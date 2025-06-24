@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Bubble Sort",
+    "endpoint": "/api/sorting/bubble-sort",
+    "methodName": "bubbleSort",
+    "serviceFile": "SortingService.java",
+    "defaultInput": { "nums": [5, 1, 4, 2, 8] },
+    "description": "Sort an array using the bubble sort algorithm.",
+    "approach": "Repeatedly swap adjacent elements if they are in the wrong order, bubbling the largest element to the end in each pass.",
+    "code": "public int[] bubbleSort(int[] nums) {\n    int n = nums.length;\n    for (int i = n - 1; i >= 0; i--) {\n        boolean isSwapped = false;\n        for (int j = 0; j <= i - 1; j++) {\n            if (nums[j] > nums[j + 1]) {\n                int temp = nums[j];\n                nums[j] = nums[j + 1];\n                nums[j + 1] = temp;\n                isSwapped = true;\n            }\n        }\n        if (!isSwapped) {\n            break;\n        }\n    }\n    return nums;\n}"
+  },
+  {
+    "name": "Insertion Sort",
+    "endpoint": "/api/sorting/insertion-sort",
+    "methodName": "insertionSort",
+    "serviceFile": "SortingService.java",
+    "defaultInput": { "nums": [12, 11, 13, 5, 6] },
+    "description": "Sort an array using the insertion sort algorithm.",
+    "approach": "Build the sorted array one element at a time by inserting each element into its correct position.",
+    "code": "public int[] insertionSort(int[] nums) {\n    int n = nums.length;\n    for (int i = 1; i < n; i++) {\n        int key = nums[i];\n        int j = i - 1;\n        while (j >= 0 && nums[j] > key) {\n            nums[j + 1] = nums[j];\n            j = j - 1;\n        }\n        nums[j + 1] = key;\n    }\n    return nums;\n}"
+  },
+  {
+    "name": "Merge Sort",
+    "endpoint": "/api/sorting/merge-sort",
+    "methodName": "mergeSort",
+    "serviceFile": "SortingService.java",
+    "defaultInput": { "nums": [38, 27, 43, 3, 9, 82, 10] },
+    "description": "Sort an array using the merge sort algorithm.",
+    "approach": "Recursively divide the array into halves, sort each half, and merge the sorted halves.",
+    "code": "public int[] mergeSort(int[] arr) {\n    mergeSort(arr, 0, arr.length - 1);\n    return arr;\n}"
+  },
+  {
+    "name": "Quick Sort",
+    "endpoint": "/api/sorting/quick-sort",
+    "methodName": "quickSort",
+    "serviceFile": "SortingService.java",
+    "defaultInput": { "nums": [10, 7, 8, 9, 1, 5] },
+    "description": "Sort an array using the quick sort algorithm.",
+    "approach": "Recursively partition the array around a pivot, sorting elements less than the pivot to the left and greater to the right.",
+    "code": "public int[] quickSort(int[] arr) {\n    quickSort(arr, 0, arr.length - 1);\n    return arr;\n}"
+  }
+]

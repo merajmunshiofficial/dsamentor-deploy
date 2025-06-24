@@ -1,0 +1,262 @@
+[
+  {
+    "name": "Find Max Consecutive Ones",
+    "endpoint": "/api/arrays/find-max-consecutive-ones",
+    "methodName": "findMaxConsecutiveOnes",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [1, 1, 0, 1, 1, 1] },
+    "description": "Find the maximum number of consecutive 1s in a binary array.",
+    "approach": "Iterate and count consecutive 1s, track the maximum.",
+    "code": "public int findMaxConsecutiveOnes(int[] nums) {\n    int cnt = 0;\n    int maxi = 0;\n    for (int i = 0; i < nums.length; i++) {\n        if (nums[i] == 1) {\n            cnt++;\n            maxi = Math.max(maxi, cnt);\n        } else {\n            cnt = 0;\n        }\n    }\n    return maxi;\n}"
+  },
+  {
+    "name": "Single Number",
+    "endpoint": "/api/arrays/single-number",
+    "methodName": "singleNumber",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [4, 1, 2, 1, 2] },
+    "description": "Find the element that appears only once in an array where every other element appears twice.",
+    "approach": "Use XOR to find the unique element.",
+    "code": "public int singleNumber(int[] nums) {\n    int xorr = 0;\n    for (int num : nums) {\n        xorr ^= num;\n    }\n    return xorr;\n}"
+  },
+  {
+    "name": "Largest Element",
+    "endpoint": "/api/arrays/largest-element",
+    "methodName": "largestElement",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [2, 3, 1, 4, 5] },
+    "description": "Find the largest element in the array.",
+    "approach": "Iterate and track the maximum value.",
+    "code": "public int largestElement(int[] nums) {\n    int max = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        if (nums[i] > max) {\n            max = nums[i];\n        }\n    }\n    return max;\n}"
+  },
+  {
+    "name": "Second Largest Element",
+    "endpoint": "/api/arrays/second-largest-element",
+    "methodName": "secondLargestElement",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [2, 3, 1, 4, 5] },
+    "description": "Find the second largest element in the array.",
+    "approach": "Track the largest and second largest values while iterating.",
+    "code": "public int secondLargestElement(int[] nums) {\n    if (nums.length < 2) {\n        return -1;\n    }\n    int largest = Integer.MIN_VALUE;\n    int secondLargest = Integer.MIN_VALUE;\n    for (int i = 0; i < nums.length; i++) {\n        if (nums[i] > largest) {\n            secondLargest = largest;\n            largest = nums[i];\n        } else if (nums[i] > secondLargest && nums[i] != largest) {\n            secondLargest = nums[i];\n        }\n    }\n    return secondLargest == Integer.MIN_VALUE ? -1 : secondLargest;\n}"
+  },
+  {
+    "name": "Four Sum",
+    "endpoint": "/api/arrays/four-sum",
+    "methodName": "fourSum",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [1, 0, -1, 0, 2, -2], "target": 0 },
+    "description": "Find all unique quadruplets in the array that sum up to the target.",
+    "approach": "Sort the array and use four pointers to find quadruplets that sum to the target, skipping duplicates.",
+    "code": "public List<List<Integer>> fourSum(int[] nums, int target) {\n    List<List<Integer>> ans = new ArrayList<>();\n    int n = nums.length;\n    Arrays.sort(nums);\n    for (int i = 0; i < n; i++) {\n        if (i > 0 && nums[i] == nums[i - 1]) continue;\n        for (int j = i + 1; j < n; j++) {\n            if (j > i + 1 && nums[j] == nums[j - 1]) continue;\n            int k = j + 1, l = n - 1;\n            while (k < l) {\n                long sum = (long) nums[i] + nums[j] + nums[k] + nums[l];\n                if (sum == target) {\n                    ans.add(Arrays.asList(nums[i], nums[j], nums[k], nums[l]));\n                    k++; l--;\n                    while (k < l && nums[k] == nums[k - 1]) k++;\n                    while (k < l && nums[l] == nums[l + 1]) l--;\n                } else if (sum < target) {\n                    k++;\n                } else {\n                    l--;\n                }\n            }\n        }\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Find Missing and Repeating Numbers",
+    "endpoint": "/api/arrays/find-missing-repeating-numbers",
+    "methodName": "findMissingRepeatingNumbers",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [4, 3, 6, 2, 1, 1] },
+    "description": "Find the missing and repeating numbers in an array of size n containing numbers from 1 to n.",
+    "approach": "Use XOR and bit manipulation to find the missing and repeating numbers.",
+    "code": "public int[] findMissingRepeatingNumbers(int[] nums) {\n    int n = nums.length;\n    int xr = 0;\n    for (int i = 0; i < n; i++) {\n        xr = xr ^ nums[i];\n        xr = xr ^ (i + 1);\n    }\n    int number = (xr & ~(xr - 1));\n    int zero = 0;\n    int one = 0;\n    for (int i = 0; i < n; i++) {\n        if ((nums[i] & number) != 0) {\n            one = one ^ nums[i];\n        } else {\n            zero = zero ^ nums[i];\n        }\n    }\n    for (int i = 1; i <= n; i++) {\n        if ((i & number) != 0) {\n            one = one ^ i;\n        } else {\n            zero = zero ^ i;\n        }\n    }\n    int cnt = 0;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] == zero) {\n            cnt++;\n        }\n    }\n    if (cnt == 2) {\n        return new int[] {zero, one};\n    }\n    return new int[] {one, zero};\n}"
+  },
+  {
+    "name": "Move Zeroes",
+    "endpoint": "/api/arrays/move-zeroes",
+    "methodName": "moveZeroes",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [0, 1, 0, 3, 12] },
+    "description": "Move all zeroes in the array to the end while maintaining the order of non-zero elements.",
+    "approach": "Find the first zero, then swap non-zero elements forward as you iterate.",
+    "code": "public int[] moveZeroes(int[] nums) {\n    int j = -1;\n    int n = nums.length;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] == 0) {\n            j = i;\n            break;\n        }\n    }\n    if (j == -1) return nums;\n    for (int i = j + 1; i < n; i++) {\n        if (nums[i] != 0) {\n            int temp = nums[i];\n            nums[i] = nums[j];\n            nums[j] = temp;\n            j++;\n        }\n    }\n    return nums;\n}"
+  },
+  {
+    "name": "Remove Duplicates",
+    "endpoint": "/api/arrays/remove-duplicates",
+    "methodName": "removeDuplicates",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [1, 1, 2, 2, 3, 4, 4] },
+    "description": "Remove duplicates from a sorted array and return the number of unique elements.",
+    "approach": "Use two pointers to overwrite duplicates and count unique elements.",
+    "code": "public int removeDuplicates(int[] nums) {\n    if (nums.length == 0) {\n        return 0;\n    }\n    int i = 0;\n    for (int j = 1; j < nums.length; j++) {\n        if (nums[i] != nums[j]) {\n            i++;\n            nums[i] = nums[j];\n        }\n    }\n    return i + 1;\n}"
+  },
+  {
+    "name": "Rotate Array",
+    "endpoint": "/api/arrays/rotate-array",
+    "methodName": "rotateArray",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [1, 2, 3, 4, 5, 6, 7], "k": 2 },
+    "description": "Rotate the array to the left by k positions.",
+    "approach": "Reverse the first k elements, then the rest, then the whole array.",
+    "code": "public int[] rotateArray(int[] nums, int k) {\n    int n = nums.length;\n    k = k % n;\n    reverseArray(nums, 0, k - 1);\n    reverseArray(nums, k, n - 1);\n    reverseArray(nums, 0, n - 1);\n    return nums;\n}"
+  },
+  {
+    "name": "Linear Search",
+    "endpoint": "/api/arrays/linear-search",
+    "methodName": "linearSearch",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [2, 4, 6, 8, 10], "target": 6 },
+    "description": "Find the index of the target in the array using linear search.",
+    "approach": "Iterate through the array and return the index if the target is found.",
+    "code": "public int linearSearch(int[] nums, int target) {\n    for (int i = 0; i < nums.length; i++) {\n        if (nums[i] == target) {\n            return i;\n        }\n    }\n    return -1;\n}"
+  },
+  {
+    "name": "Majority Element",
+    "endpoint": "/api/arrays/majority-element",
+    "methodName": "majorityElement",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [3, 2, 3] },
+    "description": "Find the element that appears more than n/2 times in the array.",
+    "approach": "Use the Boyer-Moore Voting Algorithm to find the majority element.",
+    "code": "public int majorityElement(int[] nums) {\n    int n = nums.length;\n    int cnt = 0;\n    int el = 0;\n    for (int i = 0; i < n; i++) {\n        if (cnt == 0) {\n            cnt = 1;\n            el = nums[i];\n        } else if (el == nums[i]) {\n            cnt++;\n        } else {\n            cnt--;\n        }\n    }\n    int cnt1 = 0;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] == el) {\n            cnt1++;\n        }\n    }\n    if (cnt1 > (n / 2)) {\n        return el;\n    }\n    return -1;\n}"
+  },
+  {
+    "name": "Majority Element II",
+    "endpoint": "/api/arrays/majority-element-two",
+    "methodName": "majorityElementTwo",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [1, 1, 1, 3, 3, 2, 2, 2] },
+    "description": "Find all elements that appear more than n/3 times in the array.",
+    "approach": "Use a modified Boyer-Moore Voting Algorithm to find up to two majority elements.",
+    "code": "public int[] majorityElementTwo(int[] nums) {\n    int n = nums.length;\n    int count1 = 0, count2 = 0, candidate1 = 0, candidate2 = 1;\n    for (int num : nums) {\n        if (num == candidate1) {\n            count1++;\n        } else if (num == candidate2) {\n            count2++;\n        } else if (count1 == 0) {\n            candidate1 = num;\n            count1 = 1;\n        } else if (count2 == 0) {\n            candidate2 = num;\n            count2 = 1;\n        } else {\n            count1--;\n            count2--;\n        }\n    }\n    count1 = 0;\n    count2 = 0;\n    for (int num : nums) {\n        if (num == candidate1) count1++;\n        else if (num == candidate2) count2++;\n    }\n    List<Integer> result = new ArrayList<>();\n    if (count1 > n / 3) result.add(candidate1);\n    if (count2 > n / 3) result.add(candidate2);\n    return result.stream().mapToInt(i -> i).toArray();\n}"
+  },
+  {
+    "name": "Rotate Array By One",
+    "endpoint": "/api/arrays/rotate-array-by-one",
+    "methodName": "rotateArrayByOne",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [1, 2, 3, 4, 5] },
+    "description": "Rotate the array to the left by one position.",
+    "approach": "Store the first element, shift all elements left, and put the first element at the end.",
+    "code": "public int[] rotateArrayByOne(int[] nums) {\n    int temp = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        nums[i - 1] = nums[i];\n    }\n    nums[nums.length - 1] = temp;\n    return nums;\n}"
+  },
+  {
+    "name": "Sort Zero One Two",
+    "endpoint": "/api/arrays/sort-zero-one-two",
+    "methodName": "sortZeroOneTwo",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [2, 0, 2, 1, 1, 0] },
+    "description": "Sort an array containing only 0s, 1s, and 2s (Dutch National Flag problem).",
+    "approach": "Use three pointers to sort the array in a single pass.",
+    "code": "public int[] sortZeroOneTwo(int[] nums) {\n    int low = 0, mid = 0, high = nums.length - 1;\n    while (mid <= high) {\n        if (nums[mid] == 0) {\n            int temp = nums[low];\n            nums[low] = nums[mid];\n            nums[mid] = temp;\n            low++;\n            mid++;\n        } else if (nums[mid] == 1) {\n            mid++;\n        } else {\n            int temp = nums[mid];\n            nums[mid] = nums[high];\n            nums[high] = temp;\n            high--;\n        }\n    }\n    return nums;\n}"
+  },
+  {
+    "name": "Max Subarray",
+    "endpoint": "/api/arrays/max-subarray",
+    "methodName": "maxSubArray",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [-2, 1, -3, 4, -1, 2, 1, -5, 4] },
+    "description": "Find the maximum sum of a contiguous subarray (Kadane's Algorithm).",
+    "approach": "Iterate through the array, maintaining the current sum and updating the maximum sum found.",
+    "code": "public int maxSubArray(int[] nums) {\n    long maxi = Long.MIN_VALUE;\n    long sum = 0;\n    for (int i = 0; i < nums.length; i++) {\n        sum += nums[i];\n        if (sum > maxi) {\n            maxi = sum;\n        }\n        if (sum < 0) {\n            sum = 0;\n        }\n    }\n    return (int) maxi;\n}"
+  },
+  {
+    "name": "Leaders in Array",
+    "endpoint": "/api/arrays/leaders",
+    "methodName": "leaders",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [16, 17, 4, 3, 5, 2] },
+    "description": "Find all leaders in the array (elements greater than all elements to their right).",
+    "approach": "Iterate from the end, tracking the maximum and collecting leaders.",
+    "code": "public int[] leaders(int[] nums) {\n    ArrayList<Integer> ans = new ArrayList<>();\n    if (nums.length == 0) {\n        return nums;\n    }\n    int max = nums[nums.length - 1];\n    ans.add(nums[nums.length - 1]);\n    for (int i = nums.length - 2; i >= 0; i--) {\n        if (nums[i] > max) {\n            ans.add(nums[i]);\n            max = nums[i];\n        }\n    }\n    int[] result = new int[ans.size()];\n    for (int i = ans.size() - 1; i >= 0; i--) {\n        result[ans.size() - 1 - i] = ans.get(i);\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Intersection of Arrays",
+    "endpoint": "/api/arrays/intersection-array",
+    "methodName": "intersectionArray",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums1": [1, 2, 2, 1], "nums2": [2, 2] },
+    "description": "Find the intersection of two arrays (unique elements present in both).",
+    "approach": "Use sets to collect unique elements from both arrays and find their intersection.",
+    "code": "public int[] intersectionArray(int[] nums1, int[] nums2) {\n    Set<Integer> set1 = new HashSet<>();\n    for (int num : nums1) set1.add(num);\n    Set<Integer> resultSet = new HashSet<>();\n    for (int num : nums2) {\n        if (set1.contains(num)) resultSet.add(num);\n    }\n    int[] result = new int[resultSet.size()];\n    int i = 0;\n    for (int num : resultSet) result[i++] = num;\n    return result;\n}"
+  },
+  {
+    "name": "Union of Arrays",
+    "endpoint": "/api/arrays/union-array",
+    "methodName": "unionArray",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums1": [1, 2, 2, 1], "nums2": [2, 2, 3] },
+    "description": "Find the union of two arrays (all unique elements from both arrays).",
+    "approach": "Use a TreeSet to collect all unique elements from both arrays.",
+    "code": "public int[] unionArray(int[] nums1, int[] nums2) {\n    Set<Integer> set = new TreeSet<>();\n    for (int num : nums1) set.add(num);\n    for (int num : nums2) set.add(num);\n    int[] result = new int[set.size()];\n    int i = 0;\n    for (int num : set) result[i++] = num;\n    return result;\n}"
+  },
+  {
+    "name": "Missing Number",
+    "endpoint": "/api/arrays/missing-number",
+    "methodName": "missingNumber",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [3, 0, 1] },
+    "description": "Find the missing number in an array containing numbers from 0 to n.",
+    "approach": "Use XOR to find the missing number by comparing indices and values.",
+    "code": "public int missingNumber(int[] nums) {\n    int xor1 = 0, xor2 = 0;\n    for (int i = 0; i < nums.length; i++) {\n        xor1 = xor1 ^ (i + 1);\n        xor2 = xor2 ^ nums[i];\n    }\n    return (xor1 ^ xor2);\n}"
+  },
+  {
+    "name": "Generate Pascal's Triangle",
+    "endpoint": "/api/arrays/generate-pascal-triangle",
+    "methodName": "generatePascalTriangle",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "n": 5 },
+    "description": "Generate Pascal's Triangle up to n rows.",
+    "approach": "Build each row using the previous row's values and combinatorial logic.",
+    "code": "public List<List<Integer>> generatePascalTriangle(int n) {\n    List<List<Integer>> triangle = new ArrayList<>();\n    for (int i = 0; i < n; i++) {\n        List<Integer> row = new ArrayList<>();\n        int val = 1;\n        for (int j = 0; j <= i; j++) {\n            row.add(val);\n            val = val * (i - j) / (j + 1);\n        }\n        triangle.add(row);\n    }\n    return triangle;\n}"
+  },
+  {
+    "name": "Max Product Subarray",
+    "endpoint": "/api/arrays/max-product",
+    "methodName": "maxProduct",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [2, 3, -2, 4] },
+    "description": "Find the maximum product of a contiguous subarray.",
+    "approach": "Track both maximum and minimum products at each step to handle negatives.",
+    "code": "public int maxProduct(int[] nums) {\n    int prod1 = nums[0], prod2 = nums[0], result = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        int temp = Math.max(nums[i], Math.max(prod1 * nums[i], prod2 * nums[i]));\n        prod2 = Math.min(nums[i], Math.min(prod1 * nums[i], prod2 * nums[i]));\n        prod1 = temp;\n        result = Math.max(result, prod1);\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Spiral Order Matrix",
+    "endpoint": "/api/arrays/spiral-order",
+    "methodName": "spiralOrder",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "matrix": [[1,2,3],[4,5,6],[7,8,9]] },
+    "description": "Return all elements of a 2D matrix in spiral order.",
+    "approach": "Use four pointers to traverse the matrix in spiral order.",
+    "code": "public int[] spiralOrder(int[][] matrix) {\n    List<Integer> ans = new ArrayList<>();\n    int n = matrix.length;\n    int m = matrix[0].length;\n    int top = 0, left = 0, bottom = n - 1, right = m - 1;\n    while (top <= bottom && left <= right) {\n        for (int i = left; i <= right; ++i) ans.add(matrix[top][i]);\n        top++;\n        for (int i = top; i <= bottom; ++i) ans.add(matrix[i][right]);\n        right--;\n        if (top <= bottom) {\n            for (int i = right; i >= left; --i) ans.add(matrix[bottom][i]);\n            bottom--;\n        }\n        if (left <= right) {\n            for (int i = bottom; i >= top; --i) ans.add(matrix[i][left]);\n            left++;\n        }\n    }\n    return ans.stream().mapToInt(i -> i).toArray();\n}"
+  },
+  {
+    "name": "Three Sum",
+    "endpoint": "/api/arrays/three-sum",
+    "methodName": "threeSum",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [-1, 0, 1, 2, -1, -4] },
+    "description": "Find all unique triplets in the array which gives the sum of zero.",
+    "approach": "Sort the array and use two pointers for each element to find triplets.",
+    "code": "public List<List<Integer>> threeSum(int[] nums) {\n    List<List<Integer>> ans = new ArrayList<>();\n    int n = nums.length;\n    Arrays.sort(nums);\n    for (int i = 0; i < n; i++) {\n        if (i > 0 && nums[i] == nums[i - 1]) continue;\n        int j = i + 1, k = n - 1;\n        while (j < k) {\n            int sum = nums[i] + nums[j] + nums[k];\n            if (sum < 0) {\n                j++;\n            } else if (sum > 0) {\n                k--;\n            } else {\n                ans.add(Arrays.asList(nums[i], nums[j], nums[k]));\n                j++; k--;\n                while (j < k && nums[j] == nums[j - 1]) j++;\n                while (j < k && nums[k] == nums[k + 1]) k--;\n            }\n        }\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Two Sum",
+    "endpoint": "/api/arrays/two-sum",
+    "methodName": "twoSum",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [2, 7, 11, 15], "target": 9 },
+    "description": "Find indices of the two numbers such that they add up to a specific target.",
+    "approach": "Use a hashmap to store indices and check for the complement as you iterate.",
+    "code": "public int[] twoSum(int[] nums, int target) {\n    Map<Integer, Integer> map = new HashMap<>();\n    for (int i = 0; i < nums.length; i++) {\n        int complement = target - nums[i];\n        if (map.containsKey(complement)) {\n            return new int[] { map.get(complement), i };\n        }\n        map.put(nums[i], i);\n    }\n    return new int[] { -1, -1 };\n}"
+  },
+  {
+    "name": "Rearrange Array Alternately",
+    "endpoint": "/api/arrays/rearrange-array",
+    "methodName": "rearrangeArray",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [3, 1, -2, -5, 2, -4] },
+    "description": "Rearrange the array so that positive and negative numbers alternate, maintaining their order.",
+    "approach": "Place positive and negative numbers at alternate indices using two pointers.",
+    "code": "public int[] rearrangeArray(int[] nums) {\n    int n = nums.length;\n    int[] ans = new int[n];\n    int posIndex = 0, negIndex = 1;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] < 0) {\n            ans[negIndex] = nums[i];\n            negIndex += 2;\n        } else {\n            ans[posIndex] = nums[i];\n            posIndex += 2;\n        }\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Reverse Pairs",
+    "endpoint": "/api/arrays/reverse-pairs",
+    "methodName": "reversePairs",
+    "serviceFile": "ArrayService.java",
+    "defaultInput": { "nums": [1, 3, 2, 3, 1] },
+    "description": "Count the number of reverse pairs in the array (i < j and nums[i] > 2 * nums[j]).",
+    "approach": "Use a modified merge sort to count reverse pairs efficiently.",
+    "code": "public int reversePairs(int[] nums) {\n    return reversePairsMergeSort(nums.clone(), 0, nums.length - 1);\n}"
+  }
+]

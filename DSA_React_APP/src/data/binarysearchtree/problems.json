@@ -1,0 +1,132 @@
+[
+  {
+    "name": "BST from Preorder",
+    "endpoint": "/api/bst/bst-from-preorder",
+    "methodName": "bstFromPreorder",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "preorder": [8, 5, 1, 7, 10, 12] },
+    "description": "Construct a BST from its preorder traversal.",
+    "approach": "Recursively build the BST using bounds and preorder index.",
+    "code": "public BSTResponse.TreeNodeDTO bstFromPreorder(List<Integer> preorder) {\n    TreeNode root = bstFromPreorderHelper(preorder, Integer.MAX_VALUE, new int[]{0});\n    return toDTO(root);\n}"
+  },
+  {
+    "name": "BST Iterator Inorder",
+    "endpoint": "/api/bst/bst-iterator-inorder",
+    "methodName": "bstIteratorInorder",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "preorder": [8, 5, 1, 7, 10, 12] },
+    "description": "Return the inorder traversal of a BST constructed from preorder.",
+    "approach": "Build the BST from preorder and perform inorder traversal.",
+    "code": "public List<Integer> bstIteratorInorder(List<Integer> preorder) {\n    TreeNode root = bstFromPreorderHelper(preorder, Integer.MAX_VALUE, new int[]{0});\n    List<Integer> inorder = new java.util.ArrayList<>();\n    inorderTraversal(root, inorder);\n    return inorder;\n}"
+  },
+  {
+    "name": "Delete Node in BST",
+    "endpoint": "/api/bst/delete-node",
+    "methodName": "deleteNode",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 5, "left": { "data": 3 }, "right": { "data": 6 } }, "key": 3 },
+    "description": "Delete a node with a given key from the BST.",
+    "approach": "Find the node, then reconnect subtrees appropriately.",
+    "code": "public BSTResponse.TreeNodeDTO deleteNode(BSTResponse.TreeNodeDTO rootDto, int key) {\n    TreeNode root = fromDTO(rootDto);\n    TreeNode newRoot = deleteNodeInternal(root, key);\n    return toDTO(newRoot);\n}"
+  },
+  {
+    "name": "Floor and Ceil of BST",
+    "endpoint": "/api/bst/floor-ceil",
+    "methodName": "floorCeilOfBST",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 8, "left": { "data": 4 }, "right": { "data": 12 } }, "key": 10 },
+    "description": "Find the floor and ceil of a given key in a BST.",
+    "approach": "Traverse the BST to find the closest smaller (floor) and larger (ceil) values.",
+    "code": "public List<Integer> floorCeilOfBST(BSTResponse.TreeNodeDTO rootDto, int key) {\n    TreeNode root = fromDTO(rootDto);\n    int floor = -1, ceil = -1;\n    TreeNode current = root;\n    while (current != null) {\n        if (current.data == key) {\n            floor = current.data;\n            break;\n        } else if (current.data < key) {\n            floor = current.data;\n            current = current.right;\n        } else {\n            current = current.left;\n        }\n    }\n    current = root;\n    while (current != null) {\n        if (current.data == key) {\n            ceil = current.data;\n            break;\n        } else if (current.data > key) {\n            ceil = current.data;\n            current = current.left;\n        } else {\n            current = current.right;\n        }\n    }\n    return java.util.Arrays.asList(floor, ceil);\n}"
+  },
+  {
+    "name": "Insert into BST",
+    "endpoint": "/api/bst/insert-into-bst",
+    "methodName": "insertIntoBST",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 4, "left": { "data": 2 }, "right": { "data": 7 } }, "val": 5 },
+    "description": "Insert a value into the BST.",
+    "approach": "Iteratively traverse and insert the value at the correct position.",
+    "code": "public BSTResponse.TreeNodeDTO insertIntoBST(BSTResponse.TreeNodeDTO rootDto, int val) {\n    TreeNode root = fromDTO(rootDto);\n    TreeNode newRoot = insertIntoBSTInternal(root, val);\n    return toDTO(newRoot);\n}"
+  },
+  {
+    "name": "Check if BST",
+    "endpoint": "/api/bst/is-bst",
+    "methodName": "isBST",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 2, "left": { "data": 1 }, "right": { "data": 3 } } },
+    "description": "Check if a binary tree is a valid BST.",
+    "approach": "Recursively validate that all nodes are within valid min/max bounds.",
+    "code": "public boolean isBST(BSTResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return validateBST(root, Integer.MIN_VALUE, Integer.MAX_VALUE);\n}"
+  },
+  {
+    "name": "Kth Smallest and Largest in BST",
+    "endpoint": "/api/bst/kth-smallest-largest",
+    "methodName": "kthSmallestLargest",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 5, "left": { "data": 3 }, "right": { "data": 6 } }, "k": 2 },
+    "description": "Find the kth smallest and kth largest elements in the BST.",
+    "approach": "Use inorder and reverse inorder traversals to find kth elements.",
+    "code": "public List<Integer> kthSmallestLargest(BSTResponse.TreeNodeDTO rootDto, int k) {\n    TreeNode root = fromDTO(rootDto);\n    return java.util.Arrays.asList(kthSmallest(root, k), kthLargest(root, k));\n}"
+  },
+  {
+    "name": "Largest BST Subtree",
+    "endpoint": "/api/bst/largest-bst",
+    "methodName": "largestBST",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 10, "left": { "data": 5 }, "right": { "data": 15 } } },
+    "description": "Find the size of the largest BST subtree in a binary tree.",
+    "approach": "Recursively check each subtree and track the largest BST size.",
+    "code": "public int largestBST(BSTResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return largestBSTSubtreeHelper(root).maxSize;\n}"
+  },
+  {
+    "name": "Search in BST",
+    "endpoint": "/api/bst/search-bst",
+    "methodName": "searchBST",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 4, "left": { "data": 2 }, "right": { "data": 7 } }, "val": 2 },
+    "description": "Search for a value in the BST and return the subtree rooted at that value.",
+    "approach": "Iteratively traverse the BST to find the value.",
+    "code": "public BSTResponse.TreeNodeDTO searchBST(BSTResponse.TreeNodeDTO rootDto, int val) {\n    TreeNode root = fromDTO(rootDto);\n    TreeNode result = searchBSTInternal(root, val);\n    return toDTO(result);\n}"
+  },
+  {
+    "name": "Successor and Predecessor in BST",
+    "endpoint": "/api/bst/succ-pred-bst",
+    "methodName": "succPredBST",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 8, "left": { "data": 4 }, "right": { "data": 12 } }, "key": 10 },
+    "description": "Find the in-order predecessor and successor of a given key in the BST.",
+    "approach": "Traverse the BST and track the closest smaller and larger values.",
+    "code": "public List<Integer> succPredBST(BSTResponse.TreeNodeDTO rootDto, int key) {\n    TreeNode root = fromDTO(rootDto);\n    int[] predecessor = {-1};\n    int[] successor = {Integer.MAX_VALUE};\n    traverseSuccPred(root, key, predecessor, successor);\n    return java.util.Arrays.asList(\n        predecessor[0] == -1 ? -1 : predecessor[0], \n        successor[0] == Integer.MAX_VALUE ? -1 : successor[0]\n    );\n}"
+  },
+  {
+    "name": "Two Sum in BST",
+    "endpoint": "/api/bst/two-sum-bst",
+    "methodName": "twoSumBST",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 5, "left": { "data": 3 }, "right": { "data": 6 } }, "k": 9 },
+    "description": "Check if there exist two elements in the BST such that their sum is equal to k.",
+    "approach": "Use two stacks to perform in-order and reverse in-order traversals and check for the sum.",
+    "code": "public boolean twoSumBST(BSTResponse.TreeNodeDTO rootDto, int k) {\n    TreeNode root = fromDTO(rootDto);\n    if (root == null) return false;\n    java.util.Stack<TreeNode> leftStack = new java.util.Stack<>();\n    java.util.Stack<TreeNode> rightStack = new java.util.Stack<>();\n    pushAllLeft(root, leftStack);\n    pushAllRight(root, rightStack);\n    TreeNode left = getNextLeft(leftStack);\n    TreeNode right = getNextRight(rightStack);\n    while (left != null && right != null && left.data < right.data) {\n        int sum = left.data + right.data;\n        if (sum == k) return true;\n        else if (sum < k) left = getNextLeft(leftStack);\n        else right = getNextRight(rightStack);\n    }\n    return false;\n}"
+  },
+  {
+    "name": "Lowest Common Ancestor in BST",
+    "endpoint": "/api/bst/lca",
+    "methodName": "lca",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 6, "left": { "data": 2 }, "right": { "data": 8 } }, "p": 2, "q": 8 },
+    "description": "Find the lowest common ancestor (LCA) of two nodes in the BST.",
+    "approach": "Recursively search for the LCA in the BST.",
+    "code": "public int lca(BSTResponse.TreeNodeDTO rootDto, int p, int q) {\n    TreeNode root = fromDTO(rootDto);\n    TreeNode result = lcaInternal(root, p, q);\n    return result != null ? result.data : -1;\n}"
+  },
+  {
+    "name": "Recover BST",
+    "endpoint": "/api/bst/recover-tree",
+    "methodName": "recoverTree",
+    "serviceFile": "BSTService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 3, "right": { "data": 2 } } } },
+    "description": "Recover a BST where two nodes are swapped by mistake.",
+    "approach": "Use inorder traversal to find and swap the misplaced nodes.",
+    "code": "public BSTResponse.TreeNodeDTO recoverTree(BSTResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    TreeNode[] first = {null};\n    TreeNode[] middle = {null};\n    TreeNode[] last = {null};\n    TreeNode[] prev = {null};\n    inorderRecover(root, first, middle, last, prev);\n    if (first[0] != null && last[0] != null) {\n        int temp = first[0].data;\n        first[0].data = last[0].data;\n        last[0].data = temp;\n    } else if (first[0] != null && middle[0] != null) {\n        int temp = first[0].data;\n        first[0].data = middle[0].data;\n        middle[0].data = temp;\n    }\n    return toDTO(root);\n}"
+  }
+]

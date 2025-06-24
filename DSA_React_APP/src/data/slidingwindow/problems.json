@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Longest Repeating Character Replacement",
+    "endpoint": "/api/sliding-window/character-replacement",
+    "methodName": "characterReplacement",
+    "serviceFile": "SlidingWindowService.java",
+    "defaultInput": { "s": "ABAB", "k": 2 },
+    "description": "Find the length of the longest substring containing the same letter you can get after performing at most k replacements.",
+    "approach": "Use a sliding window and a frequency array to keep track of the most frequent character and window size.",
+    "code": "public int characterReplacement(String s, int k) {\n    int maxLen = 0;\n    int maxFreq = 0;\n    int l = 0, r = 0;\n    int[] hash = new int[26];\n    while (r < s.length()) {\n        hash[s.charAt(r) - 'A']++;\n        maxFreq = Math.max(maxFreq, hash[s.charAt(r) - 'A']);\n        if ((r - l + 1) - maxFreq > k) {\n            hash[s.charAt(l) - 'A']--;\n            l++;\n        }\n        maxLen = Math.max(maxLen, r - l + 1);\n        r++;\n    }\n    return maxLen;\n}"
+  },
+  {
+    "name": "Longest Substring with K Distinct Characters",
+    "endpoint": "/api/sliding-window/k-distinct-char",
+    "methodName": "kDistinctChar",
+    "serviceFile": "SlidingWindowService.java",
+    "defaultInput": { "s": "araaci", "k": 2 },
+    "description": "Find the length of the longest substring with at most k distinct characters.",
+    "approach": "Use a sliding window and a hashmap to track the count of distinct characters in the current window.",
+    "code": "public int kDistinctChar(String s, int k) {\n    int n = s.length();\n    int maxLen = 0;\n    HashMap<Character, Integer> mpp = new HashMap<>();\n    int l = 0, r = 0;\n    while(r < n){\n        char charR = s.charAt(r);\n        mpp.put(charR, mpp.getOrDefault(charR, 0) + 1);\n        if(mpp.size() > k){\n            char charL = s.charAt(l);\n            mpp.put(charL, mpp.get(charL) - 1);\n            if(mpp.get(charL) == 0){\n                mpp.remove(charL);\n            }\n            l++;\n        }\n        if(mpp.size() <= k){\n            maxLen = Math.max(maxLen, r - l + 1);\n        }\n        r++;\n    }\n    return maxLen;\n}"
+  },
+  {
+    "name": "Longest Substring Without Repeating Characters",
+    "endpoint": "/api/sliding-window/longest-non-repeating-substring",
+    "methodName": "longestNonRepeatingSubstring",
+    "serviceFile": "SlidingWindowService.java",
+    "defaultInput": { "s": "abcabcbb" },
+    "description": "Find the length of the longest substring without repeating characters.",
+    "approach": "Use a sliding window and a hash array to track the last seen index of each character.",
+    "code": "public int longestNonRepeatingSubstring(String s) {\n    int n = s.length();\n    int HashLen = 256;\n    int[] hash = new int[HashLen];\n    Arrays.fill(hash, -1);\n    int l = 0, r = 0, maxLen = 0;\n    while (r < n) {\n        if (hash[s.charAt(r)] != -1) {\n            l = Math.max(hash[s.charAt(r)] + 1, l);\n        }\n        int len = r - l + 1;\n        maxLen = Math.max(len, maxLen);\n        hash[s.charAt(r)] = r;\n        r++;\n    }\n    return maxLen;\n}"
+  },
+  {
+    "name": "Max Consecutive Ones III",
+    "endpoint": "/api/sliding-window/longest-ones",
+    "methodName": "longestOnes",
+    "serviceFile": "SlidingWindowService.java",
+    "defaultInput": { "nums": [1,1,1,0,0,0,1,1,1,1,0], "k": 2 },
+    "description": "Find the length of the longest subarray with at most k zeros (can flip at most k zeros to ones).",
+    "approach": "Use a sliding window to keep track of the number of zeros in the current window.",
+    "code": "public int longestOnes(int[] nums, int k) {\n    int n = nums.length;\n    int l = 0, r = 0;\n    int zeros = 0, maxLen = 0;\n    while (r < n) {\n        if(nums[r] == 0) zeros++;\n        if (zeros > k) {\n            if (nums[l] == 0) {\n                zeros--;\n            }\n            l++;\n        }\n        if(zeros <= k){\n            int len = r - l + 1;\n            maxLen = Math.max(maxLen, len);\n        }\n        r++;\n    }\n    return maxLen;\n}"
+  },
+  {
+    "name": "Maximum Points You Can Obtain from Cards",
+    "endpoint": "/api/sliding-window/max-score",
+    "methodName": "maxScore",
+    "serviceFile": "SlidingWindowService.java",
+    "defaultInput": { "cardPoints": [1,2,3,4,5,6,1], "k": 3 },
+    "description": "Find the maximum score you can obtain by picking k cards from either end of the array.",
+    "approach": "Use a sliding window to calculate the sum of k cards from the left and right ends, updating the maximum sum.",
+    "code": "public int maxScore(int[] cardPoints, int k) {\n    int lSum = 0, rSum = 0, maxSum = 0;\n    for (int i = 0; i < k; i++) {\n        lSum += cardPoints[i];\n        maxSum = lSum;\n    }\n    int rightIndex = cardPoints.length - 1;\n    for (int i = k - 1; i >= 0; i--) {\n        lSum -= cardPoints[i];\n        rSum += cardPoints[rightIndex];\n        rightIndex--;\n        maxSum = Math.max(maxSum, lSum + rSum);\n    }\n    return maxSum;\n}"
+  },
+  {
+    "name": "Minimum Window Substring",
+    "endpoint": "/api/sliding-window/min-window",
+    "methodName": "minWindow",
+    "serviceFile": "SlidingWindowService.java",
+    "defaultInput": { "s": "ADOBECODEBANC", "t": "ABC" },
+    "description": "Find the minimum window substring of s that contains all the characters of t.",
+    "approach": "Use a sliding window and a hash array to track the count of required characters and window size.",
+    "code": "public String minWindow(String s, String t) {\n    int minLen = Integer.MAX_VALUE;\n    int sIndex = -1;\n    int[] hash = new int[256];\n    for (char c : t.toCharArray()) {\n        hash[c]++;\n    }\n    int count = 0;\n    int l = 0, r = 0;\n    while (r < s.length()) {\n        if (hash[s.charAt(r)] > 0) {\n            count++;\n        }\n        hash[s.charAt(r)]--;\n        while (count == t.length()) {\n            if (r - l + 1 < minLen) {\n                minLen = r - l + 1;\n                sIndex = l;\n            }\n            hash[s.charAt(l)]++;\n            if (hash[s.charAt(l)] > 0) {\n                count--;\n            }\n            l++;\n        }\n        r++;\n    }\n    return (sIndex == -1) ? \"\" : s.substring(sIndex, sIndex + minLen);\n}"
+  },
+  {
+    "name": "Number of Sub-arrays with Odd Sum",
+    "endpoint": "/api/sliding-window/number-of-odd-subarrays",
+    "methodName": "numberOfOddSubarrays",
+    "serviceFile": "SlidingWindowService.java",
+    "defaultInput": { "nums": [1,1,2,1,1], "k": 3 },
+    "description": "Find the number of subarrays with exactly k odd numbers.",
+    "approach": "Use a sliding window to count subarrays with at most k and at most k-1 odd numbers, then subtract.",
+    "code": "public int numberOfOddSubarrays(int[] nums, int k) {\n    return helper(nums, k) - helper(nums, k - 1);\n}"
+  },
+  {
+    "name": "Number of Substrings Containing 'a', 'b', and 'c'",
+    "endpoint": "/api/sliding-window/number-of-substrings",
+    "methodName": "numberOfSubstrings",
+    "serviceFile": "SlidingWindowService.java",
+    "defaultInput": { "s": "abcabc" },
+    "description": "Find the number of substrings containing at least one occurrence of each character 'a', 'b', and 'c'.",
+    "approach": "Track the last seen indices of 'a', 'b', and 'c' and count valid substrings ending at each position.",
+    "code": "public int numberOfSubstrings(String s) {\n    int[] lastSeen = {-1, -1, -1};\n    int count = 0;\n    for (int i = 0; i < s.length(); ++i) {\n        lastSeen[s.charAt(i) - 'a'] = i;\n        if (lastSeen[0] != -1 && lastSeen[1] != -1 && lastSeen[2] != -1) {\n            count += 1 + Math.min(Math.min(lastSeen[0], lastSeen[1]), lastSeen[2]);\n        }\n    }\n    return count;\n}"
+  }
+]

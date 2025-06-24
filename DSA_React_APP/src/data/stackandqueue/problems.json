@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Asteroid Collision",
+    "endpoint": "/api/stack-and-queue/asteroid-collision",
+    "methodName": "asteroidCollision",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "asteroids": [5, 10, -5] },
+    "description": "Simulate the collision of asteroids moving in a row and return the state after all collisions.",
+    "approach": "Use a stack to keep track of moving asteroids and resolve collisions by comparing directions and magnitudes.",
+    "code": "public int[] asteroidCollision(int[] asteroids) {\n    List<Integer> st = new ArrayList<>();\n    for (int a : asteroids) {\n        if (a > 0) {\n            st.add(a);\n        } else {\n            while (!st.isEmpty() && st.get(st.size() - 1) > 0 && st.get(st.size() - 1) < Math.abs(a)) {\n                st.remove(st.size() - 1);\n            }\n            if (!st.isEmpty() && st.get(st.size() - 1) == Math.abs(a)) {\n                st.remove(st.size() - 1);\n            } else if (st.isEmpty() || st.get(st.size() - 1) < 0) {\n                st.add(a);\n            }\n        }\n    }\n    int[] result = new int[st.size()];\n    for (int i = 0; i < st.size(); i++) result[i] = st.get(i);\n    return result;\n}"
+  },
+  {
+    "name": "Celebrity Problem",
+    "endpoint": "/api/stack-and-queue/celebrity",
+    "methodName": "celebrity",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "matrix": [[0,1,0],[0,0,0],[0,1,0]], "n": 3 },
+    "description": "Find the celebrity in a party of n people (if one exists).",
+    "approach": "Use two pointers to eliminate non-celebrities, then verify the candidate by checking the matrix.",
+    "code": "public int celebrity(int[][] M, int n) {\n    int top = 0, down = n - 1;\n    while (top < down) {\n        if (M[top][down] == 1) {\n            top++;\n        } else if (M[down][top] == 1) {\n            down--;\n        } else {\n            top++;\n            down--;\n        }\n    }\n    if (top > down) return -1;\n    for (int i = 0; i < n; i++) {\n        if (i == top) continue;\n        if (M[top][i] == 1 && M[i][top] == 0) return -1;\n    }\n    return top;\n}"
+  },
+  {
+    "name": "Valid Parentheses",
+    "endpoint": "/api/stack-and-queue/is-valid",
+    "methodName": "isValid",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "s": "()[]{}" },
+    "description": "Check if the input string of brackets is valid (all open brackets are closed in the correct order).",
+    "approach": "Use a stack to match opening and closing brackets, ensuring correct nesting and order.",
+    "code": "public boolean isValid(String str) {\n    Stack<Character> st = new Stack<>();\n    for (char c : str.toCharArray()) {\n        if (c == '(' || c == '[' || c == '{') {\n            st.push(c);\n        } else {\n            if (st.isEmpty()) return false;\n            char ch = st.pop();\n            if (!isMatched(ch, c)) return false;\n        }\n    }\n    return st.isEmpty();\n}\nprivate boolean isMatched(char open, char close) {\n    return (open == '(' && close == ')') ||\n           (open == '[' && close == ']') ||\n           (open == '{' && close == '}');\n}"
+  },
+  {
+    "name": "Largest Rectangle in Histogram",
+    "endpoint": "/api/stack-and-queue/largest-rectangle-area",
+    "methodName": "largestRectangleArea",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "heights": [2,1,5,6,2,3] },
+    "description": "Find the area of the largest rectangle in a histogram.",
+    "approach": "Use a stack to keep track of indices of bars and calculate area for each bar as the smallest bar in the rectangle.",
+    "code": "public int largestRectangleArea(int[] heights) {\n    int n = heights.length;\n    Stack<Integer> st = new Stack<>();\n    int largestArea = 0;\n    for (int i = 0; i < n; i++) {\n        while (!st.isEmpty() && heights[st.peek()] >= heights[i]) {\n            int ind = st.pop();\n            int pse = st.isEmpty() ? -1 : st.peek();\n            int nse = i;\n            int area = heights[ind] * (nse - pse - 1);\n            largestArea = Math.max(largestArea, area);\n        }\n        st.push(i);\n    }\n    while (!st.isEmpty()) {\n        int nse = n;\n        int ind = st.pop();\n        int pse = st.isEmpty() ? -1 : st.peek();\n        int area = heights[ind] * (nse - pse - 1);\n        largestArea = Math.max(largestArea, area);\n    }\n    return largestArea;\n}"
+  },
+  {
+    "name": "LFU Cache Simulation",
+    "endpoint": "/api/stack-and-queue/lfu-cache",
+    "methodName": "lfuCache",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "operations": "[{\"op\":\"put\",\"key\":1,\"value\":1},{\"op\":\"put\",\"key\":2,\"value\":2},{\"op\":\"get\",\"key\":1}]" },
+    "description": "Simulate LFU (Least Frequently Used) cache operations and return the results as a list.",
+    "approach": "Use a custom LFU cache implementation to process a sequence of put/get operations and track frequency of use.",
+    "code": "public String lfuCache(StackAndQueueRequest.LFUCacheInput request) {\n    // Simulate LFUCache operations from a JSON string\n    try {\n        ObjectMapper mapper = new ObjectMapper();\n        List<Map<String, Object>> ops = mapper.readValue(request.getOperations(), List.class);\n        LFUCacheSim cache = new LFUCacheSim(2); // Default capacity 2, can be extended\n        List<String> results = new ArrayList<>();\n        for (Map<String, Object> op : ops) {\n            String type = (String) op.get(\"op\");\n            if (\"put\".equals(type)) {\n                cache.put((Integer) op.get(\"key\"), (Integer) op.get(\"value\"));\n                results.add(\"null\");\n            } else if (\"get\".equals(type)) {\n                results.add(String.valueOf(cache.get((Integer) op.get(\"key\"))));\n            }\n        }\n        return results.toString();\n    } catch (Exception e) {\n        return \"Invalid operations format: \" + e.getMessage();\n    }\n}\n// LFUCacheSim and helper classes omitted for brevity."
+  },
+  {
+    "name": "Stock Span Problem",
+    "endpoint": "/api/stack-and-queue/stock-span",
+    "methodName": "stockSpan",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "prices": [100, 80, 60, 70, 60, 75, 85] },
+    "description": "Calculate the stock span for each day given a list of daily prices.",
+    "approach": "Use a stack to keep track of indices of previous greater elements and compute the span for each day.",
+    "code": "public int[] stockSpan(int[] prices) {\n    int n = prices.length;\n    int[] PGE = new int[n];\n    Stack<Integer> st = new Stack<>();\n    for (int i = 0; i < n; i++) {\n        while (!st.isEmpty() && prices[st.peek()] <= prices[i]) {\n            st.pop();\n        }\n        PGE[i] = st.isEmpty() ? -1 : st.peek();\n        st.push(i);\n    }\n    int[] ans = new int[n];\n    for (int i = 0; i < n; i++) {\n        ans[i] = i - PGE[i];\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Sum of Subarray Ranges",
+    "endpoint": "/api/stack-and-queue/subarray-ranges",
+    "methodName": "subArrayRanges",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "arr": [1, 2, 3] },
+    "description": "Find the sum of the ranges (max - min) of all subarrays of the array.",
+    "approach": "Calculate the sum of all subarray maximums and minimums using monotonic stacks, then subtract to get the range sum.",
+    "code": "public long subArrayRanges(int[] arr) {\n    return sumSubarrayMaxs(arr) - sumSubarrayMins(arr);\n}\nprivate long sumSubarrayMins(int[] arr) {\n    int[] nse = findNSE(arr);\n    int[] psee = findPSEE(arr);\n    int n = arr.length;\n    long sum = 0;\n    for (int i = 0; i < n; i++) {\n        int left = i - psee[i];\n        int right = nse[i] - i;\n        long freq = left * (long) right;\n        long val = freq * arr[i];\n        sum += val;\n    }\n    return sum;\n}\nprivate long sumSubarrayMaxs(int[] arr) {\n    int[] nge = findNGE(arr);\n    int[] pgee = findPGEE(arr);\n    int n = arr.length;\n    long sum = 0;\n    for (int i = 0; i < n; i++) {\n        int left = i - pgee[i];\n        int right = nge[i] - i;\n        long freq = left * (long) right;\n        long val = freq * arr[i];\n        sum += val;\n    }\n    return sum;\n}"
+  },
+  {
+    "name": "Sum of Subarray Minimums",
+    "endpoint": "/api/stack-and-queue/sum-subarray-mins",
+    "methodName": "sumSubarrayMins",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "arr": [3, 1, 2, 4] },
+    "description": "Find the sum of the minimum value of every subarray of the array.",
+    "approach": "Use monotonic stacks to find the previous and next smaller elements for each index and calculate the contribution of each element.",
+    "code": "public int sumSubarrayMins(int[] arr) {\n    int[] nse = findNSE(arr);\n    int[] psee = findPSEE(arr);\n    int n = arr.length;\n    long sum = 0;\n    for (int i = 0; i < n; i++) {\n        int left = i - psee[i];\n        int right = nse[i] - i;\n        long freq = left * (long) right;\n        long val = freq * arr[i];\n        sum += val;\n    }\n    return (int)sum;\n}\nprivate int[] findNSE(int[] arr) {\n    int n = arr.length;\n    int[] ans = new int[n];\n    Stack<Integer> st = new Stack<>();\n    for (int i = n - 1; i >= 0; i--) {\n        while (!st.isEmpty() && arr[st.peek()] >= arr[i]) {\n            st.pop();\n        }\n        ans[i] = !st.isEmpty() ? st.peek() : n;\n        st.push(i);\n    }\n    return ans;\n}\nprivate int[] findPSEE(int[] arr) {\n    int n = arr.length;\n    int[] ans = new int[n];\n    Stack<Integer> st = new Stack<>();\n    for (int i = 0; i < n; i++) {\n        while (!st.isEmpty() && arr[st.peek()] > arr[i]) {\n            st.pop();\n        }\n        ans[i] = !st.isEmpty() ? st.peek() : -1;\n        st.push(i);\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Trapping Rain Water",
+    "endpoint": "/api/stack-and-queue/trap",
+    "methodName": "trap",
+    "serviceFile": "StackAndQueueService.java",
+    "defaultInput": { "height": [0,1,0,2,1,0,1,3,2,1,2,1] },
+    "description": "Compute how much water can be trapped after raining given an elevation map.",
+    "approach": "Use two pointers to track the maximum height to the left and right of each bar and accumulate trapped water.",
+    "code": "public int trap(int[] height) {\n    int n = height.length;\n    int total = 0;\n    int leftMax = 0, rightMax = 0;\n    int left = 0, right = n - 1;\n    while (left < right) {\n        if (height[left] <= height[right]) {\n            if (leftMax > height[left]) {\n                total += leftMax - height[left];\n            } else leftMax = height[left];\n            left++;\n        } else {\n            if (rightMax > height[right]) {\n                total += rightMax - height[right];\n            } else rightMax = height[right];\n            right--;\n        }\n    }\n    return total;\n}"
+  }
+]

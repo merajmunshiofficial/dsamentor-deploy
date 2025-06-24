@@ -1,0 +1,252 @@
+[
+  {
+    "name": "DFS of Graph",
+    "endpoint": "/api/graph/dfs-traversal",
+    "methodName": "dfsOfGraph",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 5, "adj": [[1,2],[0,3,4],[0,4],[1],[1,2]] },
+    "description": "Perform Depth First Search (DFS) traversal of a graph.",
+    "approach": "Use a visited array and recursively visit all connected nodes.",
+    "code": "public List<Integer> dfsOfGraph(int V, List<Integer>[] adj) {\n    boolean[] vis = new boolean[V];\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            dfs(i, adj, vis, ans);\n        }\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "BFS of Graph",
+    "endpoint": "/api/graph/bfs-traversal",
+    "methodName": "bfsOfGraph",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 5, "adj": [[1,2],[0,3,4],[0,4],[1],[1,2]] },
+    "description": "Perform Breadth First Search (BFS) traversal of a graph.",
+    "approach": "Use a queue and visited array to traverse nodes level by level.",
+    "code": "public List<Integer> bfsOfGraph(int V, List<Integer>[] adj) {\n    boolean[] vis = new boolean[V];\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            vis[i] = true;\n            bfs(i, adj, vis, ans);\n        }\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Detect Cycle in Directed Graph (DFS)",
+    "endpoint": "/api/graph/is-cyclic-dfs",
+    "methodName": "isCyclicDFS",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 4, "adj": [[1],[2],[3],[1]] },
+    "description": "Detect if a directed graph contains a cycle using DFS.",
+    "approach": "Use a recursion stack (dfsVis) to track nodes in the current path.",
+    "code": "public boolean isCyclicDFS(int V, List<Integer>[] adj) {\n    boolean[] vis = new boolean[V];\n    boolean[] dfsVis = new boolean[V];\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            if (isCyclicDFSHelper(i, adj, vis, dfsVis)) {\n                return true;\n            }\n        }\n    }\n    return false;\n}"
+  },
+  {
+    "name": "Detect Cycle in Directed Graph (BFS/Kahn's Algorithm)",
+    "endpoint": "/api/graph/is-cyclic-bfs",
+    "methodName": "isCyclicBFS",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 4, "adj": [[1],[2],[3],[1]] },
+    "description": "Detect if a directed graph contains a cycle using BFS (Kahn's Algorithm).",
+    "approach": "Use in-degree array and queue to perform topological sort and check for cycles.",
+    "code": "public boolean isCyclicBFS(int V, List<Integer>[] adj) {\n    int[] inDegree = new int[V];\n    for (int i = 0; i < V; i++) {\n        for (int it : adj[i]) {\n            inDegree[it]++;\n        }\n    }\n    Queue<Integer> q = new LinkedList<>();\n    for (int i = 0; i < V; i++) {\n        if (inDegree[i] == 0) {\n            q.add(i);\n        }\n    }\n    int count = 0;\n    while (!q.isEmpty()) {\n        int node = q.poll();\n        count++;\n        for (int it : adj[node]) {\n            inDegree[it]--;\n            if (inDegree[it] == 0) {\n                q.add(it);\n            }\n        }\n    }\n    return count != V;\n}"
+  },
+  {
+    "name": "Check if Graph is Bipartite (DFS)",
+    "endpoint": "/api/graph/is-bipartite-dfs",
+    "methodName": "isBipartiteDFS",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 4, "adj": [[1,3],[0,2],[1,3],[0,2]] },
+    "description": "Check if a graph is bipartite using DFS.",
+    "approach": "Color nodes recursively and check for color conflicts.",
+    "code": "public boolean isBipartiteDFS(int V, List<Integer>[] adj) {\n    int[] color = new int[V];\n    Arrays.fill(color, -1);\n    for (int i = 0; i < V; i++) {\n        if (color[i] == -1) {\n            if (!isBipartiteDFSHelper(i, 0, adj, color)) {\n                return false;\n            }\n        }\n    }\n    return true;\n}"
+  },
+  {
+    "name": "Check if Graph is Bipartite (BFS)",
+    "endpoint": "/api/graph/is-bipartite-bfs",
+    "methodName": "isBipartiteBFS",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 4, "adj": [[1,3],[0,2],[1,3],[0,2]] },
+    "description": "Check if a graph is bipartite using BFS.",
+    "approach": "Color nodes using BFS and check for color conflicts.",
+    "code": "public boolean isBipartiteBFS(int V, List<Integer>[] adj) {\n    int[] color = new int[V];\n    Arrays.fill(color, -1);\n    for (int i = 0; i < V; i++) {\n        if (color[i] == -1) {\n            if (!isBipartiteBFSHelper(i, adj, color)) {\n                return false;\n            }\n        }\n    }\n    return true;\n}"
+  },
+  {
+    "name": "Topological Sort (DFS)",
+    "endpoint": "/api/graph/topological-sort-dfs",
+    "methodName": "topologicalSortDFS",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 6, "adj": [[2,3],[3,4],[4],[5],[5],[]] },
+    "description": "Perform topological sort of a directed graph using DFS.",
+    "approach": "Use a stack to store the order of nodes after visiting all descendants.",
+    "code": "public List<Integer> topologicalSortDFS(int V, List<Integer>[] adj) {\n    boolean[] vis = new boolean[V];\n    Stack<Integer> st = new Stack<>();\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            topologicalSortDFSHelper(i, adj, vis, st);\n        }\n    }\n    List<Integer> ans = new ArrayList<>();\n    while (!st.isEmpty()) {\n        ans.add(st.pop());\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Topological Sort (Kahn's Algorithm)",
+    "endpoint": "/api/graph/topological-sort-kahn",
+    "methodName": "topologicalSortKahn",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 6, "adj": [[2,3],[3,4],[4],[5],[5],[]] },
+    "description": "Perform topological sort of a directed graph using Kahn's Algorithm (BFS).",
+    "approach": "Use in-degree array and queue to process nodes with zero in-degree.",
+    "code": "public List<Integer> topologicalSortKahn(int V, List<Integer>[] adj) {\n    int[] inDegree = new int[V];\n    for (int i = 0; i < V; i++) {\n        for (int it : adj[i]) {\n            inDegree[it]++;\n        }\n    }\n    Queue<Integer> q = new LinkedList<>();\n    for (int i = 0; i < V; i++) {\n        if (inDegree[i] == 0) {\n            q.add(i);\n        }\n    }\n    List<Integer> ans = new ArrayList<>();\n    while (!q.isEmpty()) {\n        int node = q.poll();\n        ans.add(node);\n        for (int it : adj[node]) {\n            inDegree[it]--;\n            if (inDegree[it] == 0) {\n                q.add(it);\n            }\n        }\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Dijkstra's Shortest Path Algorithm",
+    "endpoint": "/api/graph/dijkstra",
+    "methodName": "dijkstra",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 5, "adj": [ [[1,2],[2,4]], [[2,1],[3,7]], [[4,3]], [[5,1]], [] ], "S": 0 },
+    "description": "Find shortest paths from source to all vertices using Dijkstra's algorithm.",
+    "approach": "Use a priority queue to greedily select the next closest node.",
+    "code": "public List<Integer> dijkstra(int V, List<List<Integer>>[] adj, int S) {\n    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);\n    int[] dist = new int[V];\n    Arrays.fill(dist, Integer.MAX_VALUE);\n    dist[S] = 0;\n    pq.add(new int[]{S, 0});\n    while (!pq.isEmpty()) {\n        int[] pair = pq.poll();\n        int node = pair[0];\n        int dis = pair[1];\n        if (dis > dist[node]) continue;\n        for (List<Integer> it : adj[node]) {\n            int adjNode = it.get(0);\n            int weight = it.get(1);\n            if (dis + weight < dist[adjNode]) {\n                dist[adjNode] = dis + weight;\n                pq.add(new int[]{adjNode, dist[adjNode]});\n            }\n        }\n    }\n    List<Integer> result = new ArrayList<>();\n    for (int d : dist) {\n        result.add(d == Integer.MAX_VALUE ? -1 : d);\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Bellman-Ford Shortest Path Algorithm",
+    "endpoint": "/api/graph/bellman-ford",
+    "methodName": "bellmanFord",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 5, "edges": [[0,1,5],[1,2,3],[2,3,1],[3,4,2],[4,0,-10]], "S": 0 },
+    "description": "Find shortest paths from source to all vertices using Bellman-Ford algorithm.",
+    "approach": "Relax all edges V-1 times to find shortest paths, allowing negative weights.",
+    "code": "public List<Integer> bellmanFord(int V, List<List<Integer>> edges, int S) {\n    int[] dist = new int[V];\n    Arrays.fill(dist, Integer.MAX_VALUE);\n    dist[S] = 0;\n    for (int i = 0; i < V - 1; i++) {\n        for (List<Integer> edge : edges) {\n            int u = edge.get(0);\n            int v = edge.get(1);\n            int wt = edge.get(2);\n            if (dist[u] != Integer.MAX_VALUE && dist[u] + wt < dist[v]) {\n                dist[v] = dist[u] + wt;\n            }\n        }\n    }\n    List<Integer> result = new ArrayList<>();\n    for (int d : dist) {\n        result.add(d == Integer.MAX_VALUE ? -1 : d);\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Floyd-Warshall All-Pairs Shortest Path",
+    "endpoint": "/api/graph/floyd-warshall",
+    "methodName": "floydWarshall",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "matrix": [[0,3,-1,-1],[2,0,-1,1],[-1,7,0,2],[6,-1,-1,0]] },
+    "description": "Find shortest paths between all pairs of vertices using Floyd-Warshall algorithm.",
+    "approach": "Iteratively update the matrix by considering all possible intermediate nodes.",
+    "code": "public int[][] floydWarshall(int[][] matrix) {\n    int n = matrix.length;\n    for (int k = 0; k < n; k++) {\n        for (int i = 0; i < n; i++) {\n            for (int j = 0; j < n; j++) {\n                if (matrix[i][k] != -1 && matrix[k][j] != -1) {\n                    if (matrix[i][j] == -1 || matrix[i][k] + matrix[k][j] < matrix[i][j]) {\n                        matrix[i][j] = matrix[i][k] + matrix[k][j];\n                    }\n                }\n            }\n        }\n    }\n    return matrix;\n}"
+  },
+  {
+    "name": "Kruskal's Minimum Spanning Tree",
+    "endpoint": "/api/graph/kruskal",
+    "methodName": "kruskal",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 4, "edges": [[0,1,10],[0,2,6],[0,3,5],[1,3,15],[2,3,4]] },
+    "description": "Find the weight of the minimum spanning tree using Kruskal's algorithm.",
+    "approach": "Sort edges by weight and use union-find to avoid cycles.",
+    "code": "public int kruskal(int V, List<List<Integer>> edges) {\n    Collections.sort(edges, (a, b) -> a.get(2) - b.get(2));\n    int[] parent = new int[V];\n    int[] rank = new int[V];\n    for (int i = 0; i < V; i++) {\n        parent[i] = i;\n    }\n    int mstWt = 0;\n    for (List<Integer> edge : edges) {\n        int u = edge.get(0);\n        int v = edge.get(1);\n        int wt = edge.get(2);\n        if (findPar(u, parent) != findPar(v, parent)) {\n            union(u, v, parent, rank);\n            mstWt += wt;\n        }\n    }\n    return mstWt;\n}"
+  },
+  {
+    "name": "Prim's Minimum Spanning Tree",
+    "endpoint": "/api/graph/prim",
+    "methodName": "prim",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 5, "adj": [ [[1,2],[2,3]], [[0,2],[3,4]], [[0,3],[4,5]], [[1,4],[4,1]], [[2,5],[3,1]] ] },
+    "description": "Find the weight of the minimum spanning tree using Prim's algorithm.",
+    "approach": "Use a priority queue to greedily select the next minimum edge.",
+    "code": "public int prim(int V, List<List<Integer>>[] adj) {\n    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);\n    boolean[] vis = new boolean[V];\n    pq.add(new int[]{0, 0});\n    int sum = 0;\n    while (!pq.isEmpty()) {\n        int[] pair = pq.poll();\n        int node = pair[0];\n        int wt = pair[1];\n        if (vis[node]) continue;\n        vis[node] = true;\n        sum += wt;\n        for (List<Integer> it : adj[node]) {\n            int adjNode = it.get(0);\n            int adjWt = it.get(1);\n            if (!vis[adjNode]) {\n                pq.add(new int[]{adjNode, adjWt});\n            }\n        }\n    }\n    return sum;\n}"
+  },
+  {
+    "name": "Number of Islands",
+    "endpoint": "/api/graph/num-islands",
+    "methodName": "numIslands",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "grid": [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]] },
+    "description": "Count the number of islands in a 2D grid.",
+    "approach": "Use DFS to mark all cells in an island as visited.",
+    "code": "public int numIslands(char[][] grid) {\n    int n = grid.length;\n    int m = grid[0].length;\n    int count = 0;\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < m; j++) {\n            if (grid[i][j] == '1') {\n                count++;\n                dfsIslands(i, j, grid);\n            }\n        }\n    }\n    return count;\n}"
+  },
+  {
+    "name": "Flood Fill Algorithm",
+    "endpoint": "/api/graph/flood-fill",
+    "methodName": "floodFill",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "image": [[1,1,1],[1,1,0],[1,0,1]], "sr": 1, "sc": 1, "color": 2 },
+    "description": "Perform flood fill on a 2D image starting from a given cell.",
+    "approach": "Use DFS to change the color of all connected cells with the same original color.",
+    "code": "public int[][] floodFill(int[][] image, int sr, int sc, int color) {\n    int oldColor = image[sr][sc];\n    if (oldColor == color) return image;\n    dfsFloodFill(sr, sc, image, oldColor, color);\n    return image;\n}"
+  },
+  {
+    "name": "Course Schedule (Can Finish All Courses)",
+    "endpoint": "/api/graph/can-finish",
+    "methodName": "canFinish",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "numCourses": 2, "prerequisites": [[1,0]] },
+    "description": "Determine if all courses can be finished given prerequisites.",
+    "approach": "Build adjacency list and check for cycles using DFS.",
+    "code": "public boolean canFinish(int numCourses, List<List<Integer>> prerequisites) {\n    List<Integer>[] adj = new List[numCourses];\n    for (int i = 0; i < numCourses; i++) {\n        adj[i] = new ArrayList<>();\n    }\n    for (List<Integer> pre : prerequisites) {\n        adj[pre.get(1)].add(pre.get(0));\n    }\n    return !isCyclicDFS(numCourses, adj);\n}"
+  },
+  {
+    "name": "Course Schedule II (Find Order)",
+    "endpoint": "/api/graph/find-order",
+    "methodName": "findOrder",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "numCourses": 2, "prerequisites": [[1,0]] },
+    "description": "Find a possible order to finish all courses given prerequisites.",
+    "approach": "Build adjacency list and use Kahn's algorithm for topological sort.",
+    "code": "public List<Integer> findOrder(int numCourses, List<List<Integer>> prerequisites) {\n    List<Integer>[] adj = new List[numCourses];\n    for (int i = 0; i < numCourses; i++) {\n        adj[i] = new ArrayList<>();\n    }\n    for (List<Integer> pre : prerequisites) {\n        adj[pre.get(1)].add(pre.get(0));\n    }\n    List<Integer> result = topologicalSortKahn(numCourses, adj);\n    return result.size() == numCourses ? result : new ArrayList<>();\n}"
+  },
+  {
+    "name": "Number of Provinces",
+    "endpoint": "/api/graph/num-provinces",
+    "methodName": "numProvinces",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "isConnected": [[1,1,0],[1,1,0],[0,0,1]] },
+    "description": "Count the number of provinces (connected components) in an undirected graph.",
+    "approach": "Use DFS to find all connected components in the adjacency matrix.",
+    "code": "public int numProvinces(int[][] isConnected) {\n    int n = isConnected.length;\n    boolean[] vis = new boolean[n];\n    int count = 0;\n    for (int i = 0; i < n; i++) {\n        if (!vis[i]) {\n            count++;\n            dfsProvinces(i, isConnected, vis);\n        }\n    }\n    return count;\n}"
+  },
+  {
+    "name": "Rotting Oranges",
+    "endpoint": "/api/graph/oranges-rotting",
+    "methodName": "orangesRotting",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "grid": [[2,1,1],[1,1,0],[0,1,1]] },
+    "description": "Find the minimum time to rot all oranges in a grid.",
+    "approach": "Use BFS to spread rot from initially rotten oranges to adjacent fresh ones.",
+    "code": "public int orangesRotting(int[][] grid) {\n    int n = grid.length;\n    int m = grid[0].length;\n    Queue<int[]> q = new LinkedList<>();\n    int fresh = 0;\n    for (int i = 0; i < n; i++) {\n        for (int j = 0; j < m; j++) {\n            if (grid[i][j] == 2) {\n                q.add(new int[]{i, j});\n            } else if (grid[i][j] == 1) {\n                fresh++;\n            }\n        }\n    }\n    if (fresh == 0) return 0;\n    int time = 0;\n    int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};\n    while (!q.isEmpty() && fresh > 0) {\n        int size = q.size();\n        time++;\n        for (int i = 0; i < size; i++) {\n            int[] curr = q.poll();\n            for (int[] dir : dirs) {\n                int newRow = curr[0] + dir[0];\n                int newCol = curr[1] + dir[1];\n                if (newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && grid[newRow][newCol] == 1) {\n                    grid[newRow][newCol] = 2;\n                    q.add(new int[]{newRow, newCol});\n                    fresh--;\n                }\n            }\n        }\n    }\n    return fresh == 0 ? time - 1 : -1;\n}"
+  },
+  {
+    "name": "Word Ladder Length",
+    "endpoint": "/api/graph/word-ladder-length",
+    "methodName": "wordLadderLength",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "wordList": ["hot","dot","dog","lot","log","cog"], "beginWord": "hit", "endWord": "cog" },
+    "description": "Find the length of the shortest transformation sequence from beginWord to endWord.",
+    "approach": "Use BFS to explore all possible one-letter transformations.",
+    "code": "public int wordLadderLength(List<String> wordList, String beginWord, String endWord) {\n    Set<String> set = new HashSet<>(wordList);\n    if (!set.contains(endWord)) return 0;\n    Queue<String> q = new LinkedList<>();\n    q.add(beginWord);\n    int level = 1;\n    while (!q.isEmpty()) {\n        int size = q.size();\n        for (int i = 0; i < size; i++) {\n            String curr = q.poll();\n            if (curr.equals(endWord)) return level;\n            char[] arr = curr.toCharArray();\n            for (int j = 0; j < arr.length; j++) {\n                char original = arr[j];\n                for (char c = 'a'; c <= 'z'; c++) {\n                    arr[j] = c;\n                    String newWord = new String(arr);\n                    if (set.contains(newWord)) {\n                        set.remove(newWord);\n                        q.add(newWord);\n                    }\n                }\n                arr[j] = original;\n            }\n        }\n        level++;\n    }\n    return 0;\n}"
+  },
+  {
+    "name": "Cheapest Flight Within K Stops",
+    "endpoint": "/api/graph/cheapest-flight",
+    "methodName": "cheapestFlight",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "n": 4, "flights": [[0,1,100],[1,2,100],[2,3,100],[0,2,500]], "src": 0, "dst": 3, "k": 1 },
+    "description": "Find the cheapest price from src to dst with at most k stops.",
+    "approach": "Use BFS with a queue to track cost and stops, updating minimum cost for each node.",
+    "code": "public int cheapestFlight(int n, List<List<Integer>> flights, int src, int dst, int k) {\n    List<List<int[]>> adj = new ArrayList<>();\n    for (int i = 0; i < n; i++) {\n        adj.add(new ArrayList<>());\n    }\n    for (List<Integer> flight : flights) {\n        adj.get(flight.get(0)).add(new int[]{flight.get(1), flight.get(2)});\n    }\n    int[] dist = new int[n];\n    Arrays.fill(dist, Integer.MAX_VALUE);\n    dist[src] = 0;\n    Queue<int[]> q = new LinkedList<>();\n    q.add(new int[]{src, 0, 0});\n    while (!q.isEmpty()) {\n        int[] curr = q.poll();\n        int node = curr[0];\n        int cost = curr[1];\n        int stops = curr[2];\n        if (stops > k) continue;\n        for (int[] neighbor : adj.get(node)) {\n            int nextNode = neighbor[0];\n            int nextCost = neighbor[1];\n            if (cost + nextCost < dist[nextNode] && stops <= k) {\n                dist[nextNode] = cost + nextCost;\n                q.add(new int[]{nextNode, dist[nextNode], stops + 1});\n            }\n        }\n    }\n    return dist[dst] == Integer.MAX_VALUE ? -1 : dist[dst];\n}"
+  },
+  {
+    "name": "Articulation Points in a Graph",
+    "endpoint": "/api/graph/articulation-points",
+    "methodName": "articulationPoints",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 5, "adj": [[1,2],[0,2],[0,1,3,4],[2,4],[2,3]] },
+    "description": "Find all articulation points (cut vertices) in a graph.",
+    "approach": "Use DFS to compute discovery and low times, marking articulation points.",
+    "code": "public List<Integer> articulationPoints(int V, List<Integer>[] adj) {\n    boolean[] vis = new boolean[V];\n    int[] tin = new int[V];\n    int[] low = new int[V];\n    int[] mark = new int[V];\n    int timer = 0;\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            dfsArticulation(i, -1, adj, vis, tin, low, mark, timer);\n        }\n    }\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i < V; i++) {\n        if (mark[i] == 1) {\n            ans.add(i);\n        }\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Critical Connections (Bridges) in a Network",
+    "endpoint": "/api/graph/critical-connections",
+    "methodName": "criticalConnections",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "n": 5, "connections": [[0,1],[1,2],[2,0],[1,3],[3,4]] },
+    "description": "Find all critical connections (bridges) in a network.",
+    "approach": "Use DFS to compute discovery and low times, identifying bridges.",
+    "code": "public List<List<Integer>> criticalConnections(int n, List<List<Integer>> connections) {\n    List<Integer>[] adj = new List[n];\n    for (int i = 0; i < n; i++) {\n        adj[i] = new ArrayList<>();\n    }\n    for (List<Integer> connection : connections) {\n        adj[connection.get(0)].add(connection.get(1));\n        adj[connection.get(1)].add(connection.get(0));\n    }\n    boolean[] vis = new boolean[n];\n    int[] tin = new int[n];\n    int[] low = new int[n];\n    int timer = 0;\n    List<List<Integer>> bridges = new ArrayList<>();\n    for (int i = 0; i < n; i++) {\n        if (!vis[i]) {\n            dfsBridges(i, -1, adj, vis, tin, low, timer, bridges);\n        }\n    }\n    return bridges;\n}"
+  },
+  {
+    "name": "Kosaraju's Strongly Connected Components",
+    "endpoint": "/api/graph/kosaraju",
+    "methodName": "kosaraju",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "V": 5, "adj": [[1],[2],[0,3],[4],[]] },
+    "description": "Find all strongly connected components in a directed graph using Kosaraju's algorithm.",
+    "approach": "Perform topological sort, transpose the graph, and DFS on the transposed graph.",
+    "code": "public List<List<Integer>> kosaraju(int V, List<Integer>[] adj) {\n    boolean[] vis = new boolean[V];\n    Stack<Integer> st = new Stack<>();\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            dfsKosaraju(i, adj, vis, st);\n        }\n    }\n    List<Integer>[] adjT = new List[V];\n    for (int i = 0; i < V; i++) {\n        adjT[i] = new ArrayList<>();\n    }\n    for (int i = 0; i < V; i++) {\n        for (int it : adj[i]) {\n            adjT[it].add(i);\n        }\n    }\n    Arrays.fill(vis, false);\n    List<List<Integer>> scc = new ArrayList<>();\n    while (!st.isEmpty()) {\n        int node = st.pop();\n        if (!vis[node]) {\n            List<Integer> component = new ArrayList<>();\n            dfsKosarajuRev(node, adjT, vis, component);\n            scc.add(component);\n        }\n    }\n    return scc;\n}"
+  },
+  {
+    "name": "Disjoint Set (Union-Find) Operations",
+    "endpoint": "/api/graph/disjoint-set",
+    "methodName": "disjointSet",
+    "serviceFile": "GraphService.java",
+    "defaultInput": { "n": 5, "queries": [["union","0","1"],["union","1","2"],["find","0","2"],["find","0","3"]] },
+    "description": "Perform union and find operations on a disjoint set (union-find) data structure.",
+    "approach": "Use union by rank and path compression for efficient set operations.",
+    "code": "public List<String> disjointSet(int n, List<List<String>> queries) {\n    int[] parent = new int[n];\n    int[] rank = new int[n];\n    for (int i = 0; i < n; i++) {\n        parent[i] = i;\n    }\n    List<String> result = new ArrayList<>();\n    for (List<String> query : queries) {\n        String operation = query.get(0);\n        if (operation.equals(\"union\")) {\n            int u = Integer.parseInt(query.get(1));\n            int v = Integer.parseInt(query.get(2));\n            union(u, v, parent, rank);\n            result.add(\"Union performed\");\n        } else if (operation.equals(\"find\")) {\n            int u = Integer.parseInt(query.get(1));\n            int v = Integer.parseInt(query.get(2));\n            boolean sameSet = findPar(u, parent) == findPar(v, parent);\n            result.add(sameSet ? \"Yes\" : \"No\");\n        }\n    }\n    return result;\n}"
+  }
+]

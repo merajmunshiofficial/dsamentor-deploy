@@ -1,0 +1,232 @@
+[
+  {
+    "name": "Climb Stairs",
+    "endpoint": "/api/dynamic-programming/climb-stairs",
+    "methodName": "climbStairs",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "n": 5 },
+    "description": "Count total ways to reach nth stair.",
+    "approach": "Use dynamic programming to count ways to reach each stair.",
+    "code": "public int climbStairs(int n) {\n    int[] dp = new int[n + 1];\n    dp[0] = 1;\n    dp[1] = 1;\n    for (int i = 2; i <= n; i++) {\n        dp[i] = dp[i - 1] + dp[i - 2];\n    }\n    return dp[n];\n}"
+  },
+  {
+    "name": "0/1 Knapsack",
+    "endpoint": "/api/dynamic-programming/knapsack-01",
+    "methodName": "knapsack01",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "wt": [1, 2, 4, 5], "val": [5, 4, 8, 6], "n": 4, "W": 5 },
+    "description": "Solve 0/1 Knapsack problem.",
+    "approach": "Use recursion and memoization to solve the knapsack problem.",
+    "code": "public int knapsack01(int[] wt, int[] val, int n, int W) {\n    int[][] dp = new int[n][W + 1];\n    for (int[] row : dp) {\n        Arrays.fill(row, -1);\n    }\n    return knapsack01Helper(wt, val, n - 1, W, dp);\n}"
+  },
+  {
+    "name": "Frog Jump",
+    "endpoint": "/api/dynamic-programming/frog-jump",
+    "methodName": "frogJump",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "heights": [10, 20, 30, 10] },
+    "description": "Find minimum energy for frog jump.",
+    "approach": "Use DP to minimize energy spent jumping stairs.",
+    "code": "public int frogJump(int[] heights) {\n    int n = heights.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return frogJumpHelper(n - 1, heights, dp);\n}"
+  },
+  {
+    "name": "Frog Jump K Steps",
+    "endpoint": "/api/dynamic-programming/frog-jump-k",
+    "methodName": "frogJumpK",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "heights": [10, 20, 30, 10], "k": 2 },
+    "description": "Find minimum energy for frog jump with k steps.",
+    "approach": "Use DP to minimize energy with up to k jumps.",
+    "code": "public int frogJumpK(int[] heights, int k) {\n    int n = heights.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return frogJumpKHelper(n - 1, heights, k, dp);\n}"
+  },
+  {
+    "name": "House Robber",
+    "endpoint": "/api/dynamic-programming/house-robber",
+    "methodName": "houseRobber",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "nums": [2, 7, 9, 3, 1] },
+    "description": "House robber problem - maximum money without adjacent houses.",
+    "approach": "Use DP to maximize sum without picking adjacent elements.",
+    "code": "public int houseRobber(int[] nums) {\n    int n = nums.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return houseRobberHelper(n - 1, nums, dp);\n}"
+  },
+  {
+    "name": "Unbounded Knapsack",
+    "endpoint": "/api/dynamic-programming/unbounded-knapsack",
+    "methodName": "unboundedKnapsack",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "wt": [2, 3, 4], "val": [1, 2, 5], "n": 3, "W": 7 },
+    "description": "Solve the unbounded knapsack problem.",
+    "approach": "Use DP to maximize value with unlimited items.",
+    "code": "public int unboundedKnapsack(int[] wt, int[] val, int n, int W) {\n    int[] dp = new int[W + 1];\n    for (int i = 0; i < n; i++) {\n        for (int j = wt[i]; j <= W; j++) {\n            dp[j] = Math.max(dp[j], dp[j - wt[i]] + val[i]);\n        }\n    }\n    return dp[W];\n}"
+  },
+  {
+    "name": "Rod Cutting",
+    "endpoint": "/api/dynamic-programming/rod-cutting",
+    "methodName": "rodCutting",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "price": [2, 5, 7, 8, 10], "n": 5 },
+    "description": "Rod cutting problem to maximize profit.",
+    "approach": "Use DP to find the best way to cut the rod.",
+    "code": "public int rodCutting(int[] price, int n) {\n    int[] dp = new int[n + 1];\n    for (int i = 1; i <= n; i++) {\n        for (int j = 1; j <= i; j++) {\n            dp[i] = Math.max(dp[i], price[j - 1] + dp[i - j]);\n        }\n    }\n    return dp[n];\n}"
+  },
+  {
+    "name": "Coin Change (Count Ways)",
+    "endpoint": "/api/dynamic-programming/coin-change",
+    "methodName": "coinChange",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "coins": [1, 2, 5], "amount": 5 },
+    "description": "Count the number of ways to make up the amount with coins.",
+    "approach": "Use DP to count combinations for each amount.",
+    "code": "public int coinChange(int[] coins, int amount) {\n    int[] dp = new int[amount + 1];\n    dp[0] = 1;\n    for (int coin : coins) {\n        for (int i = coin; i <= amount; i++) {\n            dp[i] += dp[i - coin];\n        }\n    }\n    return dp[amount];\n}"
+  },
+  {
+    "name": "Target Sum",
+    "endpoint": "/api/dynamic-programming/target-sum",
+    "methodName": "targetSum",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "n": 5, "target": 3, "nums": [1, 1, 1, 1, 1] },
+    "description": "Find the number of ways to assign + and - to make the sum equal to target.",
+    "approach": "Use DP to count ways to partition the array.",
+    "code": "public int targetSum(int n, int target, int[] nums) {\n    int totSum = 0;\n    for (int num : nums) {\n        totSum += num;\n    }\n    if (totSum - target < 0 || (totSum - target) % 2 == 1) return 0;\n    int s2 = (totSum - target) / 2;\n    int[][] dp = new int[n][s2 + 1];\n    for (int[] row : dp) {\n        Arrays.fill(row, -1);\n    }\n    return targetSumHelper(n - 1, s2, nums, dp);\n}"
+  },
+  {
+    "name": "Partition Equal Subset Sum",
+    "endpoint": "/api/dynamic-programming/partition-equal-subset-sum",
+    "methodName": "partitionEqualSubsetSum",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "nums": [1, 5, 11, 5] },
+    "description": "Determine if the array can be partitioned into two subsets with equal sum.",
+    "approach": "Use DP to check for subset sum.",
+    "code": "public boolean partitionEqualSubsetSum(int[] nums) {\n    int sum = 0;\n    for (int num : nums) {\n        sum += num;\n    }\n    if (sum % 2 != 0) return false;\n    int target = sum / 2;\n    boolean[] dp = new boolean[target + 1];\n    dp[0] = true;\n    for (int num : nums) {\n        for (int i = target; i >= num; i--) {\n            dp[i] = dp[i] || dp[i - num];\n        }\n    }\n    return dp[target];\n}"
+  },
+  {
+    "name": "Minimum Falling Path Sum",
+    "endpoint": "/api/dynamic-programming/min-falling-path-sum",
+    "methodName": "minFallingPathSum",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "matrix": [[2,1,3],[6,5,4],[7,8,9]] },
+    "description": "Find the minimum sum of a falling path through a matrix.",
+    "approach": "Use DP to compute the minimum path sum for each cell.",
+    "code": "public int minFallingPathSum(int[][] matrix) {\n    int n = matrix.length;\n    int[][] dp = new int[n][n];\n    for (int[] row : dp) Arrays.fill(row, -1);\n    int minSum = Integer.MAX_VALUE;\n    for (int j = 0; j < n; j++) {\n        minSum = Math.min(minSum, minFallingPathSumHelper(n - 1, j, matrix, dp));\n    }\n    return minSum;\n}"
+  },
+  {
+    "name": "Minimum Triangle Sum",
+    "endpoint": "/api/dynamic-programming/min-triangle-sum",
+    "methodName": "minTriangleSum",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "triangle": [[2],[3,4],[6,5,7],[4,1,8,3]] },
+    "description": "Find the minimum path sum from top to bottom in a triangle.",
+    "approach": "Use DP to compute the minimum path sum for each position.",
+    "code": "public int minTriangleSum(List<List<Integer>> triangle) {\n    int n = triangle.size();\n    int[][] dp = new int[n][n];\n    for (int[] row : dp) Arrays.fill(row, -1);\n    return minTriangleSumHelper(0, 0, triangle, dp);\n}"
+  },
+  {
+    "name": "Max Coins",
+    "endpoint": "/api/dynamic-programming/max-coins",
+    "methodName": "maxCoins",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "nums": [3,1,5,8] },
+    "description": "Find the maximum coins you can collect by bursting balloons wisely.",
+    "approach": "Use DP to maximize coins for each subarray.",
+    "code": "public int maxCoins(int[] nums) {\n    int n = nums.length;\n    int[] newNums = new int[n + 2];\n    newNums[0] = 1;\n    newNums[n + 1] = 1;\n    for (int i = 0; i < n; i++) {\n        newNums[i + 1] = nums[i];\n    }\n    int[][] dp = new int[n + 2][n + 2];\n    for (int[] row : dp) Arrays.fill(row, -1);\n    return maxCoinsHelper(1, n, newNums, dp);\n}"
+  },
+  {
+    "name": "Matrix Chain Multiplication",
+    "endpoint": "/api/dynamic-programming/matrix-chain-multiplication",
+    "methodName": "matrixChainMultiplication",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "arr": [40, 20, 30, 10, 30] },
+    "description": "Find the minimum number of multiplications needed to multiply a chain of matrices.",
+    "approach": "Use DP to find the optimal order of matrix multiplication.",
+    "code": "public int matrixChainMultiplication(int[] arr) {\n    int n = arr.length;\n    int[][] dp = new int[n][n];\n    for (int[] row : dp) Arrays.fill(row, -1);\n    return matrixChainMultiplicationHelper(1, n - 1, arr, dp);\n}"
+  },
+  {
+    "name": "Minimum Cost to Cut Stick",
+    "endpoint": "/api/dynamic-programming/min-cost",
+    "methodName": "minCost",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "n": 7, "cuts": [1,3,4,5] },
+    "description": "Find the minimum cost to cut a stick at given positions.",
+    "approach": "Use DP to minimize the cost of cuts.",
+    "code": "public int minCost(int n, int[] cuts) {\n    int c = cuts.length;\n    int[] newCuts = new int[c + 2];\n    newCuts[0] = 0;\n    newCuts[c + 1] = n;\n    for (int i = 0; i < c; i++) {\n        newCuts[i + 1] = cuts[i];\n    }\n    Arrays.sort(newCuts);\n    int[][] dp = new int[c + 2][c + 2];\n    for (int[] row : dp) Arrays.fill(row, -1);\n    return minCostHelper(1, c, newCuts, dp);\n}"
+  },
+  {
+    "name": "Minimum Insertions to Make Palindrome",
+    "endpoint": "/api/dynamic-programming/min-insertions",
+    "methodName": "minInsertions",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "s": "mbadm" },
+    "description": "Find the minimum number of insertions to make a string palindrome.",
+    "approach": "Use DP to compute the minimum insertions for each substring.",
+    "code": "public int minInsertions(String s) {\n    int n = s.length();\n    int[][] dp = new int[n][n];\n    for (int[] row : dp) Arrays.fill(row, -1);\n    return minInsertionsHelper(0, n - 1, s, dp);\n}"
+  },
+  {
+    "name": "Minimum Operations to Make Array Equal",
+    "endpoint": "/api/dynamic-programming/min-operations",
+    "methodName": "minOperations",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "nums": [1, 2, 3, 4, 5] },
+    "description": "Find the minimum number of operations to make all array elements equal.",
+    "approach": "Use math to compute the target and sum the differences.",
+    "code": "public int minOperations(int[] nums) {\n    int n = nums.length;\n    int sum = 0;\n    for (int num : nums) sum += num;\n    if (sum % n != 0) return -1;\n    int target = sum / n;\n    int operations = 0;\n    for (int num : nums) {\n        operations += Math.abs(num - target);\n    }\n    return operations / 2;\n}"
+  },
+  {
+    "name": "Non-Adjacent Elements Maximum Sum",
+    "endpoint": "/api/dynamic-programming/non-adjacent",
+    "methodName": "nonAdjacent",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "nums": [3, 2, 5, 10, 7] },
+    "description": "Find the maximum sum of non-adjacent elements in the array.",
+    "approach": "Use DP to maximize sum without picking adjacent elements.",
+    "code": "public int nonAdjacent(int[] nums) {\n    int n = nums.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return nonAdjacentHelper(n - 1, nums, dp);\n}"
+  },
+  {
+    "name": "Wildcard Pattern Matching",
+    "endpoint": "/api/dynamic-programming/wildcard",
+    "methodName": "wildcard",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "pattern": "a*b?c", "str": "aabxc" },
+    "description": "Check if the string matches the pattern with wildcards.",
+    "approach": "Use DP to match pattern and string with wildcards.",
+    "code": "public boolean wildcard(String pattern, String str) {\n    int n = pattern.length();\n    int m = str.length();\n    int[][] dp = new int[n][m];\n    for (int[] row : dp) Arrays.fill(row, -1);\n    return wildcardHelper(n - 1, m - 1, pattern, str, dp) == 1;\n}"
+  },
+  {
+    "name": "Count Partitions with Given Difference",
+    "endpoint": "/api/dynamic-programming/count-partitions",
+    "methodName": "countPartitions",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "n": 4, "d": 1, "arr": [1, 1, 2, 3] },
+    "description": "Count the number of ways to partition the array into two subsets with a given difference.",
+    "approach": "Use DP to count partitions with the required difference.",
+    "code": "public int countPartitions(int n, int d, int[] arr) {\n    int totSum = 0;\n    for (int num : arr) totSum += num;\n    if (totSum - d < 0 || (totSum - d) % 2 == 1) return 0;\n    int s2 = (totSum - d) / 2;\n    int[][] dp = new int[n][s2 + 1];\n    for (int[] row : dp) Arrays.fill(row, -1);\n    return countPartitionsHelper(n - 1, s2, arr, dp);\n}"
+  },
+  {
+    "name": "Equal Partition Sum",
+    "endpoint": "/api/dynamic-programming/equal-partition",
+    "methodName": "equalPartition",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "n": 4, "arr": [1, 5, 11, 5] },
+    "description": "Check if the array can be partitioned into two subsets with equal sum.",
+    "approach": "Use DP to check for subset sum.",
+    "code": "public boolean equalPartition(int n, int[] arr) {\n    int totSum = 0;\n    for (int num : arr) totSum += num;\n    if (totSum % 2 == 1) return false;\n    int target = totSum / 2;\n    boolean[][] dp = new boolean[n][target + 1];\n    for (int i = 0; i < n; i++) dp[i][0] = true;\n    if (arr[0] <= target) dp[0][arr[0]] = true;\n    for (int ind = 1; ind < n; ind++) {\n        for (int cap = 1; cap <= target; cap++) {\n            boolean notTaken = dp[ind - 1][cap];\n            boolean taken = false;\n            if (arr[ind] <= cap) taken = dp[ind - 1][cap - arr[ind]];\n            dp[ind][cap] = notTaken || taken;\n        }\n    }\n    return dp[n - 1][target];\n}"
+  },
+  {
+    "name": "Is Subset Sum",
+    "endpoint": "/api/dynamic-programming/is-subset-sum",
+    "methodName": "isSubsetSum",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "n": 5, "arr": [3, 34, 4, 12, 5], "sum": 9 },
+    "description": "Check if there is a subset of the array with sum equal to the given sum.",
+    "approach": "Use DP to check for subset sum.",
+    "code": "public boolean isSubsetSum(int n, int[] arr, int sum) {\n    boolean[][] dp = new boolean[n][sum + 1];\n    for (int i = 0; i < n; i++) dp[i][0] = true;\n    if (arr[0] <= sum) dp[0][arr[0]] = true;\n    for (int ind = 1; ind < n; ind++) {\n        for (int target = 1; target <= sum; target++) {\n            boolean notTaken = dp[ind - 1][target];\n            boolean taken = false;\n            if (arr[ind] <= target) taken = dp[ind - 1][target - arr[ind]];\n            dp[ind][target] = notTaken || taken;\n        }\n    }\n    return dp[n - 1][sum];\n}"
+  },
+  {
+    "name": "Count Ways to Reach Nth Stair",
+    "endpoint": "/api/dynamic-programming/count",
+    "methodName": "count",
+    "serviceFile": "DynamicProgrammingService.java",
+    "defaultInput": { "n": 4 },
+    "description": "Count the number of ways to reach the nth stair.",
+    "approach": "Use DP to count the number of ways to reach each stair.",
+    "code": "public int count(int n) {\n    int[] dp = new int[n + 1];\n    Arrays.fill(dp, -1);\n    return countHelper(n, dp);\n}"
+  }
+]

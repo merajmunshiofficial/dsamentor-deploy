@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Longest Consecutive Sequence",
+    "endpoint": "/api/hashing/longest-consecutive",
+    "methodName": "longestConsecutive",
+    "serviceFile": "HashingService.java",
+    "defaultInput": { "nums": [100, 4, 200, 1, 3, 2] },
+    "description": "Find the length of the longest consecutive elements sequence in an array.",
+    "approach": "Use a HashSet to check for the start of a sequence and count its length.",
+    "code": "public int longestConsecutive(int[] nums) {\n    int n = nums.length;\n    if (n == 0) return 0;\n    int longest = 1;\n    Set<Integer> st = new HashSet<>();\n    for (int i = 0; i < n; i++) {\n        st.add(nums[i]);\n    }\n    for (int it : st) {\n        if (!st.contains(it - 1)) {\n            int cnt = 1;\n            int x = it;\n            while (st.contains(x + 1)) {\n                x = x + 1;\n                cnt = cnt + 1;\n            }\n            longest = Math.max(longest, cnt);\n        }\n    }\n    return longest;\n}"
+  },
+  {
+    "name": "Subarrays with Given Sum",
+    "endpoint": "/api/hashing/subarray-sum",
+    "methodName": "subarraySum",
+    "serviceFile": "HashingService.java",
+    "defaultInput": { "nums": [1, 2, 3], "k": 3 },
+    "description": "Find the total number of continuous subarrays whose sum equals k.",
+    "approach": "Use a HashMap to store prefix sums and count subarrays with the required sum.",
+    "code": "public int subarraySum(int[] nums, int k) {\n    int n = nums.length;\n    HashMap<Integer, Integer> prefixSumMap = new HashMap<>();\n    int currentPrefixSum = 0, subarrayCount = 0;\n    prefixSumMap.put(0, 1);\n    for (int i = 0; i < n; i++) {\n        currentPrefixSum += nums[i];\n        int sumToRemove = currentPrefixSum - k;\n        subarrayCount += prefixSumMap.getOrDefault(sumToRemove, 0);\n        prefixSumMap.put(currentPrefixSum, prefixSumMap.getOrDefault(currentPrefixSum, 0) + 1);\n    }\n    return subarrayCount;\n}"
+  },
+  {
+    "name": "Longest Subarray with Given Sum",
+    "endpoint": "/api/hashing/longest-subarray",
+    "methodName": "longestSubarray",
+    "serviceFile": "HashingService.java",
+    "defaultInput": { "nums": [10, 5, 2, 7, 1, 9], "k": 15 },
+    "description": "Find the length of the longest subarray with sum equal to k.",
+    "approach": "Use a HashMap to store prefix sums and their earliest indices.",
+    "code": "public int longestSubarray(int[] nums, int k) {\n    int n = nums.length;\n    HashMap<Integer, Integer> prefixSumMap = new HashMap<>();\n    int currentPrefixSum = 0, maxLength = 0;\n    for (int i = 0; i < n; i++) {\n        currentPrefixSum += nums[i];\n        if (currentPrefixSum == k) {\n            maxLength = i + 1;\n        }\n        if (prefixSumMap.containsKey(currentPrefixSum - k)) {\n            maxLength = Math.max(maxLength, i - prefixSumMap.get(currentPrefixSum - k));\n        }\n        if (!prefixSumMap.containsKey(currentPrefixSum)) {\n            prefixSumMap.put(currentPrefixSum, i);\n        }\n    }\n    return maxLength;\n}"
+  },
+  {
+    "name": "Subarrays with XOR Equal to K",
+    "endpoint": "/api/hashing/subarrays-with-xor-k",
+    "methodName": "subarraysWithXorK",
+    "serviceFile": "HashingService.java",
+    "defaultInput": { "nums": [4, 2, 2, 6, 4], "k": 6 },
+    "description": "Find the number of subarrays with XOR equal to k.",
+    "approach": "Use a HashMap to store prefix XORs and count subarrays with the required XOR.",
+    "code": "public int subarraysWithXorK(int[] nums, int k) {\n    int n = nums.length;\n    HashMap<Integer, Integer> xorMap = new HashMap<>();\n    int currentXor = 0, subarrayCount = 0;\n    xorMap.put(0, 1);\n    for (int i = 0; i < n; i++) {\n        currentXor ^= nums[i];\n        int xorToRemove = currentXor ^ k;\n        subarrayCount += xorMap.getOrDefault(xorToRemove, 0);\n        xorMap.put(currentXor, xorMap.getOrDefault(currentXor, 0) + 1);\n    }\n    return subarrayCount;\n}"
+  }
+]

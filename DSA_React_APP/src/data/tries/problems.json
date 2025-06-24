@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Count Distinct Substrings",
+    "endpoint": "/api/tries/count-distinct",
+    "methodName": "countDistinct",
+    "serviceFile": "TriesService.java",
+    "defaultInput": { "s": "ababa" },
+    "description": "Count the number of distinct substrings in a given string using a trie.",
+    "approach": "Insert all suffixes of the string into a trie and count the number of new nodes created.",
+    "code": "public int countDistinct(String s) {\n    int c = 0;\n    Node26 root = new Node26();\n    for (int i = 0; i < s.length(); i++) {\n        Node26 node = root;\n        for (int j = i; j < s.length(); j++) {\n            if (!node.containsKey(s.charAt(j))) {\n                c++;\n                node.put(s.charAt(j), new Node26());\n            }\n            node = node.get(s.charAt(j));\n        }\n    }\n    return c + 1;\n}"
+  },
+  {
+    "name": "Find Maximum XOR of Two Numbers in an Array",
+    "endpoint": "/api/tries/find-maximum-xor",
+    "methodName": "findMaximumXOR",
+    "serviceFile": "TriesService.java",
+    "defaultInput": { "nums": [3, 10, 5, 25, 2, 8] },
+    "description": "Find the maximum XOR of any two numbers in an array using a binary trie.",
+    "approach": "Insert all numbers into a binary trie and for each number, find the number in the trie that gives the maximum XOR.",
+    "code": "public int findMaximumXOR(int[] nums) {\n    Trie trie = new Trie();\n    for (int num : nums) trie.insert(num);\n    int maxi = 0;\n    for (int num : nums) {\n        maxi = Math.max(maxi, trie.getMax(num));\n    }\n    return maxi;\n}"
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Count and Say Sequence",
+    "endpoint": "/api/string/count-and-say",
+    "methodName": "countAndSay",
+    "serviceFile": "StringService.java",
+    "defaultInput": { "n": 4 },
+    "description": "Generate the n-th term of the count-and-say sequence.",
+    "approach": "Recursively build the sequence by describing the previous term in terms of consecutive digits.",
+    "code": "public String countAndSay(int n) {\n    if (n == 1) return \"1\";\n    String prev = countAndSay(n - 1);\n    int len = prev.length();\n    StringBuilder ans = new StringBuilder();\n    int count = 1;\n    for (int i = 1; i < len; i++) {\n        if (prev.charAt(i) == prev.charAt(i - 1)) count++;\n        else {\n            ans.append(count).append(prev.charAt(i - 1));\n            count = 1;\n        }\n    }\n    ans.append(count).append(prev.charAt(len - 1));\n    return ans.toString();\n}"
+  },
+  {
+    "name": "Minimum Parenthesis Reversals",
+    "endpoint": "/api/string/count-rev",
+    "methodName": "countRev",
+    "serviceFile": "StringService.java",
+    "defaultInput": { "s": "(()))(" },
+    "description": "Find the minimum number of reversals to balance a parenthesis string.",
+    "approach": "Count unmatched open and close brackets, then compute the minimum reversals needed.",
+    "code": "public int countRev(String s) {\n    int n = s.length();\n    if (n % 2 != 0) return -1;\n    int open = 0, close = 0;\n    for (int i = 0; i < n; i++) {\n        if (s.charAt(i) == '(') open++;\n        else {\n            if (open > 0) open--;\n            else close++;\n        }\n    }\n    return (open / 2) + (open % 2) + (close / 2) + (close % 2);\n}"
+  },
+  {
+    "name": "Reverse Words in String",
+    "endpoint": "/api/string/reverse-words",
+    "methodName": "reverseWords",
+    "serviceFile": "StringService.java",
+    "defaultInput": { "s": "  hello world  " },
+    "description": "Reverse the order of words in a string, trimming spaces.",
+    "approach": "Reverse the entire string, then reverse each word individually, and trim extra spaces.",
+    "code": "public String reverseWords(String s) {\n    int n = s.length();\n    StringBuilder sb = new StringBuilder(s);\n    reverseString(sb, 0, n - 1);\n    int i = 0, j = 0, start, end;\n    while (j < n) {\n        while (j < n && sb.charAt(j) == ' ') j++;\n        if (j == n) break;\n        start = i;\n        while (j < n && sb.charAt(j) != ' ') {\n            if (i < sb.length()) sb.setCharAt(i++, sb.charAt(j++));\n            else { sb.append(sb.charAt(j++)); i++; }\n        }\n        end = i - 1;\n        reverseString(sb, start, end);\n        if (j < n) {\n            if (i < sb.length()) sb.setCharAt(i++, ' ');\n            else { sb.append(' '); i++; }\n        }\n    }\n    if (i > 0 && sb.charAt(i - 1) == ' ') i--;\n    return sb.substring(0, i);\n}"
+  },
+  {
+    "name": "KMP Pattern Search",
+    "endpoint": "/api/string/kmp-search",
+    "methodName": "kmpSearch",
+    "serviceFile": "StringService.java",
+    "defaultInput": { "pattern": "abc", "text": "ababcabcababc" },
+    "description": "Find all indices of a pattern in text using the KMP algorithm.",
+    "approach": "Build the LPS array for the pattern and use it to efficiently search for matches in the text.",
+    "code": "public List<Integer> kmpSearch(String pattern, String text) {\n    String s = pattern + '$' + text;\n    int[] lps = computeLPS(s);\n    int n = text.length(), m = pattern.length();\n    List<Integer> ans = new ArrayList<>();\n    for (int i = m + 1; i < s.length(); i++) {\n        if (lps[i] == m) ans.add(i - 2 * m);\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Rabin-Karp Pattern Search",
+    "endpoint": "/api/string/rabin-karp-search",
+    "methodName": "rabinKarpSearch",
+    "serviceFile": "StringService.java",
+    "defaultInput": { "pattern": "abc", "text": "ababcabcababc" },
+    "description": "Find all indices of a pattern in text using the Rabin-Karp algorithm (naive version).",
+    "approach": "Check all substrings of the text for equality with the pattern.",
+    "code": "public List<Integer> rabinKarpSearch(String pattern, String text) {\n    int n = pattern.length(), m = text.length();\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i <= m - n; i++) {\n        boolean flag = true;\n        for (int j = 0; j < n; j++) {\n            if (text.charAt(i + j) != pattern.charAt(j)) { flag = false; break; }\n        }\n        if (flag) ans.add(i);\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Z-Algorithm Pattern Search",
+    "endpoint": "/api/string/z-algorithm-search",
+    "methodName": "zAlgorithmSearch",
+    "serviceFile": "StringService.java",
+    "defaultInput": { "pattern": "xyz", "text": "xyzabxyzabxyz" },
+    "description": "Find all indices of a pattern in text using the Z-algorithm.",
+    "approach": "Build the Z-array for the concatenated pattern and text, then find matches where Z[i] equals the pattern length.",
+    "code": "public List<Integer> zAlgorithmSearch(String text, String pattern) {\n    String s = pattern + '$' + text;\n    int[] z = computeZarray(s);\n    int n = text.length(), m = pattern.length();\n    List<Integer> ans = new ArrayList<>();\n    for (int i = m + 1; i < s.length(); i++) {\n        if (z[i] == m) ans.add(i - (m + 1));\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Longest Happy Prefix",
+    "endpoint": "/api/string/longest-happy-prefix",
+    "methodName": "longestHappyPrefix",
+    "serviceFile": "StringService.java",
+    "defaultInput": { "s": "ababab" },
+    "description": "Find the longest happy prefix (LPS) of a string.",
+    "approach": "Use the LPS array to find the longest prefix which is also a suffix.",
+    "code": "public String longestHappyPrefix(String s) {\n    int[] lps = computeLPS(s);\n    return s.substring(0, lps[s.length() - 1]);\n}"
+  },
+  {
+    "name": "Shortest Palindrome by Prepending",
+    "endpoint": "/api/string/shortest-palindrome",
+    "methodName": "shortestPalindrome",
+    "serviceFile": "StringService.java",
+    "defaultInput": { "s": "aacecaaa" },
+    "description": "Find the shortest palindrome by prepending characters to the string.",
+    "approach": "Reverse the string, concatenate with the original, and use the LPS array to find the minimum prefix to add.",
+    "code": "public String shortestPalindrome(String s) {\n    StringBuilder revs = new StringBuilder(s).reverse();\n    String str = s + \"$\" + revs;\n    int[] lps = computeLPS(str);\n    int ans = s.length() - lps[lps.length - 1];\n    String toAdd = revs.substring(0, ans);\n    return toAdd + s;\n}"
+  }
+]

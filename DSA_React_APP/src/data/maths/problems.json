@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Prime Factors of Numbers",
+    "endpoint": "/api/maths/prime-factors",
+    "methodName": "primeFactors",
+    "serviceFile": "MathsService.java",
+    "defaultInput": { "numbers": [12, 15, 100] },
+    "description": "Find the prime factors for each number in a list.",
+    "approach": "Use a sieve to precompute smallest prime factors, then factorize each number by dividing by its smallest prime factor repeatedly.",
+    "code": "public List<List<Integer>> primeFactors(List<Integer> numbers) {\n    sieve();\n    List<List<Integer>> ans = new ArrayList<>();\n    for (int n : numbers) {\n        ans.add(primeFact(n));\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "All Primes Up to N",
+    "endpoint": "/api/maths/prime-till-n",
+    "methodName": "primeTillN",
+    "serviceFile": "MathsService.java",
+    "defaultInput": { "n": 30 },
+    "description": "Get all prime numbers up to a given number n.",
+    "approach": "Use the Sieve of Eratosthenes to find all primes up to n.",
+    "code": "public List<Integer> primeTillN(int n) {\n    boolean[] isPrime = new boolean[n + 1];\n    Arrays.fill(isPrime, true);\n    List<Integer> ans = new ArrayList<>();\n    for (long i = 2; i <= n; i++) {\n        if (isPrime[(int) i]) {\n            ans.add((int) i);\n            for (long val = i * i; val <= n; val += i) {\n                isPrime[(int) val] = false;\n            }\n        }\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Count of Primes in Ranges",
+    "endpoint": "/api/maths/primes-in-range",
+    "methodName": "primesInRange",
+    "serviceFile": "MathsService.java",
+    "defaultInput": { "ranges": [[10, 20], [1, 10], [15, 30]] },
+    "description": "Get the count of prime numbers in each specified range.",
+    "approach": "Precompute the number of primes up to each value using a sieve, then answer each range query in O(1) using prefix sums.",
+    "code": "public List<Integer> primesInRange(List<int[]> ranges) {\n    if (ranges == null || ranges.isEmpty()) {\n        return new ArrayList<>();\n    }\n    int maxVal = 0;\n    for (int[] query : ranges) {\n        maxVal = Math.max(maxVal, query[1]);\n    }\n    boolean[] isPrime = new boolean[maxVal + 1];\n    Arrays.fill(isPrime, true);\n    for (int i = 2; i * i <= maxVal; i++) {\n        if (isPrime[i]) {\n            for (int j = i * i; j <= maxVal; j += i) {\n                isPrime[j] = false;\n            }\n        }\n    }\n    int[] primeCount = new int[maxVal + 1];\n    for (int i = 1; i <= maxVal; i++) {\n        primeCount[i] = primeCount[i - 1];\n        if (isPrime[i]) {\n            primeCount[i]++;\n        }\n    }\n    List<Integer> result = new ArrayList<>();\n    for (int[] query : ranges) {\n        int start = query[0];\n        int end = query[1];\n        if (start == 0) {\n            result.add(primeCount[end]);\n        } else {\n            result.add(primeCount[end] - primeCount[start - 1]);\n        }\n    }\n    return result;\n}"
+  }
+]

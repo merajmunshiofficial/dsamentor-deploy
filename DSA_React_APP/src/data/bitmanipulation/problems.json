@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Divide Two Integers Without Multiplication or Division",
+    "endpoint": "/api/bit-manipulation/divide",
+    "methodName": "divide",
+    "serviceFile": "BitManipulationService.java",
+    "defaultInput": { "dividend": 10, "divisor": 3 },
+    "description": "Divide two integers without using multiplication or division.",
+    "approach": "Use bit shifting to find the quotient by subtracting multiples of the divisor.",
+    "code": "public int divide(int dividend, int divisor) {\n    if(dividend == divisor) return 1;\n    boolean isPositive = true;\n    if(dividend >= 0 && divisor < 0) \n        isPositive = false;\n    else if(dividend < 0 && divisor > 0)\n        isPositive = false;\n    int n = Math.abs(dividend);\n    int d = Math.abs(divisor);\n    int ans = 0;\n    while(n >= d) {\n        int count = 0;\n        while(n >= (d << (count+1))) {\n            count++;\n        }\n        ans += (1 << count);\n        n -= d*(1 << count);\n    }\n    if(ans > Integer.MAX_VALUE && isPositive) \n        return Integer.MAX_VALUE;\n    if(ans > Integer.MAX_VALUE && !isPositive)\n        return Integer.MIN_VALUE;\n    return isPositive ? ans : -1*ans;\n}"
+  },
+  {
+    "name": "Single Number (All Others Appear Twice)",
+    "endpoint": "/api/bit-manipulation/single-number",
+    "methodName": "singleNumber",
+    "serviceFile": "BitManipulationService.java",
+    "defaultInput": { "nums": [2, 2, 1] },
+    "description": "Find the single number that appears once in an array where all others appear twice.",
+    "approach": "Use XOR to cancel out duplicate numbers, leaving the unique one.",
+    "code": "public int singleNumber(int[] nums) {\n    int XOR = 0;\n    for (int i = 0; i < nums.length; i++) {\n        XOR ^= nums[i];    \n    }\n    return XOR;        \n}"
+  },
+  {
+    "name": "Single Number II (All Others Appear Thrice)",
+    "endpoint": "/api/bit-manipulation/single-number-ii",
+    "methodName": "singleNumberII",
+    "serviceFile": "BitManipulationService.java",
+    "defaultInput": { "nums": [2, 2, 3, 2] },
+    "description": "Find the single number that appears once in an array where all others appear three times.",
+    "approach": "Use bitwise operations to track bits appearing once and twice.",
+    "code": "public int singleNumberII(int[] nums) {\n    int ones = 0, twos = 0;\n    for (int i = 0; i < nums.length; i++) {\n        ones = (ones ^ nums[i] & ~twos);\n        twos = (twos ^ nums[i] & ~ones);\n    }\n    return ones;\n}"
+  },
+  {
+    "name": "Single Number III (Two Singles, All Others Appear Twice)",
+    "endpoint": "/api/bit-manipulation/single-number-iii",
+    "methodName": "singleNumberIII",
+    "serviceFile": "BitManipulationService.java",
+    "defaultInput": { "nums": [1, 2, 1, 3, 2, 5] },
+    "description": "Find two single numbers that appear once in an array where all others appear twice.",
+    "approach": "Use XOR and bit manipulation to separate the two unique numbers.",
+    "code": "public int[] singleNumberIII(int[] nums) {\n    int n = nums.length;\n    long XOR = 0;\n    for(int i=0; i < n; i++) {\n        XOR = XOR ^ nums[i];\n    }\n    int rightmost = (int)(XOR & (XOR - 1)) ^ (int)XOR;\n    int XOR1 = 0, XOR2 = 0;\n    for(int i=0; i < n; i++) {\n        if((nums[i] & rightmost) != 0) {\n            XOR1 = XOR1 ^ nums[i];\n        }\n        else {\n            XOR2 = XOR2 ^ nums[i];\n        }\n    }\n    if(XOR1 < XOR2) return new int[]{XOR1, XOR2};\n    return new int[]{XOR2, XOR1};\n}"
+  },
+  {
+    "name": "Power Set (All Subsets)",
+    "endpoint": "/api/bit-manipulation/power-set",
+    "methodName": "powerSet",
+    "serviceFile": "BitManipulationService.java",
+    "defaultInput": { "nums": [1, 2, 3] },
+    "description": "Generate all possible subsets (power set) of an array.",
+    "approach": "Use bitmasking to generate all possible combinations of elements.",
+    "code": "public List<List<Integer>> powerSet(int[] nums) {\n    int n = nums.length;\n    List<List<Integer>> ans = new ArrayList<>();\n    int count = (1 << n);\n    for (int val = 0; val < count; val++) {\n        List<Integer> subset = new ArrayList<>();\n        for (int i = 0; i < n; i++) {\n            if ((val & (1 << i)) != 0) {\n                subset.add(nums[i]);\n            }\n        }\n        ans.add(subset);\n    }\n    return ans;\n}"
+  },
+  {
+    "name": "Range XOR (L to R)",
+    "endpoint": "/api/bit-manipulation/find-range-xor",
+    "methodName": "findRangeXOR",
+    "serviceFile": "BitManipulationService.java",
+    "defaultInput": { "l": 2, "r": 5 },
+    "description": "Find XOR of numbers from L to R.",
+    "approach": "Use properties of XOR to compute the result efficiently.",
+    "code": "public int findRangeXOR(int l, int r) {\n    return XORtillN(l - 1) ^ XORtillN(r);\n}"
+  },
+  {
+    "name": "Minimum Bit Flips to Convert Start to Goal",
+    "endpoint": "/api/bit-manipulation/min-bits-flip",
+    "methodName": "minBitsFlip",
+    "serviceFile": "BitManipulationService.java",
+    "defaultInput": { "start": 10, "goal": 7 },
+    "description": "Find minimum number of bit flips to convert start to goal.",
+    "approach": "Count the number of differing bits using XOR and bit counting.",
+    "code": "public int minBitsFlip(int start, int goal) {\n    int num = start ^ goal;\n    int count = 0;\n    for (int i = 0; i < 32; i++) {\n        count += (num & 1); \n        num = num >> 1;\n    }\n    return count;\n}"
+  }
+]

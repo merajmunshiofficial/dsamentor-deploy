@@ -1,0 +1,172 @@
+[
+  {
+    "name": "Check Subsequence Sum",
+    "endpoint": "/api/recursion/check-subsequence-sum",
+    "methodName": "checkSubsequenceSum",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "nums": [1, 2, 3], "target": 5 },
+    "description": "Check if there exists a subsequence of the array whose sum equals the target.",
+    "approach": "Use recursion to explore all subsequences, including or excluding each element, and check if any sum to the target.",
+    "code": "public boolean checkSubsequenceSum(int[] nums, int target) {\n    return solve(0, nums.length, nums, target);\n}"
+  },
+  {
+    "name": "Combination Sum (Unlimited Repeats)",
+    "endpoint": "/api/recursion/combination-sum",
+    "methodName": "combinationSum",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "candidates": [2, 3, 6, 7], "target": 7 },
+    "description": "Find all unique combinations of candidates where chosen numbers sum to target (each number can be used unlimited times).",
+    "approach": "Use recursion and backtracking to try including each candidate multiple times, building up combinations that sum to the target.",
+    "code": "public List<List<Integer>> combinationSum(int[] candidates, int target) {\n    List<List<Integer>> ans = new ArrayList<>();\n    func(candidates, candidates.length - 1, target, new ArrayList<>(), ans);\n    return ans;\n}"
+  },
+  {
+    "name": "Combination Sum II (No Repeats)",
+    "endpoint": "/api/recursion/combination-sum-2",
+    "methodName": "combinationSum2",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "candidates": [10, 1, 2, 7, 6, 1, 5], "target": 8 },
+    "description": "Find all unique combinations where chosen numbers sum to target (each number can be used at most once).",
+    "approach": "Sort the array and use recursion/backtracking, skipping duplicates to avoid repeated combinations.",
+    "code": "public List<List<Integer>> combinationSum2(int[] candidates, int target) {\n    List<List<Integer>> ans = new ArrayList<>();\n    Arrays.sort(candidates);\n    func2(candidates, 0, target, new ArrayList<>(), ans);\n    return ans;\n}"
+  },
+  {
+    "name": "Combination Sum III (K Numbers, 1-9)",
+    "endpoint": "/api/recursion/combination-sum-3",
+    "methodName": "combinationSum3",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "k": 3, "n": 7 },
+    "description": "Find all possible combinations of k numbers that add up to n, using numbers 1-9 each at most once.",
+    "approach": "Use recursion and backtracking to build combinations of k numbers from 1-9 that sum to n.",
+    "code": "public List<List<Integer>> combinationSum3(int k, int n) {\n    List<List<Integer>> ans = new ArrayList<>();\n    func3(n, 1, new ArrayList<>(), k, ans);\n    return ans;\n}"
+  },
+  {
+    "name": "Count Subsequences with Target Sum",
+    "endpoint": "/api/recursion/count-subsequence-with-target-sum",
+    "methodName": "countSubsequenceWithTargetSum",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "nums": [1, 2, 3], "target": 3 },
+    "description": "Count the number of subsequences whose sum equals the target.",
+    "approach": "Use recursion to count all subsequences that sum to the target by including or excluding each element.",
+    "code": "public int countSubsequenceWithTargetSum(int[] nums, int target) {\n    return func4(0, target, nums);\n}"
+  },
+  {
+    "name": "Word Search in 2D Board",
+    "endpoint": "/api/recursion/exist",
+    "methodName": "exist",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "board": [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], "word": "ABCCED" },
+    "description": "Check if a word exists in a 2D board by moving horizontally or vertically to adjacent cells.",
+    "approach": "Use DFS recursion to search for the word starting from each cell, marking visited cells temporarily.",
+    "code": "public boolean exist(char[][] board, String word) {\n    for (int i = 0; i < board.length; i++) {\n        for (int j = 0; j < board[0].length; j++) {\n            if (board[i][j] == word.charAt(0)) {\n                if (func5(board, i, j, word, 0)) {\n                    return true;\n                }\n            }\n        }\n    }\n    return false;\n}"
+  },
+  {
+    "name": "Rat in a Maze (Find All Paths)",
+    "endpoint": "/api/recursion/find-path",
+    "methodName": "findPath",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "grid": [[1,0,0,0],[1,1,0,1],[0,1,0,0],[1,1,1,1]] },
+    "description": "Find all possible paths for a rat to reach the bottom-right corner of a maze grid.",
+    "approach": "Use recursion and backtracking to explore all possible moves (down, right, up, left) and collect valid paths.",
+    "code": "public List<String> findPath(int[][] grid) {\n    int n = grid.length;\n    List<String> result = new ArrayList<>();\n    if (grid[0][0] == 0 || grid[n - 1][n - 1] == 0) {\n        return result;\n    }\n    path(grid, 0, 0, \"\", n, result);\n    Collections.sort(result);\n    return result;\n}"
+  },
+  {
+    "name": "Generate Parentheses",
+    "endpoint": "/api/recursion/generate-parenthesis",
+    "methodName": "generateParenthesis",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "n": 3 },
+    "description": "Generate all combinations of well-formed parentheses for n pairs.",
+    "approach": "Use recursion to build valid parentheses strings by adding '(' or ')' as long as the sequence remains valid.",
+    "code": "public List<String> generateParenthesis(int n) {\n    List<String> result = new ArrayList<>();\n    generate(0, 0, n, \"\", result);\n    return result;\n}"
+  },
+  {
+    "name": "Graph Coloring Problem",
+    "endpoint": "/api/recursion/graph-coloring",
+    "methodName": "graphColoring",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "edges": [[0,1],[1,2],[2,0]], "m": 3, "n": 3 },
+    "description": "Determine if a graph can be colored with m colors such that no two adjacent nodes have the same color.",
+    "approach": "Use recursion and backtracking to assign colors to each node, checking for safety at each step.",
+    "code": "public boolean graphColoring(int[][] edges, int m, int n) {\n    List<List<Integer>> adj = new ArrayList<>();\n    for (int i = 0; i < n; i++) {\n        adj.add(new ArrayList<>());\n    }\n    for (int[] edge : edges) {\n        adj.get(edge[0]).add(edge[1]);\n        adj.get(edge[1]).add(edge[0]);\n    }\n    int[] colors = new int[n];\n    return solve6(0, m, n, colors, adj);\n}"
+  },
+  {
+    "name": "Palindrome Partitioning",
+    "endpoint": "/api/recursion/partition",
+    "methodName": "partition",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "s": "aab" },
+    "description": "Partition a string into all possible palindrome substring combinations.",
+    "approach": "Use recursion and backtracking to try every possible partition and check if each substring is a palindrome.",
+    "code": "public List<List<String>> partition(String s) {\n    List<List<String>> res = new ArrayList<>();\n    List<String> path = new ArrayList<>();\n    dfs(0, s, path, res);\n    return res;\n}"
+  },
+  {
+    "name": "Letter Combinations of a Phone Number",
+    "endpoint": "/api/recursion/letter-combinations",
+    "methodName": "letterCombinations",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "digits": "23" },
+    "description": "Return all possible letter combinations that the number could represent on a phone keypad.",
+    "approach": "Use recursion to build all possible strings by mapping each digit to its corresponding letters.",
+    "code": "public List<String> letterCombinations(String digits) {\n    List<String> ans = new ArrayList<>();\n    if (digits.length() == 0) return ans;\n    helper(digits, ans, 0, \"\");\n    return ans;\n}"
+  },
+  {
+    "name": "Power Function (x^n)",
+    "endpoint": "/api/recursion/my-pow",
+    "methodName": "myPow",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "x": 2.0, "n": 10 },
+    "description": "Calculate x raised to the power n (x^n) using recursion.",
+    "approach": "Use fast exponentiation (divide and conquer) recursively for efficient computation.",
+    "code": "public double myPow(double x, int n) {\n    if (n < 0) {\n        return 1.0 / power(x, -1L * n);\n    }\n    return power(x, n);\n}"
+  },
+  {
+    "name": "Power Set (All Subsets)",
+    "endpoint": "/api/recursion/power-set",
+    "methodName": "powerSet",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "nums": [1, 2, 3] },
+    "description": "Generate all possible subsets (the power set) of a set of numbers.",
+    "approach": "Use recursion and backtracking to include or exclude each element and build all subsets.",
+    "code": "public List<List<Integer>> powerSet(int[] nums) {\n    List<List<Integer>> ans = new ArrayList<>();\n    List<Integer> current = new ArrayList<>();\n    backtrack(0, nums.length, nums, current, ans);\n    return ans;\n}"
+  },
+  {
+    "name": "N-Queens Problem",
+    "endpoint": "/api/recursion/solve-n-queens",
+    "methodName": "solveNQueens",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "n": 4 },
+    "description": "Solve the N-Queens problem and return all distinct solutions.",
+    "approach": "Use recursion and backtracking to place queens row by row, checking for safety at each step.",
+    "code": "public List<List<String>> solveNQueens(int n) {\n    List<List<String>> result = new ArrayList<>();\n    char[][] board = new char[n][n];\n    for (int i = 0; i < n; i++) {\n        Arrays.fill(board[i], '.');\n    }\n    solveNQueensHelper(0, board, result);\n    return result;\n}"
+  },
+  {
+    "name": "Sudoku Solver",
+    "endpoint": "/api/recursion/solve-sudoku",
+    "methodName": "solveSudoku",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "board": [["5","3",".",".","7",".",".",".","."],["6",".",".","1","9","5",".",".","."],[".","9","8",".",".",".",".","6","."],["8",".",".",".","6",".",".",".","3"],["4",".",".","8",".","3",".",".","1"],["7",".",".",".","2",".",".",".","6"],[".","6",".",".",".",".","2","8","."],[".",".",".","4","1","9",".",".","5"],[".",".",".",".","8",".",".","7","9"]] },
+    "description": "Solve a given Sudoku puzzle using recursion and backtracking.",
+    "approach": "Use recursion to try placing each digit in empty cells, backtracking when a placement is invalid.",
+    "code": "public char[][] solveSudoku(char[][] board) {\n    solve(board);\n    return board;\n}"
+  },
+  {
+    "name": "Subsets With Duplicates",
+    "endpoint": "/api/recursion/subsets-with-dup",
+    "methodName": "subsetsWithDup",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "nums": [1, 2, 2] },
+    "description": "Return all possible subsets of a list of numbers, allowing for duplicates.",
+    "approach": "Sort the array and use recursion/backtracking, skipping duplicates to avoid repeated subsets.",
+    "code": "public List<List<Integer>> subsetsWithDup(int[] nums) {\n    List<List<Integer>> result = new ArrayList<>();\n    Arrays.sort(nums);\n    subsetsWithDupHelper(0, nums, new ArrayList<>(), result);\n    return result;\n}"
+  },
+  {
+    "name": "Subset Sums",
+    "endpoint": "/api/recursion/subset-sums",
+    "methodName": "subsetSums",
+    "serviceFile": "RecursionService.java",
+    "defaultInput": { "nums": [1, 2, 3] },
+    "description": "Return all possible sums of subsets of a list of numbers.",
+    "approach": "Use recursion to include or exclude each element and accumulate the sum for each subset.",
+    "code": "public List<Integer> subsetSums(int[] nums) {\n    List<Integer> ans = new ArrayList<>();\n    func(0, 0, nums, ans);\n    return ans;\n}"
+  }
+]

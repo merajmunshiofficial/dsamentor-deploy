@@ -1,0 +1,212 @@
+[
+  {
+    "name": "Inorder Traversal",
+    "endpoint": "/api/binary-tree/inorder-traversal",
+    "methodName": "inorderTraversal",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "right": { "data": 2, "left": { "data": 3 } } } },
+    "description": "Return the inorder traversal of a binary tree.",
+    "approach": "Recursively traverse left subtree, visit node, then right subtree.",
+    "code": "public List<Integer> inorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    inorderHelper(root, result);\n    return result;\n}"
+  },
+  {
+    "name": "Preorder Traversal",
+    "endpoint": "/api/binary-tree/preorder-traversal",
+    "methodName": "preorderTraversal",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
+    "description": "Return the preorder traversal of a binary tree.",
+    "approach": "Visit node, then recursively traverse left and right subtrees.",
+    "code": "public List<Integer> preorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    preorderHelper(root, result);\n    return result;\n}"
+  },
+  {
+    "name": "Postorder Traversal",
+    "endpoint": "/api/binary-tree/postorder-traversal",
+    "methodName": "postorderTraversal",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
+    "description": "Return the postorder traversal of a binary tree.",
+    "approach": "Recursively traverse left and right subtrees, then visit node.",
+    "code": "public List<Integer> postorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    postorderHelper(root, result);\n    return result;\n}"
+  },
+  {
+    "name": "Level Order Traversal",
+    "endpoint": "/api/binary-tree/level-order-traversal",
+    "methodName": "levelOrderTraversal",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
+    "description": "Return the level order traversal of a binary tree.",
+    "approach": "Use a queue to traverse the tree level by level.",
+    "code": "public List<List<Integer>> levelOrderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<List<Integer>> result = new ArrayList<>();\n    if (root == null) return result;\n    Queue<TreeNode> queue = new LinkedList<>();\n    queue.offer(root);\n    while (!queue.isEmpty()) {\n        int levelSize = queue.size();\n        List<Integer> level = new ArrayList<>();\n        for (int i = 0; i < levelSize; i++) {\n            TreeNode node = queue.poll();\n            level.add(node.data);\n            if (node.left != null) queue.offer(node.left);\n            if (node.right != null) queue.offer(node.right);\n        }\n        result.add(level);\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Maximum Depth of Binary Tree",
+    "endpoint": "/api/binary-tree/max-depth",
+    "methodName": "maxDepth",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
+    "description": "Find the maximum depth of a binary tree.",
+    "approach": "Recursively compute the maximum depth of left and right subtrees.",
+    "code": "public int maxDepth(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return maxDepthHelper(root);\n}"
+  },
+  {
+    "name": "Check if Binary Tree is Balanced",
+    "endpoint": "/api/binary-tree/is-balanced",
+    "methodName": "isBalanced",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
+    "description": "Check if a binary tree is height-balanced.",
+    "approach": "Recursively check the height of subtrees and ensure the difference is at most 1.",
+    "code": "public boolean isBalanced(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return isBalancedHelper(root) != -1;\n}"
+  },
+  {
+    "name": "Check if Two Trees are Same",
+    "endpoint": "/api/binary-tree/is-same-tree",
+    "methodName": "isSameTree",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "p": { "data": 1, "left": { "data": 2 } }, "q": { "data": 1, "left": { "data": 2 } } },
+    "description": "Check if two binary trees are the same.",
+    "approach": "Recursively compare nodes and their subtrees for equality.",
+    "code": "public boolean isSameTree(BinaryTreeResponse.TreeNodeDTO pDto, BinaryTreeResponse.TreeNodeDTO qDto) {\n    TreeNode p = fromDTO(pDto);\n    TreeNode q = fromDTO(qDto);\n    return isSameTreeHelper(p, q);\n}"
+  },
+  {
+    "name": "Check if Binary Tree is Symmetric",
+    "endpoint": "/api/binary-tree/is-symmetric",
+    "methodName": "isSymmetric",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2, "left": { "data": 3 }, "right": { "data": 4 } }, "right": { "data": 2, "left": { "data": 4 }, "right": { "data": 3 } } } },
+    "description": "Check if a binary tree is symmetric around its center.",
+    "approach": "Recursively compare left and right subtrees for mirror symmetry.",
+    "code": "public boolean isSymmetric(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    if (root == null) return true;\n    return isSymmetricHelper(root.left, root.right);\n}"
+  },
+  {
+    "name": "Lowest Common Ancestor",
+    "endpoint": "/api/binary-tree/lowest-common-ancestor",
+    "methodName": "lowestCommonAncestor",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 3, "left": { "data": 5 }, "right": { "data": 1 } }, "p": 5, "q": 1 },
+    "description": "Find the lowest common ancestor (LCA) of two nodes in the binary tree.",
+    "approach": "Recursively search for the LCA in the tree.",
+    "code": "public int lowestCommonAncestor(BinaryTreeResponse.TreeNodeDTO rootDto, int p, int q) {\n    TreeNode root = fromDTO(rootDto);\n    TreeNode result = lcaHelper(root, p, q);\n    return result != null ? result.data : -1;\n}"
+  },
+  {
+    "name": "Diameter of Binary Tree",
+    "endpoint": "/api/binary-tree/diameter",
+    "methodName": "diameterOfBinaryTree",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
+    "description": "Find the diameter (longest path) of the binary tree.",
+    "approach": "Recursively compute the height of subtrees and update the maximum diameter.",
+    "code": "public int diameterOfBinaryTree(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    int[] diameter = {0};\n    diameterHelper(root, diameter);\n    return diameter[0];\n}"
+  },
+  {
+    "name": "Maximum Path Sum",
+    "endpoint": "/api/binary-tree/max-path-sum",
+    "methodName": "findMaxPathSum",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
+    "description": "Find the maximum path sum in a binary tree.",
+    "approach": "Recursively compute the maximum path sum for each node, updating the global maximum.",
+    "code": "public int findMaxPathSum(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    int[] maxSum = {Integer.MIN_VALUE};\n    maxPathSumHelper(root, maxSum);\n    return maxSum[0];\n}"
+  },
+  {
+    "name": "Right Side View",
+    "endpoint": "/api/binary-tree/right-side-view",
+    "methodName": "rightSideView",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
+    "description": "Return the right side view of a binary tree.",
+    "approach": "Use level order traversal and record the last node at each level.",
+    "code": "public List<Integer> rightSideView(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    if (root == null) return result;\n    Queue<TreeNode> queue = new LinkedList<>();\n    queue.offer(root);\n    while (!queue.isEmpty()) {\n        int levelSize = queue.size();\n        for (int i = 0; i < levelSize; i++) {\n            TreeNode node = queue.poll();\n            if (i == levelSize - 1) {\n                result.add(node.data);\n            }\n            if (node.left != null) queue.offer(node.left);\n            if (node.right != null) queue.offer(node.right);\n        }\n    }\n    return result;\n}"
+  },
+  {
+    "name": "All Root to Leaf Paths",
+    "endpoint": "/api/binary-tree/all-root-to-leaf-paths",
+    "methodName": "allRootToLeafPaths",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2, "left": { "data": 3 }, "right": { "data": 4 } }, "right": { "data": 5 } } },
+    "description": "Return all root-to-leaf paths in a binary tree.",
+    "approach": "Use DFS to build paths from root to each leaf.",
+    "code": "public List<String> allRootToLeafPaths(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<String> result = new ArrayList<>();\n    if (root == null) return result;\n    rootToLeafHelper(root, \"\", result);\n    return result;\n}"
+  },
+  {
+    "name": "Zigzag Level Order Traversal",
+    "endpoint": "/api/binary-tree/zigzag-level-order",
+    "methodName": "zigzagLevelOrder",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
+    "description": "Return the zigzag level order traversal of a binary tree.",
+    "approach": "Use a queue and alternate the order of insertion for each level.",
+    "code": "public List<List<Integer>> zigzagLevelOrder(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<List<Integer>> result = new ArrayList<>();\n    if (root == null) return result;\n    Queue<TreeNode> queue = new LinkedList<>();\n    queue.offer(root);\n    boolean leftToRight = true;\n    while (!queue.isEmpty()) {\n        int levelSize = queue.size();\n        List<Integer> level = new ArrayList<>();\n        for (int i = 0; i < levelSize; i++) {\n            TreeNode node = queue.poll();\n            if (leftToRight) {\n                level.add(node.data);\n            } else {\n                level.add(0, node.data);\n            }\n            if (node.left != null) queue.offer(node.left);\n            if (node.right != null) queue.offer(node.right);\n        }\n        result.add(level);\n        leftToRight = !leftToRight;\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Build Tree from Inorder and Postorder",
+    "endpoint": "/api/binary-tree/build-tree",
+    "methodName": "buildTree",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "inorder": [9,3,15,20,7], "postorder": [9,15,7,20,3] },
+    "description": "Build a binary tree from inorder and postorder traversal arrays.",
+    "approach": "Use recursion and a hashmap to efficiently build the tree.",
+    "code": "public BinaryTreeResponse.TreeNodeDTO buildTree(int[] inorder, int[] postorder) {\n    Map<Integer, Integer> inorderMap = new HashMap<>();\n    for (int i = 0; i < inorder.length; i++) {\n        inorderMap.put(inorder[i], i);\n    }\n    TreeNode root = buildTreeHelper(inorder, postorder, 0, inorder.length - 1, 0, postorder.length - 1, inorderMap);\n    return toDTO(root);\n}"
+  },
+  {
+    "name": "Boundary Traversal",
+    "endpoint": "/api/binary-tree/boundary-traversal",
+    "methodName": "boundaryTraversal",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2, "left": { "data": 4 }, "right": { "data": 5 } }, "right": { "data": 3, "right": { "data": 6 } } } },
+    "description": "Return the boundary traversal of a binary tree.",
+    "approach": "Traverse left boundary, leaves, and right boundary in reverse.",
+    "code": "public List<Integer> boundaryTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    if (root == null) return result;\n    result.add(root.data);\n    addLeftBoundary(root.left, result);\n    addLeaves(root.left, result);\n    addLeaves(root.right, result);\n    addRightBoundary(root.right, result);\n    return result;\n}"
+  },
+  {
+    "name": "Bottom View",
+    "endpoint": "/api/binary-tree/bottom-view",
+    "methodName": "bottomView",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 20, "left": { "data": 8, "left": { "data": 5 }, "right": { "data": 3, "left": { "data": 10 }, "right": { "data": 14 } } }, "right": { "data": 22, "right": { "data": 25 } } } },
+    "description": "Return the bottom view of a binary tree.",
+    "approach": "Use a queue and map to track the last node at each horizontal distance.",
+    "code": "public List<Integer> bottomView(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    if (root == null) return result;\n    Map<Integer, Integer> map = new TreeMap<>();\n    Queue<Pair> queue = new LinkedList<>();\n    queue.offer(new Pair(root, 0));\n    while (!queue.isEmpty()) {\n        Pair pair = queue.poll();\n        TreeNode node = pair.node;\n        int hd = pair.horizontalDistance;\n        map.put(hd, node.data);\n        if (node.left != null) {\n            queue.offer(new Pair(node.left, hd - 1));\n        }\n        if (node.right != null) {\n            queue.offer(new Pair(node.right, hd + 1));\n        }\n    }\n    for (int val : map.values()) {\n        result.add(val);\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Top View",
+    "endpoint": "/api/binary-tree/top-view",
+    "methodName": "topView",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
+    "description": "Return the top view of a binary tree.",
+    "approach": "Use a queue and map to track the first node at each horizontal distance.",
+    "code": "public List<Integer> topView(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    if (root == null) return result;\n    Map<Integer, Integer> map = new TreeMap<>();\n    Queue<Pair> queue = new LinkedList<>();\n    queue.offer(new Pair(root, 0));\n    while (!queue.isEmpty()) {\n        Pair pair = queue.poll();\n        TreeNode node = pair.node;\n        int hd = pair.horizontalDistance;\n        if (!map.containsKey(hd)) {\n            map.put(hd, node.data);\n        }\n        if (node.left != null) {\n            queue.offer(new Pair(node.left, hd - 1));\n        }\n        if (node.right != null) {\n            queue.offer(new Pair(node.right, hd + 1));\n        }\n    }\n    for (int val : map.values()) {\n        result.add(val);\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Nodes at Distance K",
+    "endpoint": "/api/binary-tree/distance-k",
+    "methodName": "distanceK",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 3, "left": { "data": 5 }, "right": { "data": 1 } }, "target": 5, "k": 1 },
+    "description": "Return all nodes at distance K from the target node in a binary tree.",
+    "approach": "Use BFS and a parent map to find all nodes at distance K.",
+    "code": "public List<Integer> distanceK(BinaryTreeResponse.TreeNodeDTO rootDto, int target, int k) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    if (root == null) return result;\n    Map<TreeNode, TreeNode> parentMap = new HashMap<>();\n    buildParentMap(root, parentMap);\n    TreeNode targetNode = findTargetNode(root, target);\n    if (targetNode == null) return result;\n    Set<TreeNode> visited = new HashSet<>();\n    Queue<TreeNode> queue = new LinkedList<>();\n    queue.offer(targetNode);\n    visited.add(targetNode);\n    int distance = 0;\n    while (!queue.isEmpty() && distance <= k) {\n        int size = queue.size();\n        for (int i = 0; i < size; i++) {\n            TreeNode node = queue.poll();\n            if (distance == k) {\n                result.add(node.data);\n            }\n            if (node.left != null && !visited.contains(node.left)) {\n                queue.offer(node.left);\n                visited.add(node.left);\n            }\n            if (node.right != null && !visited.contains(node.right)) {\n                queue.offer(node.right);\n                visited.add(node.right);\n            }\n            TreeNode parent = parentMap.get(node);\n            if (parent != null && !visited.contains(parent)) {\n                queue.offer(parent);\n                visited.add(parent);\n            }\n        }\n        distance++;\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Serialize Binary Tree",
+    "endpoint": "/api/binary-tree/serialize",
+    "methodName": "serialize",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
+    "description": "Serialize a binary tree to a string.",
+    "approach": "Use level order traversal to serialize the tree, including nulls.",
+    "code": "public String serialize(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    if (root == null) return \"null\";\n    StringBuilder sb = new StringBuilder();\n    Queue<TreeNode> queue = new LinkedList<>();\n    queue.offer(root);\n    while (!queue.isEmpty()) {\n        TreeNode node = queue.poll();\n        if (node == null) {\n            sb.append(\"null,\");\n        } else {\n            sb.append(node.data).append(\",\");\n            queue.offer(node.left);\n            queue.offer(node.right);\n        }\n    }\n    String result = sb.toString();\n    while (result.endsWith(\"null,\")) {\n        result = result.substring(0, result.length() - 5);\n    }\n    if (result.endsWith(\",\")) {\n        result = result.substring(0, result.length() - 1);\n    }\n    return result;\n}"
+  },
+  {
+    "name": "Deserialize Binary Tree",
+    "endpoint": "/api/binary-tree/deserialize",
+    "methodName": "deserialize",
+    "serviceFile": "BinaryTreeService.java",
+    "defaultInput": { "data": "1,2,3,null,null,4,5" },
+    "description": "Deserialize a string to a binary tree.",
+    "approach": "Use a queue to reconstruct the tree from the serialized string.",
+    "code": "public BinaryTreeResponse.TreeNodeDTO deserialize(String data) {\n    if (data.equals(\"null\") || data.isEmpty()) return null;\n    String[] values = data.split(\",\");\n    if (values.length == 0) return null;\n    TreeNode root = new TreeNode(Integer.parseInt(values[0]));\n    Queue<TreeNode> queue = new LinkedList<>();\n    queue.offer(root);\n    int i = 1;\n    while (!queue.isEmpty() && i < values.length) {\n        TreeNode node = queue.poll();\n        if (!values[i].equals(\"null\")) {\n            node.left = new TreeNode(Integer.parseInt(values[i]));\n            queue.offer(node.left);\n        }\n        i++;\n        if (i >= values.length) break;\n        if (!values[i].equals(\"null\")) {\n            node.right = new TreeNode(Integer.parseInt(values[i]));\n            queue.offer(node.right);\n        }\n        i++;\n    }\n    return toDTO(root);\n}"
+  }
+]
