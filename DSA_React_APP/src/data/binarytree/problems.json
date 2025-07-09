@@ -6,7 +6,7 @@
     "serviceFile": "BinaryTreeService.java",
     "defaultInput": { "root": { "data": 1, "right": { "data": 2, "left": { "data": 3 } } } },
     "description": "Return the inorder traversal of a binary tree.",
-    "approach": "Recursively traverse left subtree, visit node, then right subtree.",
+    "approach": "1. Use recursive depth-first traversal following Left-Root-Right pattern\n2. Base case: if current node is null, return (end of subtree)\n3. First recursively traverse the left subtree\n4. Then visit (process) the current node by adding its value to result\n5. Finally recursively traverse the right subtree\n6. This order ensures values are collected in ascending order for BST",
     "code": "public List<Integer> inorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    inorderHelper(root, result);\n    return result;\n}\n\nprivate void inorderHelper(TreeNode node, List<Integer> result) {\n    if (node == null) return;\n    inorderHelper(node.left, result);\n    result.add(node.data);\n    inorderHelper(node.right, result);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
@@ -16,7 +16,7 @@
     "serviceFile": "BinaryTreeService.java",
     "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
     "description": "Return the preorder traversal of a binary tree.",
-    "approach": "Visit node, then recursively traverse left and right subtrees.",
+    "approach": "1. Use recursive depth-first traversal following Root-Left-Right pattern\n2. Base case: if current node is null, return (end of subtree)\n3. First visit (process) the current node by adding its value to result\n4. Then recursively traverse the left subtree\n5. Finally recursively traverse the right subtree\n6. This pattern processes parent before children, useful for tree reconstruction",
     "code": "public List<Integer> preorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    preorderHelper(root, result);\n    return result;\n}\n\nprivate void preorderHelper(TreeNode node, List<Integer> result) {\n    if (node == null) return;\n    result.add(node.data);\n    preorderHelper(node.left, result);\n    preorderHelper(node.right, result);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
@@ -26,7 +26,7 @@
     "serviceFile": "BinaryTreeService.java",
     "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
     "description": "Return the postorder traversal of a binary tree.",
-    "approach": "Recursively traverse left and right subtrees, then visit node.",
+    "approach": "1. Use recursive depth-first traversal following Left-Right-Root pattern\n2. Base case: if current node is null, return (end of subtree)\n3. First recursively traverse the left subtree\n4. Then recursively traverse the right subtree\n5. Finally visit (process) the current node by adding its value to result\n6. This pattern processes children before parent, useful for deletion operations",
     "code": "public List<Integer> postorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    postorderHelper(root, result);\n    return result;\n}\n\nprivate void postorderHelper(TreeNode node, List<Integer> result) {\n    if (node == null) return;\n    postorderHelper(node.left, result);\n    postorderHelper(node.right, result);\n    result.add(node.data);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
@@ -36,7 +36,7 @@
     "serviceFile": "BinaryTreeService.java",
     "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
     "description": "Return the level order traversal of a binary tree.",
-    "approach": "Use a queue to traverse the tree level by level.",
+    "approach": "1. Use BFS (Breadth-First Search) with a queue to traverse level by level\n2. Initialize queue with root node if it exists\n3. For each level, record current queue size to process exactly that many nodes\n4. Process all nodes at current level: poll from queue and add to current level list\n5. For each processed node, add its children to queue for next level\n6. Add completed level to result and continue until queue is empty",
     "code": "public List<List<Integer>> levelOrderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<List<Integer>> result = new ArrayList<>();\n    if (root == null) return result;\n    Queue<TreeNode> queue = new LinkedList<>();\n    queue.offer(root);\n    while (!queue.isEmpty()) {\n        int levelSize = queue.size();\n        List<Integer> level = new ArrayList<>();\n        for (int i = 0; i < levelSize; i++) {\n            TreeNode node = queue.poll();\n            level.add(node.data);\n            if (node.left != null) queue.offer(node.left);\n            if (node.right != null) queue.offer(node.right);\n        }\n        result.add(level);\n    }\n    return result;\n}"
   },
   {
@@ -46,7 +46,7 @@
     "serviceFile": "BinaryTreeService.java",
     "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
     "description": "Find the maximum depth of a binary tree.",
-    "approach": "Recursively compute the maximum depth of left and right subtrees.",
+    "approach": "1. Use recursive approach where depth = 1 + maximum depth of left and right subtrees\n2. Base case: if node is null, return depth 0\n3. Recursively calculate depth of left subtree\n4. Recursively calculate depth of right subtree\n5. Return 1 (current node) + max(leftDepth, rightDepth)\n6. The recursion naturally explores all paths and finds the longest one",
     "code": "public int maxDepth(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return maxDepthHelper(root);\n}\n\nprivate int maxDepthHelper(TreeNode node) {\n    if (node == null) return 0;\n    return Math.max(maxDepthHelper(node.left), maxDepthHelper(node.right)) + 1;\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
@@ -56,7 +56,7 @@
     "serviceFile": "BinaryTreeService.java",
     "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
     "description": "Check if a binary tree is height-balanced.",
-    "approach": "Recursively check the height of subtrees and ensure the difference is at most 1.",
+    "approach": "1. Use optimized approach that checks balance while calculating height in single pass\n2. Return -1 as signal for unbalanced tree, otherwise return actual height\n3. For each node, recursively get heights of left and right subtrees\n4. If either subtree is unbalanced (returns -1), propagate -1 upward\n5. If height difference between subtrees > 1, current subtree is unbalanced, return -1\n6. Otherwise return 1 + max(leftHeight, rightHeight) for current subtree height",
     "code": "public boolean isBalanced(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return isBalancedHelper(root) != -1;\n}\n\nprivate int isBalancedHelper(TreeNode node) {\n    if (node == null) return 0;\n    \n    int leftHeight = isBalancedHelper(node.left);\n    if (leftHeight == -1) return -1;\n    \n    int rightHeight = isBalancedHelper(node.right);\n    if (rightHeight == -1) return -1;\n    \n    if (Math.abs(leftHeight - rightHeight) > 1) return -1;\n    \n    return Math.max(leftHeight, rightHeight) + 1;\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
@@ -66,7 +66,7 @@
     "serviceFile": "BinaryTreeService.java",
     "defaultInput": { "p": { "data": 1, "left": { "data": 2 } }, "q": { "data": 1, "left": { "data": 2 } } },
     "description": "Check if two binary trees are the same.",
-    "approach": "Recursively compare nodes and their subtrees for equality.",
+    "approach": "1. Use recursive approach to compare trees node by node\n2. Base case: if both nodes are null, they are identical (return true)\n3. If one node is null and other is not, they are different (return false)\n4. If both nodes exist, compare their values for equality\n5. Recursively check if left subtrees are same AND right subtrees are same\n6. Return true only if current nodes match AND both subtrees are identical",
     "code": "public boolean isSameTree(BinaryTreeResponse.TreeNodeDTO pDto, BinaryTreeResponse.TreeNodeDTO qDto) {\n    TreeNode p = fromDTO(pDto);\n    TreeNode q = fromDTO(qDto);\n    return isSameTreeHelper(p, q);\n}\n\nprivate boolean isSameTreeHelper(TreeNode p, TreeNode q) {\n    if (p == null && q == null) return true;\n    if (p == null || q == null) return false;\n    return p.data == q.data && \n           isSameTreeHelper(p.left, q.left) && \n           isSameTreeHelper(p.right, q.right);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
@@ -76,7 +76,7 @@
     "serviceFile": "BinaryTreeService.java",
     "defaultInput": { "root": { "data": 1, "left": { "data": 2, "left": { "data": 3 }, "right": { "data": 4 } }, "right": { "data": 2, "left": { "data": 4 }, "right": { "data": 3 } } } },
     "description": "Check if a binary tree is symmetric around its center.",
-    "approach": "Recursively compare left and right subtrees for mirror symmetry.",
+    "approach": "1. A tree is symmetric if left and right subtrees are mirror images of each other\n2. Check symmetry by comparing left subtree with right subtree using helper function\n3. For two subtrees to be mirrors: left.data == right.data\n4. left's left subtree should mirror right's right subtree\n5. left's right subtree should mirror right's left subtree\n6. Handle null cases: both null = symmetric, one null = not symmetric",
     "code": "public boolean isSymmetric(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    if (root == null) return true;\n    return isSymmetricHelper(root.left, root.right);\n}\n\nprivate boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n    if (left == null && right == null) return true;\n    if (left == null || right == null) return false;\n    return left.data == right.data && \n           isSymmetricHelper(left.left, right.right) && \n           isSymmetricHelper(left.right, right.left);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {

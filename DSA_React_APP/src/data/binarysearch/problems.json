@@ -6,7 +6,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 2, 4, 8, 9], "k": 3 },
     "description": "Place k cows in stalls such that the minimum distance between any two cows is maximized.",
-    "approach": "Use binary search on the answer (distance) and check feasibility with a greedy helper.",
+    "approach": "1. First sort the array of stall positions\n2. Apply binary search on possible minimum distances (from 1 to max possible distance)\n3. For each mid value (potential minimum distance), check if it's feasible\n4. Feasibility check: place first cow at first stall, then try to place remaining cows\n5. For each stall, place a cow if distance from last placed cow >= current minimum distance\n6. If we can place all k cows, the current distance is feasible, search for larger distances\n7. Otherwise, search for smaller distances\n8. Return the maximum feasible distance (high pointer after binary search)",
     "code": "public int aggressiveCows(int[] nums, int k) {\n    Arrays.sort(nums);\n    int low = 1, high = nums[nums.length - 1] - nums[0];\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (canWePlace(nums, mid, k)) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return high;\n}\n\nprivate boolean canWePlace(int[] nums, int dist, int cows) {\n    int cntCows = 1, last = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        if (nums[i] - last >= dist) {\n            cntCows++;\n            last = nums[i];\n        }\n        if (cntCows >= cows) return true;\n    }\n    return false;\n}"
   },
   {
@@ -16,7 +16,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 2, 8, 10, 10, 12, 19], "x": 5 },
     "description": "Find the floor and ceil of a given number in a sorted array.",
-    "approach": "Use binary search twice: once for floor, once for ceil.",
+    "approach": "1. Floor of x is the largest element in array ≤ x\n2. Ceil of x is the smallest element in array ≥ x\n3. First binary search for floor: if nums[mid] ≤ x, update floor and search right half\n4. Otherwise search left half for floor\n5. Second binary search for ceil: if nums[mid] ≥ x, update ceil and search left half\n6. Otherwise search right half for ceil\n7. Return -1 for floor/ceil if no suitable element exists\n8. This approach leverages binary search for O(log n) efficiency",
     "code": "public int[] findFloorAndCeil(int[] nums, int x) {\n    int n = nums.length;\n    int floor = -1, ceil = -1;\n    int low = 0, high = n - 1;\n    // Find floor\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] <= x) {\n            floor = nums[mid];\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    low = 0; high = n - 1;\n    // Find ceil\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] >= x) {\n            ceil = nums[mid];\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return new int[] { floor, ceil };\n}"
   },
   {
@@ -26,7 +26,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [15, 18, 2, 3, 6, 12] },
     "description": "Find the number of times a sorted array has been rotated.",
-    "approach": "Use binary search to find the index of the minimum element.",
+    "approach": "1. When a sorted array is rotated k times, the minimum element is at index k\n2. Use binary search to find this minimum element efficiently\n3. Compare nums[mid] with nums[high]: if nums[mid] > nums[high], minimum is in right half\n4. Otherwise, minimum is in left half (including mid)\n5. Continue narrowing search space until low == high (single element)\n6. The final value of low is the rotation count (index of minimum element)\n7. This approach works in O(log n) time, even with duplicates",
     "code": "public int findKRotation(int[] nums) {\n    int n = nums.length;\n    int low = 0, high = n - 1;\n    while (low < high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] > nums[high]) {\n            low = mid + 1;\n        } else {\n            high = mid;\n        }\n    }\n    return low;\n}"
   },
   {
@@ -36,7 +36,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums1": [1, 3], "nums2": [2] },
     "description": "Find the median of two sorted arrays.",
-    "approach": "Use binary search on the smaller array to partition both arrays and find the median.",
+    "approach": "1. Always work with smaller array for efficiency (swap if needed)\n2. Use binary search on smaller array to find optimal partition point\n3. For each cut position in first array, calculate corresponding cut in second array\n4. Check if partition is valid: max(left half) ≤ min(right half) for both arrays\n5. If valid, calculate median based on total length (even or odd)\n6. If left1 > right2, move cut in first array leftward\n7. If left2 > right1, move cut in first array rightward\n8. This approach achieves required O(log(min(n,m))) time complexity",
     "code": "public double findMedian(int[] nums1, int[] nums2) {\n    int n1 = nums1.length, n2 = nums2.length;\n    if (n1 > n2) return findMedian(nums2, nums1);\n    int low = 0, high = n1;\n    while (low <= high) {\n        int cut1 = (low + high) / 2;\n        int cut2 = (n1 + n2 + 1) / 2 - cut1;\n        int l1 = (cut1 == 0) ? Integer.MIN_VALUE : nums1[cut1 - 1];\n        int l2 = (cut2 == 0) ? Integer.MIN_VALUE : nums2[cut2 - 1];\n        int r1 = (cut1 == n1) ? Integer.MAX_VALUE : nums1[cut1];\n        int r2 = (cut2 == n2) ? Integer.MAX_VALUE : nums2[cut2];\n        if (l1 <= r2 && l2 <= r1) {\n            if ((n1 + n2) % 2 == 0)\n                return (Math.max(l1, l2) + Math.min(r1, r2)) / 2.0;\n            else\n                return Math.max(l1, l2);\n        } else if (l1 > r2) {\n            high = cut1 - 1;\n        } else {\n            low = cut1 + 1;\n        }\n    }\n    return 0.0;\n}"
   },
   {
@@ -46,7 +46,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [3, 4, 5, 1, 2] },
     "description": "Find the minimum element in a rotated sorted array.",
-    "approach": "Use binary search to find the minimum element.",
+    "approach": "1. The minimum element is the only one whose previous element is greater (or it's the first element)\n2. Use binary search to efficiently locate this inflection point\n3. Compare nums[mid] with nums[high]: if nums[mid] > nums[high], minimum is in right half\n4. Otherwise, minimum is in left half (including mid)\n5. Narrow search space until low == high (single element)\n6. Return the element at index low\n7. This approach works in O(log n) time complexity",
     "code": "public int findMin(int[] nums) {\n    int n = nums.length;\n    int low = 0, high = n - 1;\n    while (low < high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] > nums[high]) {\n            low = mid + 1;\n        } else {\n            high = mid;\n        }\n    }\n    return nums[low];\n}"
   },
   {
@@ -56,7 +56,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [12, 34, 67, 90], "students": 2 },
     "description": "Allocate books to students such that the maximum number of pages assigned is minimized.",
-    "approach": "Use binary search on the answer and check allocation feasibility with a helper.",
+    "approach": "1. The minimum possible answer is the maximum element (one book per student)\n2. The maximum possible answer is sum of all elements (all books to one student)\n3. Use binary search on this range to find optimal allocation\n4. For each mid value (potential max pages), check if it's feasible\n5. Feasibility check: assign books sequentially to students, counting number needed\n6. If required students ≤ available, mid is feasible, try a smaller value\n7. Otherwise, try a larger value\n8. Return the smallest feasible value\n9. Special case: if students > books, return -1 (impossible allocation)",
     "code": "public int findPages(int[] nums, int students) {\n    int n = nums.length;\n    if (students > n) return -1;\n    int low = Arrays.stream(nums).max().getAsInt();\n    int high = Arrays.stream(nums).sum();\n    int result = -1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (canAllocate(nums, students, mid)) {\n            result = mid;\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return result;\n}\n\nprivate boolean canAllocate(int[] nums, int students, int maxPages) {\n    int count = 1, pages = 0;\n    for (int num : nums) {\n        if (pages + num > maxPages) {\n            count++;\n            pages = num;\n            if (count > students) return false;\n        } else {\n            pages += num;\n        }\n    }\n    return true;\n}"
   },
   {
@@ -66,7 +66,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 2, 1, 3, 5, 6, 4] },
     "description": "Find a peak element in the array.",
-    "approach": "Use binary search to find an element greater than its neighbors.",
+    "approach": "1. A peak element is greater than both its neighbors (or edge element with one neighbor)\n2. Use modified binary search to efficiently find any peak element\n3. For each mid position, compare with next element (mid+1)\n4. If nums[mid] < nums[mid+1], a peak must exist on right side (ascending slope)\n5. Otherwise, a peak must exist on left side or at mid itself (descending slope)\n6. Continue narrowing search space until left == right (single element)\n7. This approach guarantees finding a peak in O(log n) time\n8. Note: Problem states array edges are considered -∞ for simplicity",
     "code": "public int findPeakElement(int[] nums) {\n    int n = nums.length;\n    int low = 0, high = n - 1;\n    while (low < high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] < nums[mid + 1]) {\n            low = mid + 1;\n        } else {\n            high = mid;\n        }\n    }\n    return low;\n}"
   },
   {
@@ -76,7 +76,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "arr": [[1, 4], [3, 2]] },
     "description": "Find a peak element in a 2D array.",
-    "approach": "Use binary search on columns to find a peak in 2D.",
+    "approach": "1. Find peak using binary search on columns to reduce dimensionality\n2. For each column mid, find row with maximum value in that column\n3. Check if this element is greater than its left and right neighbors\n4. If yes, we found a peak element (2D peak)\n5. If left neighbor is greater, search left half (peak must exist there)\n6. If right neighbor is greater, search right half (peak must exist there)\n7. Handle edge cases by considering out-of-bounds values as MIN_VALUE\n8. This approach achieves O(m log n) time complexity where m is number of rows",
     "code": "public int[] findPeakElement2D(int[][] arr) {\n    int n = arr.length;\n    int m = arr[0].length;\n    int low = 0, high = m - 1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int row = maxElement(arr, mid);\n        int left = mid - 1 >= 0 ? arr[row][mid - 1] : Integer.MIN_VALUE;\n        int right = mid + 1 < m ? arr[row][mid + 1] : Integer.MIN_VALUE;\n        if (arr[row][mid] > left && arr[row][mid] > right) {\n            return new int[]{row, mid};\n        } else if (left > arr[row][mid]) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return new int[]{-1, -1};\n}\n\nprivate int maxElement(int[][] arr, int col) {\n    int n = arr.length;\n    int max = Integer.MIN_VALUE;\n    int index = -1;\n    for (int i = 0; i < n; i++) {\n        if (arr[i][col] > max) {\n            max = arr[i][col];\n            index = i;\n        }\n    }\n    return index;\n}"
   },
   {
@@ -86,7 +86,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [-1, 0, 3, 5, 9, 12], "target": 9 },
     "description": "Search for a target value in a sorted array using binary search.",
-    "approach": "Use standard binary search to find the target.",
+    "approach": "1. Standard binary search implementation on sorted array\n2. Initialize search bounds: low = 0, high = array length - 1\n3. While low ≤ high, calculate mid point = (low + high) / 2\n4. If target == nums[mid], return mid (found target)\n5. If target > nums[mid], search right half by setting low = mid + 1\n6. If target < nums[mid], search left half by setting high = mid - 1\n7. If loop exits without finding target, return -1 (not found)\n8. Time complexity is O(log n), efficient for large sorted arrays",
     "code": "public int search(int[] nums, int target) {\n    int n = nums.length;\n    int low = 0, high = n - 1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] == target)\n            return mid;\n        else if (target > nums[mid])\n            low = mid + 1;\n        else\n            high = mid - 1;\n    }\n    return -1;\n}"
   },
   {
@@ -96,7 +96,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 3, 5, 6], "target": 5 },
     "description": "Find the index where the target should be inserted in a sorted array.",
-    "approach": "Use binary search to find the insert position for the target.",
+    "approach": "1. This is essentially finding the lower bound (first position ≥ target)\n2. Initialize search bounds and default answer = array length (for target > all elements)\n3. Use binary search: if nums[mid] ≥ target, this could be insertion point\n4. Update answer and search left half for potentially earlier position\n5. If nums[mid] < target, search right half\n6. Return final answer which is either index of target or its insertion position\n7. This approach works in O(log n) time and handles all cases including duplicates",
     "code": "public int searchInsert(int[] nums, int target) {\n    int n = nums.length;\n    int low = 0, high = n - 1;\n    int ans = n;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] >= target) {\n            ans = mid;\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return ans;\n}"
   },
   {
@@ -106,7 +106,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 2, 2, 3, 4, 5], "x": 2 },
     "description": "Find the index of the first element not less than x in a sorted array.",
-    "approach": "Use binary search to find the lower bound for x.",
+    "approach": "1. Lower bound is the first position where element ≥ x appears\n2. Use binary search with default answer = array length (for x > all elements)\n3. If nums[mid] ≥ x, this could be lower bound, update answer and search left\n4. Otherwise, search right half (x must be in higher portion)\n5. Continue until search space is exhausted\n6. This approach guarantees finding the correct lower bound in O(log n) time\n7. For duplicate elements, it returns index of the first occurrence\n8. If x doesn't exist, returns insertion point (or array length)",
     "code": "public int lowerBound(int[] nums, int x) {\n    int low = 0, high = nums.length - 1;\n    int ans = nums.length;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] >= x) {\n            ans = mid;\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return ans;\n}"
   },
   {
@@ -116,7 +116,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 2, 2, 3, 4, 5], "x": 2 },
     "description": "Find the index of the first element greater than x in a sorted array.",
-    "approach": "Use binary search to find the upper bound for x.",
+    "approach": "1. Upper bound is the first position where element > x appears\n2. Similar to lower bound, but condition is nums[mid] > x (strictly greater)\n3. Use binary search with default answer = array length (for x ≥ all elements)\n4. If nums[mid] > x, this could be upper bound, update answer and search left\n5. Otherwise, search right half\n6. For duplicate elements, it returns index just after the last occurrence\n7. If all elements ≤ x, returns array length\n8. This is useful for finding ranges and counting occurrences in sorted arrays",
     "code": "public int upperBound(int[] nums, int x) {\n    int low = 0, high = nums.length - 1;\n    int ans = nums.length;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] > x) {\n            ans = mid;\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return ans;\n}"
   },
   {
@@ -126,7 +126,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "mat": [[1, 3, 5, 7], [10, 11, 16, 20], [23, 30, 34, 60]], "target": 3 },
     "description": "Search for a target value in a 2D matrix by treating it as a flattened array.",
-    "approach": "Use binary search on the virtual 1D array representation of the matrix.",
+    "approach": "1. Matrix is sorted row-wise with each row greater than previous row\n2. This allows treating entire matrix as a single sorted array\n3. Use binary search on indices from 0 to (n*m-1)\n4. For each mid index, convert to 2D coordinates: row = mid/m, col = mid%m\n5. Compare matrix[row][col] with target and search left/right accordingly\n6. This virtual flattening maintains O(log(n*m)) time complexity\n7. No need to actually create a 1D array - just calculate positions\n8. This approach works because matrix follows strict sorting property",
     "code": "public boolean searchMatrix(int[][] mat, int target) {\n    int n = mat.length;\n    int m = mat[0].length;\n    int low = 0, high = n * m - 1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int row = mid / m;\n        int col = mid % m;\n        if (mat[row][col] == target) return true;\n        else if (mat[row][col] < target) low = mid + 1;\n        else high = mid - 1;\n    }\n    return false;\n}"
   },
   {
@@ -136,7 +136,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "matrix": [[1, 4, 7, 11], [2, 5, 8, 12], [3, 6, 9, 16], [10, 13, 14, 17]], "target": 5 },
     "description": "Search for a target value in a 2D matrix using the staircase search approach.",
-    "approach": "Start from the top-right and move left or down based on comparison.",
+    "approach": "1. Unlike previous problem, this matrix is only sorted by rows and columns separately\n2. Use staircase search starting from top-right corner (row=0, col=m-1)\n3. Compare current element with target: if equal, return true\n4. If current < target, move down (increment row)\n5. If current > target, move left (decrement column)\n6. Continue until either finding target or going out of bounds\n7. This approach works in O(n+m) time complexity\n8. Starting from bottom-left would work equally well with reversed movements",
     "code": "public boolean searchMatrix2D(int[][] matrix, int target) {\n    int n = matrix.length;\n    int m = matrix[0].length;\n    int row = 0, col = m - 1;\n    while (row < n && col >= 0) {\n        if (matrix[row][col] == target) return true;\n        else if (matrix[row][col] < target) row++;\n        else col--;\n    }\n    return false;\n}"
   },
   {
@@ -146,7 +146,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 1, 2, 3, 3, 4, 4, 8, 8] },
     "description": "Find the single element in a sorted array that appears only once.",
-    "approach": "Use binary search to find the unique element by checking neighbors and index parity.",
+    "approach": "1. Key observation: in normal paired array, first occurrence of each number is at even index\n2. Single element disrupts this pattern for all subsequent pairs\n3. First check edge cases: if first or last element is single, return it\n4. Use binary search on remaining elements (indices 1 to n-2)\n5. If mid element has no matching neighbors, it's the single element\n6. Otherwise check index parity pattern: if mid is odd and matches previous, or mid is even and matches next\n7. If pattern is as expected, single element is in right half; otherwise, in left half\n8. This approach finds single element in O(log n) time without additional space",
     "code": "public int singleNonDuplicate(int[] nums) {\n    int n = nums.length;\n    if (n == 1) return nums[0];\n    if (nums[0] != nums[1]) return nums[0];\n    if (nums[n - 1] != nums[n - 2]) return nums[n - 1];\n    int low = 1, high = n - 2;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] != nums[mid + 1] && nums[mid] != nums[mid - 1]) {\n            return nums[mid];\n        }\n        if ((mid % 2 == 1 && nums[mid] == nums[mid - 1])\n            || (mid % 2 == 0 && nums[mid] == nums[mid + 1])) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return -1;\n}"
   },
   {
@@ -156,7 +156,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 2, 5, 9], "limit": 6 },
     "description": "Find the smallest divisor such that the sum of division results is less than or equal to the limit.",
-    "approach": "Use binary search on the divisor and check the sum with a helper.",
+    "approach": "1. The smallest possible divisor is 1, and largest is maximum element in array\n2. Use binary search on this range to find smallest valid divisor\n3. For each potential divisor mid, calculate sum of division results\n4. Division result for each element is ceiling of nums[i]/divisor\n5. If sum ≤ limit, current divisor works but might not be smallest; search left half\n6. If sum > limit, current divisor is too small; search right half\n7. Return low after search ends (smallest divisor satisfying condition)\n8. Edge case: if array length > limit, no solution exists (return -1)",
     "code": "public int smallestDivisor(int[] nums, int limit) {\n    int n = nums.length;\n    if (n > limit) return -1;\n    int maxi = Integer.MIN_VALUE;\n    for (int i = 0; i < n; i++) {\n        maxi = Math.max(maxi, nums[i]);\n    }\n    int low = 1, high = maxi;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (sumByD(nums, mid) <= limit) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return low;\n}\n\nprivate int sumByD(int[] nums, int limit) {\n    int n = nums.length;\n    int sum = 0;\n    for (int i = 0; i < n; i++) {\n        sum += Math.ceil((double)nums[i] / (double)limit);\n    }\n    return sum;\n}"
   },
   {
@@ -166,7 +166,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "n": 17 },
     "description": "Find the floor of the square root of a number.",
-    "approach": "Use binary search to find the largest integer whose square is less than or equal to n.",
+    "approach": "1. The floor square root is largest integer x where x*x ≤ n\n2. Search range is from 1 to n (inclusive)\n3. For each mid value, calculate val = mid*mid\n4. If val ≤ n, mid could be the answer but there might be larger values; search right\n5. If val > n, mid is too large; search left\n6. Use long data type to handle large numbers and prevent overflow\n7. After search ends, high pointer contains the floor square root\n8. This approach finds square root in O(log n) time without floating-point operations",
     "code": "public long floorSqrt(long n) {\n    long low = 1, high = n;\n    while (low <= high) {\n        long mid = (low + high) / 2;\n        long val = mid * mid;\n        if (val <= n) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return high;\n}"
   },
   {
@@ -176,7 +176,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "n": 3, "m": 27 },
     "description": "Find the nth root of m using binary search.",
-    "approach": "Use binary search to find the integer x such that x^n = m.",
+    "approach": "1. The nth root of m is the number x where x^n = m\n2. Use binary search on possible values from 1 to m\n3. For each mid value, compute mid^n and compare with m\n4. Use helper function that returns: 0 if mid^n < m, 1 if mid^n = m, 2 if mid^n > m\n5. If mid^n = m, return mid as exact nth root\n6. If mid^n < m, search right half for potentially larger root\n7. If mid^n > m, search left half for potentially smaller root\n8. If no exact integer root exists, return -1\n9. Use optimization to prevent overflow in calculations",
     "code": "public int nthRoot(int n, int m) {\n    int low = 1, high = m;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int midN = nthRootFunc(mid, n, m);\n        if (midN == 1) {\n            return mid;\n        } else if (midN == 0) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return -1;\n}\n\nprivate int nthRootFunc(int mid, int n, int m) {\n    long ans = 1;\n    for (int i = 1; i <= n; i++) {\n        ans *= mid;\n        if (ans > m) return 2;\n    }\n    if (ans == m) return 1;\n    return 0;\n}"
   },
   {
@@ -186,7 +186,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [4, 5, 6, 7, 0, 1, 2], "target": 0 },
     "description": "Search for a target value in a rotated sorted array.",
-    "approach": "Use binary search with logic to determine which half is sorted.",
+    "approach": "1. In a rotated sorted array, at least one half is always sorted\n2. Use modified binary search to handle rotation\n3. For each mid position, first check if target == nums[mid]\n4. Then determine which half is sorted by comparing nums[low] with nums[mid]\n5. If left half is sorted (nums[low] ≤ nums[mid]), check if target is in this sorted range\n6. If right half is sorted (nums[mid] < nums[low]), check if target is in this sorted range\n7. Continue search in the half that could contain target\n8. This approach maintains O(log n) time complexity despite rotation",
     "code": "public int searchInRotatedArray(int[] nums, int target) {\n    int low = 0, high = nums.length - 1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (nums[mid] == target) return mid;\n        if (nums[low] <= nums[mid]) {\n            if (nums[low] <= target && target <= nums[mid]) {\n                high = mid - 1;\n            } else {\n                low = mid + 1;\n            }\n        } else {\n            if (nums[mid] <= target && target <= nums[high]) {\n                low = mid + 1;\n            } else {\n                high = mid - 1;\n            }\n        }\n    }\n    return -1;\n}"
   },
   {
@@ -196,7 +196,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "arr": [2, 5, 6, 0, 0, 1, 2], "target": 0 },
     "description": "Search for a target value in a rotated sorted array that may contain duplicates.",
-    "approach": "Use binary search with additional checks for duplicates.",
+    "approach": "1. Extension of previous problem with duplicates allowed\n2. Key difference: when arr[low] = arr[mid] = arr[high], can't determine which half is sorted\n3. In this case, shrink search space by incrementing low and decrementing high\n4. Rest of approach is similar to non-duplicate version:\n5. Determine which half is sorted and check if target is in that sorted range\n6. Continue search in appropriate half\n7. Worst case becomes O(n) if array contains all duplicates\n8. Return boolean instead of index since we only care if target exists",
     "code": "public boolean searchInRotatedArrayII(int[] arr, int target) {\n    int n = arr.length;\n    int low = 0, high = n - 1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (arr[mid] == target) return true;\n        if (arr[low] == arr[mid] && arr[mid] == arr[high]) {\n            low = low + 1;\n            high = high - 1;\n            continue;\n        }\n        if (arr[low] <= arr[mid]) {\n            if (arr[low] <= target && target <= arr[mid]) {\n                high = mid - 1;\n            } else {\n                low = mid + 1;\n            }\n        } else {\n            if (arr[mid] <= target && target <= arr[high]) {\n                low = mid + 1;\n            } else {\n                high = mid - 1;\n            }\n        }\n    }\n    return false;\n}"
   },
   {
@@ -206,7 +206,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "mat": [[0, 1, 1, 1], [0, 0, 1, 1], [1, 1, 1, 1], [0, 0, 0, 0]] },
     "description": "Find the row with the maximum number of 1s in a binary matrix.",
-    "approach": "For each row, use lower bound to count 1s and track the row with the most.",
+    "approach": "1. Rows are sorted with 0s followed by 1s, which enables binary search\n2. For each row, find first occurrence of 1 using lower bound\n3. Number of 1s in row = (row length - first occurrence of 1)\n4. Track row with maximum count of 1s and its index\n5. Return index of row with most 1s (-1 if no 1s exist)\n6. This approach is O(n log m) where n is number of rows and m is number of columns\n7. Could be optimized to O(n+m) using staircase search, but binary search is simpler",
     "code": "public int rowWithMax1s(int[][] mat) {\n    int n = mat.length;\n    int m = mat[0].length;\n    int cnt_max = 0;\n    int index = -1;\n    for (int i = 0; i < n; i++) {\n        int cnt_ones = m - lowerBound1(mat[i], m, 1);\n        if (cnt_ones > cnt_max) {\n            cnt_max = cnt_ones;\n            index = i;\n        }\n    }\n    return index;\n}\n\nprivate int lowerBound1(int[] arr, int n, int x) {\n    int low = 0, high = n - 1;\n    int ans = n;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (arr[mid] >= x) {\n            ans = mid;\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return ans;\n}"
   },
   {
@@ -216,7 +216,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [1, 10, 3, 10, 2], "k": 1, "m": 2 },
     "description": "Find the minimum day to make m bouquets of k adjacent flowers.",
-    "approach": "Use binary search on days and check feasibility with a helper.",
+    "approach": "1. First check if making m bouquets is possible: need at least m*k flowers total\n2. The answer must lie between minimum and maximum bloom day in the array\n3. Use binary search on this range to find minimum viable day\n4. For each potential day, check if we can make m bouquets of k adjacent flowers\n5. Helper function: count adjacent flowers that have bloomed by given day\n6. If we can make ≥ m bouquets, record day as potential answer and search for earlier day\n7. Otherwise, search for later day\n8. Return the minimum viable day, or -1 if impossible",
     "code": "public int roseGarden(int[] nums, int k, int m) {\n    int n = nums.length;\n    long val = (long) m * k;\n    if (val > n) return -1;\n    int mini = Integer.MAX_VALUE, maxi = Integer.MIN_VALUE;\n    for (int i = 0; i < n; i++) {\n        mini = Math.min(mini, nums[i]);\n        maxi = Math.max(maxi, nums[i]);\n    }\n    int left = mini, right = maxi, ans = -1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (possibleRoseGarden(nums, mid, m, k)) {\n            ans = mid;\n            right = mid - 1;\n        } else {\n            left = mid + 1;\n        }\n    }\n    return ans;\n}\n\nprivate boolean possibleRoseGarden(int[] nums, int day, int m, int k) {\n    int n = nums.length;\n    int cnt = 0;\n    int noOfB = 0;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] <= day) {\n            cnt++;\n        } else {\n            noOfB += (cnt / k);\n            cnt = 0;\n        }\n    }\n    noOfB += (cnt / k);\n    return noOfB >= m;\n}"
   },
   {
@@ -226,7 +226,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [3, 6, 7, 11], "h": 8 },
     "description": "Find the minimum eating speed to finish all bananas in h hours.",
-    "approach": "Use binary search on the rate and check total hours with a helper.",
+    "approach": "1. The minimum eating speed is 1, maximum is the largest pile size\n2. Use binary search on this range to find minimum viable rate\n3. For each potential rate, calculate total hours needed to eat all piles\n4. Hours per pile = ceil(pile_size / rate)\n5. If total hours ≤ h, rate works but might not be minimum; search for lower rate\n6. If total hours > h, rate is too slow; search for higher rate\n7. Return the minimum viable rate\n8. This approach finds optimal rate in O(n log m) time where m is max pile size",
     "code": "public int minimumRateToEatBananas(int[] nums, int h) {\n    int low = 1, high = findMaxBananas(nums);\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int totalH = calculateTotalHours(nums, mid);\n        if (totalH <= h) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return low;\n}\n\nprivate int findMaxBananas(int[] nums) {\n    int maxi = Integer.MIN_VALUE;\n    int n = nums.length;\n    for (int i = 0; i < n; i++) {\n        maxi = Math.max(maxi, nums[i]);\n    }\n    return maxi;\n}\n\nprivate int calculateTotalHours(int[] nums, int hourly) {\n    int totalH = 0;\n    int n = nums.length;\n    for (int i = 0; i < n; i++) {\n        totalH += Math.ceil((double) nums[i] / (double) hourly);\n    }\n    return totalH;\n}"
   },
   {
@@ -236,7 +236,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "arr": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "k": 9 },
     "description": "Minimize the maximum distance between gas stations after adding k more stations.",
-    "approach": "Use binary search on the possible distance and check the number of stations needed.",
+    "approach": "1. Apply binary search on the possible minimum distance between gas stations (from 0 to max distance between existing stations)\n2. For each potential distance (mid), calculate how many new stations would be required\n3. To calculate required stations, iterate through adjacent stations and determine how many can be placed in between\n4. If required stations > k, we need a larger minimum distance (low = mid)\n5. Otherwise, we can try for a smaller minimum distance (high = mid)\n6. Continue binary search until precision requirement is met (diff = 1e-6)\n7. The final high value represents the minimized maximum distance\n8. This approach ensures O(n log(maxDist/ε)) time complexity, where ε is the precision",
     "code": "public double minimiseMaxDistance(int[] arr, int k) {\n    int n = arr.length;\n    double low = 0;\n    double high = 0;\n    for (int i = 0; i < n - 1; i++) {\n        high = Math.max(high, arr[i + 1] - arr[i]);\n    }\n    double diff = 1e-6;\n    while (high - low > diff) {\n        double mid = (low + high) / 2.0;\n        int cnt = numberOfGasStationsRequired(mid, arr);\n        if (cnt > k) {\n            low = mid;\n        } else {\n            high = mid;\n        }\n    }\n    return high;\n}\n\nprivate int numberOfGasStationsRequired(double dist, int[] arr) {\n    int n = arr.length;\n    int cnt = 0;\n    for (int i = 1; i < n; i++) {\n        int numberInBetween = (int) ((arr[i] - arr[i - 1]) / dist);\n        if ((arr[i] - arr[i - 1]) == (dist * numberInBetween)) {\n            numberInBetween--;\n        }\n        cnt += numberInBetween;\n    }\n    return cnt;\n}"
   },
   {
@@ -246,7 +246,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "a": [7, 2, 5, 10, 8], "k": 2 },
     "description": "Split the array into k subarrays to minimize the largest subarray sum.",
-    "approach": "Use binary search on the answer and count partitions with a helper.",
+    "approach": "1. Use binary search to find the minimum possible maximum subarray sum\n2. Initialize low pointer to the largest element in array (minimum possible sum of any subarray)\n3. Initialize high pointer to sum of all elements (maximum possible subarray sum)\n4. For each mid value, determine how many partitions would be needed to keep each subarray sum <= mid\n5. If partitions > k, low = mid + 1 (we need a larger subarray sum to reduce partitions)\n6. If partitions <= k, high = mid - 1 (try to find smaller valid sum)\n7. Return low as the answer (minimum possible maximum subarray sum)\n8. The countPartitions helper greedily forms subarrays, ensuring each has sum <= maxSum\n9. This approach runs in O(n log(sum)) time, where sum is the total array sum",
     "code": "public int largestSubarraySumMinimized(int[] a, int k) {\n    int low = a[0];\n    int high = 0;\n    for (int i = 0; i < a.length; i++) {\n        low = Math.max(low, a[i]);\n        high += a[i];\n    }\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int partitions = countPartitions(a, mid);\n        if (partitions > k) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return low;\n}\n\nprivate int countPartitions(int[] a, int maxSum) {\n    int n = a.length;\n    int partitions = 1;\n    long subarraySum = 0;\n    for (int i = 0; i < n; i++) {\n        if (subarraySum + a[i] <= maxSum) {\n            subarraySum += a[i];\n        } else {\n            partitions++;\n            subarraySum = a[i];\n        }\n    }\n    return partitions;\n}"
   },
   {
@@ -256,7 +256,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "a": [2, 3, 6, 7, 9], "b": [1, 4, 8, 10], "k": 5 },
     "description": "Find the kth element in the merged sorted array from two sorted arrays.",
-    "approach": "Use binary search to partition both arrays and find the kth element.",
+    "approach": "1. Always work with smaller array (swap if needed) for efficiency\n2. Use binary search on smaller array to find optimal partition point\n3. Calculate corresponding partition in second array based on k\n4. For each cut in arrays, we have left1, right1, left2, right2 elements\n5. Check if partition is valid: max(left1, left2) <= min(right1, right2)\n6. If valid, the kth element is max(left1, left2) since we have exactly k elements to the left\n7. If not valid and left1 > right2, move cut in first array leftward\n8. If left2 > right1, move cut in first array rightward\n9. This approach achieves O(log(min(m,n))) time complexity",
     "code": "public int kthElement(int[] a, int[] b, int k) {\n    int m = a.length;\n    int n = b.length;\n    if (m > n) {\n        return kthElement(b, a, k);\n    }\n    int left = k;\n    int low = Math.max(0, k - n), high = Math.min(k, m);\n    while (low <= high) {\n        int mid1 = (low + high) >> 1;\n        int mid2 = left - mid1;\n        int l1 = (mid1 > 0) ? a[mid1 - 1] : Integer.MIN_VALUE;\n        int l2 = (mid2 > 0) ? b[mid2 - 1] : Integer.MIN_VALUE;\n        int r1 = (mid1 < m) ? a[mid1] : Integer.MAX_VALUE;\n        int r2 = (mid2 < n) ? b[mid2] : Integer.MAX_VALUE;\n        if (l1 <= r2 && l2 <= r1) {\n            return Math.max(l1, l2);\n        } else if (l1 > r2) {\n            high = mid1 - 1;\n        } else {\n            low = mid1 + 1;\n        }\n    }\n    return -1;\n}"
   },
   {
@@ -266,7 +266,7 @@
     "serviceFile": "BinarySearchService.java",
     "defaultInput": { "nums": [5, 7, 7, 8, 8, 10], "target": 8 },
     "description": "Find the starting and ending position of a given target value in a sorted array.",
-    "approach": "Use binary search to find the first and last occurrence of the target.",
+    "approach": "1. Use two separate modified binary search operations\n2. First binary search to find leftmost (first) occurrence of target:\n   - If nums[mid] == target, mark position and continue search in left half\n   - This moves towards first occurrence even if target is already found\n3. Second binary search to find rightmost (last) occurrence of target:\n   - If nums[mid] == target, mark position and continue search in right half\n   - This moves towards last occurrence even if target is already found\n4. If first occurrence isn't found, return [-1, -1] as target isn't present\n5. Otherwise return [first, last] positions\n6. This approach has O(log n) time complexity, maintaining binary search efficiency",
     "code": "public int[] searchRange(int[] nums, int target) {\n    int first = firstOccurrence(nums, target);\n    if(first == -1) return new int[]{-1, -1};\n    int last = lastOccurrence(nums, target);\n    return new int[]{first, last};\n}\n\nprivate int firstOccurrence(int[] nums, int target) {\n    int low = 0, high = nums.length - 1;\n    int first = -1;\n    while(low <= high) {\n        int mid = low + (high - low) / 2;\n        if(nums[mid] == target) {\n            first = mid;\n            high = mid - 1;\n        } else if(nums[mid] < target) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return first;\n}\n\nprivate int lastOccurrence(int[] nums, int target) {\n    int low = 0, high = nums.length - 1;\n    int last = -1;\n    while(low <= high) {\n        int mid = low + (high - low) / 2;\n        if(nums[mid] == target) {\n            last = mid;\n            low = mid + 1;\n        } else if(nums[mid] < target) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return last;\n}"
   }
 ]
