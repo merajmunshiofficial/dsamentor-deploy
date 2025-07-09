@@ -7,7 +7,7 @@
     "defaultInput": { "array": [1, 3, 5, 7, 9, 2, 4, 6, 8, 0] },
     "description": "Convert a given min-heap array to a max-heap array.",
     "approach": "Heapify down from the last non-leaf node to the root to build a max-heap.",
-    "code": "public int[] minToMaxHeap(int[] nums) {\n    int n = nums.length;\n    for (int i = n / 2 - 1; i >= 0; i--) {\n        heapifyDownMax(nums, i);\n    }\n    return nums;\n}"
+    "code": "public int[] minToMaxHeap(int[] nums) {\n    int n = nums.length;\n    for (int i = n / 2 - 1; i >= 0; i--) {\n        heapifyDownMax(nums, i);\n    }\n    return nums;\n}\n\nprivate void heapifyDownMax(int[] arr, int ind) {\n    int n = arr.length;\n    int largestInd = ind;\n    int left = 2 * ind + 1, right = 2 * ind + 2;\n    if (left < n && arr[left] > arr[largestInd]) largestInd = left;\n    if (right < n && arr[right] > arr[largestInd]) largestInd = right;\n    if (largestInd != ind) {\n        int temp = arr[largestInd]; arr[largestInd] = arr[ind]; arr[ind] = temp;\n        heapifyDownMax(arr, largestInd);\n    }\n}"
   },
   {
     "name": "Heap Sort",
@@ -17,7 +17,7 @@
     "defaultInput": { "array": [4, 10, 3, 5, 1] },
     "description": "Sort an array using heap sort algorithm.",
     "approach": "Build a max-heap and repeatedly extract the maximum element to sort the array.",
-    "code": "public int[] heapSort(int[] nums) {\n    buildMaxHeap(nums);\n    int last = nums.length - 1;\n    while (last > 0) {\n        int temp = nums[0]; nums[0] = nums[last]; nums[last] = temp;\n        last--;\n        heapifyDownMax(nums, 0, last);\n    }\n    return nums;\n}"
+    "code": "public int[] heapSort(int[] nums) {\n    buildMaxHeap(nums);\n    int last = nums.length - 1;\n    while (last > 0) {\n        int temp = nums[0]; nums[0] = nums[last]; nums[last] = temp;\n        last--;\n        heapifyDownMax(nums, 0, last);\n    }\n    return nums;\n}\n\npublic void buildMaxHeap(int[] nums) {\n    int n = nums.length;\n    for (int i = n / 2 - 1; i >= 0; i--) {\n        heapifyDownMax(nums, i, n - 1);\n    }\n}\n\nprivate void heapifyDownMax(int[] arr, int ind, int last) {\n    int largestInd = ind;\n    int left = 2 * ind + 1, right = 2 * ind + 2;\n    if (left <= last && arr[left] > arr[largestInd]) largestInd = left;\n    if (right <= last && arr[right] > arr[largestInd]) largestInd = right;\n    if (largestInd != ind) {\n        int temp = arr[largestInd]; arr[largestInd] = arr[ind]; arr[ind] = temp;\n        heapifyDownMax(arr, largestInd, last);\n    }\n}"
   },
   {
     "name": "Kth Largest Element in Array",
@@ -47,7 +47,7 @@
     "defaultInput": { "array": [9, 4, 7, 1, -2, 6, 5] },
     "description": "Build a min-heap from an unsorted array.",
     "approach": "Heapify down from the last non-leaf node to the root to build a min-heap.",
-    "code": "public int[] buildMinHeap(int[] nums) {\n    int n = nums.length;\n    for (int i = n / 2 - 1; i >= 0; i--) {\n        heapifyDownMin(nums, i);\n    }\n    return nums;\n}"
+    "code": "public int[] buildMinHeap(int[] nums) {\n    int n = nums.length;\n    for (int i = n / 2 - 1; i >= 0; i--) {\n        heapifyDownMin(nums, i);\n    }\n    return nums;\n}\n\nprivate void heapifyDownMin(int[] arr, int ind) {\n    int n = arr.length;\n    int smallest = ind, left = 2 * ind + 1, right = 2 * ind + 2;\n    if (left < n && arr[left] < arr[smallest]) smallest = left;\n    if (right < n && arr[right] < arr[smallest]) smallest = right;\n    if (smallest != ind) {\n        int temp = arr[smallest]; arr[smallest] = arr[ind]; arr[ind] = temp;\n        heapifyDownMin(arr, smallest);\n    }\n}"
   },
   {
     "name": "Adjust Min-Heap Value at Index",
@@ -57,6 +57,6 @@
     "defaultInput": { "array": [1, 3, 5, 7, 9, 2, 4, 6, 8, 0], "index": 3, "val": 0 },
     "description": "Change the value at a given index in a min-heap and restore the heap property.",
     "approach": "If the new value is less, heapify up; if greater, heapify down.",
-    "code": "public int[] adjustMinHeap(int[] nums, int ind, int val) {\n    if (nums[ind] > val) {\n        nums[ind] = val;\n        heapifyUpMin(nums, ind);\n    } else {\n        nums[ind] = val;\n        heapifyDownMin(nums, ind);\n    }\n    return nums;\n}"
+    "code": "public int[] adjustMinHeap(int[] nums, int ind, int val) {\n    if (nums[ind] > val) {\n        nums[ind] = val;\n        heapifyUpMin(nums, ind);\n    } else {\n        nums[ind] = val;\n        heapifyDownMin(nums, ind);\n    }\n    return nums;\n}\n\nprivate void heapifyUpMin(int[] arr, int ind) {\n    int parent = (ind - 1) / 2;\n    if (ind > 0 && arr[ind] < arr[parent]) {\n        int temp = arr[ind]; arr[ind] = arr[parent]; arr[parent] = temp;\n        heapifyUpMin(arr, parent);\n    }\n}\n\nprivate void heapifyDownMin(int[] arr, int ind) {\n    int n = arr.length;\n    int smallest = ind, left = 2 * ind + 1, right = 2 * ind + 2;\n    if (left < n && arr[left] < arr[smallest]) smallest = left;\n    if (right < n && arr[right] < arr[smallest]) smallest = right;\n    if (smallest != ind) {\n        int temp = arr[smallest]; arr[smallest] = arr[ind]; arr[ind] = temp;\n        heapifyDownMin(arr, smallest);\n    }\n}"
   }
 ]

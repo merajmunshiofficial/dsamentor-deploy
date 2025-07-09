@@ -67,7 +67,7 @@
     "defaultInput": { "nums": [1,1,2,1,1], "k": 3 },
     "description": "Find the number of subarrays with exactly k odd numbers.",
     "approach": "Use a sliding window to count subarrays with at most k and at most k-1 odd numbers, then subtract.",
-    "code": "public int numberOfOddSubarrays(int[] nums, int k) {\n    return helper(nums, k) - helper(nums, k - 1);\n}"
+    "code": "public int numberOfOddSubarrays(int[] nums, int k) {\n    return helper(nums, k) - helper(nums, k - 1);\n}\n\nprivate int helper(int[] nums, int goal) {\n    if (goal < 0) return 0;\n    int l = 0, r = 0; \n    int sum = 0;      \n    int count = 0;   \n    while (r < nums.length) {\n        sum += nums[r] % 2; \n        while (sum > goal) {\n            sum -= nums[l] % 2;  \n            l++;            \n        }\n        count += (r - l + 1);\n        r++; \n    }\n    return count;\n}"
   },
   {
     "name": "Number of Substrings Containing 'a', 'b', and 'c'",

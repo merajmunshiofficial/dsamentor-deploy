@@ -7,7 +7,7 @@
     "defaultInput": { "numbers": [12, 15, 100] },
     "description": "Find the prime factors for each number in a list.",
     "approach": "Use a sieve to precompute smallest prime factors, then factorize each number by dividing by its smallest prime factor repeatedly.",
-    "code": "public List<List<Integer>> primeFactors(List<Integer> numbers) {\n    sieve();\n    List<List<Integer>> ans = new ArrayList<>();\n    for (int n : numbers) {\n        ans.add(primeFact(n));\n    }\n    return ans;\n}"
+    "code": "private static final int MAX_N = 100000;\nprivate int[] SPF = new int[MAX_N + 1];\nprivate boolean sieveDone = false;\n\nprivate void sieve() {\n    if (sieveDone) return;\n    Arrays.fill(SPF, 1);\n    for (int i = 2; i <= MAX_N; i++) {\n        if (SPF[i] == 1) {\n            for (int j = i; j <= MAX_N; j += i) {\n                if (SPF[j] == 1) {\n                    SPF[j] = i;\n                }\n            }\n        }\n    }\n    sieveDone = true;\n}\n\nprivate List<Integer> primeFact(int n) {\n    List<Integer> ans = new ArrayList<>();\n    while (n != 1) {\n        ans.add(SPF[n]);\n        n = n / SPF[n];\n    }\n    return ans;\n}\n\npublic List<List<Integer>> primeFactors(List<Integer> numbers) {\n    sieve();\n    List<List<Integer>> ans = new ArrayList<>();\n    for (int n : numbers) {\n        ans.add(primeFact(n));\n    }\n    return ans;\n}"
   },
   {
     "name": "All Primes Up to N",

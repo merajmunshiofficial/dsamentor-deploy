@@ -7,7 +7,7 @@
     "defaultInput": { "preorder": [8, 5, 1, 7, 10, 12] },
     "description": "Construct a BST from its preorder traversal.",
     "approach": "Recursively build the BST using bounds and preorder index.",
-    "code": "public BSTResponse.TreeNodeDTO bstFromPreorder(List<Integer> preorder) {\n    TreeNode root = bstFromPreorderHelper(preorder, Integer.MAX_VALUE, new int[]{0});\n    return toDTO(root);\n}"
+    "code": "public BSTResponse.TreeNodeDTO bstFromPreorder(List<Integer> preorder) {\n    TreeNode root = bstFromPreorderHelper(preorder, Integer.MAX_VALUE, new int[]{0});\n    return toDTO(root);\n}\n\nprivate TreeNode bstFromPreorderHelper(List<Integer> preorder, int bound, int[] index) {\n    if (index[0] == preorder.size() || preorder.get(index[0]) > bound) return null;\n    TreeNode root = new TreeNode(preorder.get(index[0]++));\n    root.left = bstFromPreorderHelper(preorder, root.data, index);\n    root.right = bstFromPreorderHelper(preorder, bound, index);\n    return root;\n}\n\nprivate BSTResponse.TreeNodeDTO toDTO(TreeNode node) {\n    if (node == null) return null;\n    BSTResponse.TreeNodeDTO dto = new BSTResponse.TreeNodeDTO(node.data);\n    dto.setLeft(toDTO(node.left));\n    dto.setRight(toDTO(node.right));\n    return dto;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "BST Iterator Inorder",
@@ -17,7 +17,7 @@
     "defaultInput": { "preorder": [8, 5, 1, 7, 10, 12] },
     "description": "Return the inorder traversal of a BST constructed from preorder.",
     "approach": "Build the BST from preorder and perform inorder traversal.",
-    "code": "public List<Integer> bstIteratorInorder(List<Integer> preorder) {\n    TreeNode root = bstFromPreorderHelper(preorder, Integer.MAX_VALUE, new int[]{0});\n    List<Integer> inorder = new java.util.ArrayList<>();\n    inorderTraversal(root, inorder);\n    return inorder;\n}"
+    "code": "public List<Integer> bstIteratorInorder(List<Integer> preorder) {\n    TreeNode root = bstFromPreorderHelper(preorder, Integer.MAX_VALUE, new int[]{0});\n    List<Integer> inorder = new java.util.ArrayList<>();\n    inorderTraversal(root, inorder);\n    return inorder;\n}\n\nprivate TreeNode bstFromPreorderHelper(List<Integer> preorder, int bound, int[] index) {\n    if (index[0] == preorder.size() || preorder.get(index[0]) > bound) return null;\n    TreeNode root = new TreeNode(preorder.get(index[0]++));\n    root.left = bstFromPreorderHelper(preorder, root.data, index);\n    root.right = bstFromPreorderHelper(preorder, bound, index);\n    return root;\n}\n\nprivate void inorderTraversal(TreeNode node, List<Integer> res) {\n    if (node == null) return;\n    inorderTraversal(node.left, res);\n    res.add(node.data);\n    inorderTraversal(node.right, res);\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Delete Node in BST",

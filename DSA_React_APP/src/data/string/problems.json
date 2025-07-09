@@ -27,7 +27,7 @@
     "defaultInput": { "s": "  hello world  " },
     "description": "Reverse the order of words in a string, trimming spaces.",
     "approach": "Reverse the entire string, then reverse each word individually, and trim extra spaces.",
-    "code": "public String reverseWords(String s) {\n    int n = s.length();\n    StringBuilder sb = new StringBuilder(s);\n    reverseString(sb, 0, n - 1);\n    int i = 0, j = 0, start, end;\n    while (j < n) {\n        while (j < n && sb.charAt(j) == ' ') j++;\n        if (j == n) break;\n        start = i;\n        while (j < n && sb.charAt(j) != ' ') {\n            if (i < sb.length()) sb.setCharAt(i++, sb.charAt(j++));\n            else { sb.append(sb.charAt(j++)); i++; }\n        }\n        end = i - 1;\n        reverseString(sb, start, end);\n        if (j < n) {\n            if (i < sb.length()) sb.setCharAt(i++, ' ');\n            else { sb.append(' '); i++; }\n        }\n    }\n    if (i > 0 && sb.charAt(i - 1) == ' ') i--;\n    return sb.substring(0, i);\n}"
+    "code": "public String reverseWords(String s) {\n    int n = s.length();\n    StringBuilder sb = new StringBuilder(s);\n    reverseString(sb, 0, n - 1);\n    int i = 0, j = 0, start, end;\n    while (j < n) {\n        while (j < n && sb.charAt(j) == ' ') j++;\n        if (j == n) break;\n        start = i;\n        while (j < n && sb.charAt(j) != ' ') {\n            if (i < sb.length()) sb.setCharAt(i++, sb.charAt(j++));\n            else { sb.append(sb.charAt(j++)); i++; }\n        }\n        end = i - 1;\n        reverseString(sb, start, end);\n        if (j < n) {\n            if (i < sb.length()) sb.setCharAt(i++, ' ');\n            else { sb.append(' '); i++; }\n        }\n    }\n    if (i > 0 && sb.charAt(i - 1) == ' ') i--;\n    return sb.substring(0, i);\n}\n\nprivate void reverseString(StringBuilder s, int start, int end) {\n    while (start < end) {\n        char temp = s.charAt(start);\n        s.setCharAt(start, s.charAt(end));\n        s.setCharAt(end, temp);\n        start++; end--;\n    }\n}"
   },
   {
     "name": "KMP Pattern Search",
@@ -37,7 +37,7 @@
     "defaultInput": { "pattern": "abc", "text": "ababcabcababc" },
     "description": "Find all indices of a pattern in text using the KMP algorithm.",
     "approach": "Build the LPS array for the pattern and use it to efficiently search for matches in the text.",
-    "code": "public List<Integer> kmpSearch(String pattern, String text) {\n    String s = pattern + '$' + text;\n    int[] lps = computeLPS(s);\n    int n = text.length(), m = pattern.length();\n    List<Integer> ans = new ArrayList<>();\n    for (int i = m + 1; i < s.length(); i++) {\n        if (lps[i] == m) ans.add(i - 2 * m);\n    }\n    return ans;\n}"
+    "code": "public List<Integer> kmpSearch(String pattern, String text) {\n    String s = pattern + '$' + text;\n    int[] lps = computeLPS(s);\n    int n = text.length(), m = pattern.length();\n    List<Integer> ans = new ArrayList<>();\n    for (int i = m + 1; i < s.length(); i++) {\n        if (lps[i] == m) ans.add(i - 2 * m);\n    }\n    return ans;\n}\n\nprivate int[] computeLPS(String s) {\n    int n = s.length();\n    int[] lps = new int[n];\n    int i = 1, j = 0;\n    while (i < n) {\n        if (s.charAt(i) == s.charAt(j)) {\n            lps[i] = j + 1; i++; j++;\n        } else {\n            while (j > 0 && s.charAt(i) != s.charAt(j)) j = lps[j - 1];\n            if (s.charAt(i) == s.charAt(j)) { lps[i] = j + 1; j++; }\n            i++;\n        }\n    }\n    return lps;\n}"
   },
   {
     "name": "Rabin-Karp Pattern Search",
@@ -57,7 +57,7 @@
     "defaultInput": { "pattern": "xyz", "text": "xyzabxyzabxyz" },
     "description": "Find all indices of a pattern in text using the Z-algorithm.",
     "approach": "Build the Z-array for the concatenated pattern and text, then find matches where Z[i] equals the pattern length.",
-    "code": "public List<Integer> zAlgorithmSearch(String text, String pattern) {\n    String s = pattern + '$' + text;\n    int[] z = computeZarray(s);\n    int n = text.length(), m = pattern.length();\n    List<Integer> ans = new ArrayList<>();\n    for (int i = m + 1; i < s.length(); i++) {\n        if (z[i] == m) ans.add(i - (m + 1));\n    }\n    return ans;\n}"
+    "code": "public List<Integer> zAlgorithmSearch(String text, String pattern) {\n    String s = pattern + '$' + text;\n    int[] z = computeZarray(s);\n    int n = text.length(), m = pattern.length();\n    List<Integer> ans = new ArrayList<>();\n    for (int i = m + 1; i < s.length(); i++) {\n        if (z[i] == m) ans.add(i - (m + 1));\n    }\n    return ans;\n}\n\nprivate int[] computeZarray(String s) {\n    int n = s.length();\n    int[] z = new int[n];\n    int left = 0, right = 0;\n    for (int i = 1; i < n; i++) {\n        if (i > right) {\n            while (i + z[i] < n && s.charAt(i + z[i]) == s.charAt(z[i])) z[i]++;\n            left = i; right = i + z[i] - 1;\n        } else {\n            if (i + z[i - left] <= right) z[i] = z[i - left];\n            else {\n                z[i] = right - i + 1;\n                while (i + z[i] < n && s.charAt(i + z[i]) == s.charAt(z[i])) z[i]++;\n                left = i; right = i + z[i] - 1;\n            }\n        }\n    }\n    return z;\n}"
   },
   {
     "name": "Longest Happy Prefix",
@@ -67,7 +67,7 @@
     "defaultInput": { "s": "ababab" },
     "description": "Find the longest happy prefix (LPS) of a string.",
     "approach": "Use the LPS array to find the longest prefix which is also a suffix.",
-    "code": "public String longestHappyPrefix(String s) {\n    int[] lps = computeLPS(s);\n    return s.substring(0, lps[s.length() - 1]);\n}"
+    "code": "public String longestHappyPrefix(String s) {\n    int[] lps = computeLPS(s);\n    return s.substring(0, lps[s.length() - 1]);\n}\n\nprivate int[] computeLPS(String s) {\n    int n = s.length();\n    int[] lps = new int[n];\n    int i = 1, j = 0;\n    while (i < n) {\n        if (s.charAt(i) == s.charAt(j)) {\n            lps[i] = j + 1; i++; j++;\n        } else {\n            while (j > 0 && s.charAt(i) != s.charAt(j)) j = lps[j - 1];\n            if (s.charAt(i) == s.charAt(j)) { lps[i] = j + 1; j++; }\n            i++;\n        }\n    }\n    return lps;\n}"
   },
   {
     "name": "Shortest Palindrome by Prepending",
@@ -77,6 +77,6 @@
     "defaultInput": { "s": "aacecaaa" },
     "description": "Find the shortest palindrome by prepending characters to the string.",
     "approach": "Reverse the string, concatenate with the original, and use the LPS array to find the minimum prefix to add.",
-    "code": "public String shortestPalindrome(String s) {\n    StringBuilder revs = new StringBuilder(s).reverse();\n    String str = s + \"$\" + revs;\n    int[] lps = computeLPS(str);\n    int ans = s.length() - lps[lps.length - 1];\n    String toAdd = revs.substring(0, ans);\n    return toAdd + s;\n}"
+    "code": "public String shortestPalindrome(String s) {\n    StringBuilder revs = new StringBuilder(s).reverse();\n    String str = s + \"$\" + revs;\n    int[] lps = computeLPS(str);\n    int ans = s.length() - lps[lps.length - 1];\n    String toAdd = revs.substring(0, ans);\n    return toAdd + s;\n}\n\nprivate int[] computeLPS(String s) {\n    int n = s.length();\n    int[] lps = new int[n];\n    int i = 1, j = 0;\n    while (i < n) {\n        if (s.charAt(i) == s.charAt(j)) {\n            lps[i] = j + 1; i++; j++;\n        } else {\n            while (j > 0 && s.charAt(i) != s.charAt(j)) j = lps[j - 1];\n            if (s.charAt(i) == s.charAt(j)) { lps[i] = j + 1; j++; }\n            i++;\n        }\n    }\n    return lps;\n}"
   }
 ]

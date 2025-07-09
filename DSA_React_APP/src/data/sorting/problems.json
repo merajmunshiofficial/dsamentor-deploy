@@ -27,7 +27,7 @@
     "defaultInput": { "nums": [38, 27, 43, 3, 9, 82, 10] },
     "description": "Sort an array using the merge sort algorithm.",
     "approach": "Recursively divide the array into halves, sort each half, and merge the sorted halves.",
-    "code": "public int[] mergeSort(int[] arr) {\n    mergeSort(arr, 0, arr.length - 1);\n    return arr;\n}"
+    "code": "public int[] mergeSort(int[] arr) {\n    mergeSort(arr, 0, arr.length - 1);\n    return arr;\n}\n\nprivate void merge(int[] arr, int low, int mid, int high) {\n    List<Integer> temp = new ArrayList<>();\n    int left = low;\n    int right = mid + 1;\n    while (left <= mid && right <= high) {\n        if (arr[left] <= arr[right]) {\n            temp.add(arr[left]);\n            left++;\n        } else {\n            temp.add(arr[right]);\n            right++;\n        }\n    }\n    while (left <= mid) {\n        temp.add(arr[left]);\n        left++;\n    }\n    while (right <= high) {\n        temp.add(arr[right]);\n        right++;\n    }\n    for (int i = low; i <= high; i++) {\n        arr[i] = temp.get(i - low);\n    }\n}\n\nprivate void mergeSort(int[] arr, int low, int high) {\n    if (low >= high)\n        return;\n    int mid = (low + high) / 2;\n    mergeSort(arr, low, mid);\n    mergeSort(arr, mid + 1, high);\n    merge(arr, low, mid, high);\n}"
   },
   {
     "name": "Quick Sort",
@@ -37,6 +37,6 @@
     "defaultInput": { "nums": [10, 7, 8, 9, 1, 5] },
     "description": "Sort an array using the quick sort algorithm.",
     "approach": "Recursively partition the array around a pivot, sorting elements less than the pivot to the left and greater to the right.",
-    "code": "public int[] quickSort(int[] arr) {\n    quickSort(arr, 0, arr.length - 1);\n    return arr;\n}"
+    "code": "public int[] quickSort(int[] arr) {\n    quickSort(arr, 0, arr.length - 1);\n    return arr;\n}\n\nprivate int partition(int[] arr, int low, int high) {\n    int pivot = arr[low];\n    int i = low;\n    int j = high;\n    while (i < j) {\n        while (i <= high - 1 && arr[i] <= pivot) {\n            i++;\n        }\n        while (j >= low + 1 && arr[j] > pivot) {\n            j--;\n        }\n        if (i < j) {\n            int temp = arr[i];\n            arr[i] = arr[j];\n            arr[j] = temp;\n        }\n    }\n    int temp = arr[low];\n    arr[low] = arr[j];\n    arr[j] = temp;\n    return j;\n}\n\nprivate void quickSort(int[] arr, int low, int high) {\n    if (low < high) {\n        int pIndex = partition(arr, low, high);\n        quickSort(arr, low, pIndex - 1);\n        quickSort(arr, pIndex + 1, high);\n    }\n}"
   }
 ]

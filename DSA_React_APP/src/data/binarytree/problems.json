@@ -7,7 +7,7 @@
     "defaultInput": { "root": { "data": 1, "right": { "data": 2, "left": { "data": 3 } } } },
     "description": "Return the inorder traversal of a binary tree.",
     "approach": "Recursively traverse left subtree, visit node, then right subtree.",
-    "code": "public List<Integer> inorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    inorderHelper(root, result);\n    return result;\n}"
+    "code": "public List<Integer> inorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    inorderHelper(root, result);\n    return result;\n}\n\nprivate void inorderHelper(TreeNode node, List<Integer> result) {\n    if (node == null) return;\n    inorderHelper(node.left, result);\n    result.add(node.data);\n    inorderHelper(node.right, result);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Preorder Traversal",
@@ -17,7 +17,7 @@
     "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
     "description": "Return the preorder traversal of a binary tree.",
     "approach": "Visit node, then recursively traverse left and right subtrees.",
-    "code": "public List<Integer> preorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    preorderHelper(root, result);\n    return result;\n}"
+    "code": "public List<Integer> preorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    preorderHelper(root, result);\n    return result;\n}\n\nprivate void preorderHelper(TreeNode node, List<Integer> result) {\n    if (node == null) return;\n    result.add(node.data);\n    preorderHelper(node.left, result);\n    preorderHelper(node.right, result);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Postorder Traversal",
@@ -27,7 +27,7 @@
     "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
     "description": "Return the postorder traversal of a binary tree.",
     "approach": "Recursively traverse left and right subtrees, then visit node.",
-    "code": "public List<Integer> postorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    postorderHelper(root, result);\n    return result;\n}"
+    "code": "public List<Integer> postorderTraversal(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<Integer> result = new ArrayList<>();\n    postorderHelper(root, result);\n    return result;\n}\n\nprivate void postorderHelper(TreeNode node, List<Integer> result) {\n    if (node == null) return;\n    postorderHelper(node.left, result);\n    postorderHelper(node.right, result);\n    result.add(node.data);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Level Order Traversal",
@@ -47,7 +47,7 @@
     "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
     "description": "Find the maximum depth of a binary tree.",
     "approach": "Recursively compute the maximum depth of left and right subtrees.",
-    "code": "public int maxDepth(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return maxDepthHelper(root);\n}"
+    "code": "public int maxDepth(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return maxDepthHelper(root);\n}\n\nprivate int maxDepthHelper(TreeNode node) {\n    if (node == null) return 0;\n    return Math.max(maxDepthHelper(node.left), maxDepthHelper(node.right)) + 1;\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Check if Binary Tree is Balanced",
@@ -57,7 +57,7 @@
     "defaultInput": { "root": { "data": 3, "left": { "data": 9 }, "right": { "data": 20, "left": { "data": 15 }, "right": { "data": 7 } } } },
     "description": "Check if a binary tree is height-balanced.",
     "approach": "Recursively check the height of subtrees and ensure the difference is at most 1.",
-    "code": "public boolean isBalanced(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return isBalancedHelper(root) != -1;\n}"
+    "code": "public boolean isBalanced(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    return isBalancedHelper(root) != -1;\n}\n\nprivate int isBalancedHelper(TreeNode node) {\n    if (node == null) return 0;\n    \n    int leftHeight = isBalancedHelper(node.left);\n    if (leftHeight == -1) return -1;\n    \n    int rightHeight = isBalancedHelper(node.right);\n    if (rightHeight == -1) return -1;\n    \n    if (Math.abs(leftHeight - rightHeight) > 1) return -1;\n    \n    return Math.max(leftHeight, rightHeight) + 1;\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Check if Two Trees are Same",
@@ -67,7 +67,7 @@
     "defaultInput": { "p": { "data": 1, "left": { "data": 2 } }, "q": { "data": 1, "left": { "data": 2 } } },
     "description": "Check if two binary trees are the same.",
     "approach": "Recursively compare nodes and their subtrees for equality.",
-    "code": "public boolean isSameTree(BinaryTreeResponse.TreeNodeDTO pDto, BinaryTreeResponse.TreeNodeDTO qDto) {\n    TreeNode p = fromDTO(pDto);\n    TreeNode q = fromDTO(qDto);\n    return isSameTreeHelper(p, q);\n}"
+    "code": "public boolean isSameTree(BinaryTreeResponse.TreeNodeDTO pDto, BinaryTreeResponse.TreeNodeDTO qDto) {\n    TreeNode p = fromDTO(pDto);\n    TreeNode q = fromDTO(qDto);\n    return isSameTreeHelper(p, q);\n}\n\nprivate boolean isSameTreeHelper(TreeNode p, TreeNode q) {\n    if (p == null && q == null) return true;\n    if (p == null || q == null) return false;\n    return p.data == q.data && \n           isSameTreeHelper(p.left, q.left) && \n           isSameTreeHelper(p.right, q.right);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Check if Binary Tree is Symmetric",
@@ -77,7 +77,7 @@
     "defaultInput": { "root": { "data": 1, "left": { "data": 2, "left": { "data": 3 }, "right": { "data": 4 } }, "right": { "data": 2, "left": { "data": 4 }, "right": { "data": 3 } } } },
     "description": "Check if a binary tree is symmetric around its center.",
     "approach": "Recursively compare left and right subtrees for mirror symmetry.",
-    "code": "public boolean isSymmetric(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    if (root == null) return true;\n    return isSymmetricHelper(root.left, root.right);\n}"
+    "code": "public boolean isSymmetric(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    if (root == null) return true;\n    return isSymmetricHelper(root.left, root.right);\n}\n\nprivate boolean isSymmetricHelper(TreeNode left, TreeNode right) {\n    if (left == null && right == null) return true;\n    if (left == null || right == null) return false;\n    return left.data == right.data && \n           isSymmetricHelper(left.left, right.right) && \n           isSymmetricHelper(left.right, right.left);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Lowest Common Ancestor",
@@ -87,7 +87,7 @@
     "defaultInput": { "root": { "data": 3, "left": { "data": 5 }, "right": { "data": 1 } }, "p": 5, "q": 1 },
     "description": "Find the lowest common ancestor (LCA) of two nodes in the binary tree.",
     "approach": "Recursively search for the LCA in the tree.",
-    "code": "public int lowestCommonAncestor(BinaryTreeResponse.TreeNodeDTO rootDto, int p, int q) {\n    TreeNode root = fromDTO(rootDto);\n    TreeNode result = lcaHelper(root, p, q);\n    return result != null ? result.data : -1;\n}"
+    "code": "public int lowestCommonAncestor(BinaryTreeResponse.TreeNodeDTO rootDto, int p, int q) {\n    TreeNode root = fromDTO(rootDto);\n    TreeNode result = lcaHelper(root, p, q);\n    return result != null ? result.data : -1;\n}\n\nprivate TreeNode lcaHelper(TreeNode node, int p, int q) {\n    if (node == null || node.data == p || node.data == q) {\n        return node;\n    }\n    \n    TreeNode left = lcaHelper(node.left, p, q);\n    TreeNode right = lcaHelper(node.right, p, q);\n    \n    if (left != null && right != null) {\n        return node;\n    }\n    \n    return left != null ? left : right;\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Diameter of Binary Tree",
@@ -97,7 +97,7 @@
     "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
     "description": "Find the diameter (longest path) of the binary tree.",
     "approach": "Recursively compute the height of subtrees and update the maximum diameter.",
-    "code": "public int diameterOfBinaryTree(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    int[] diameter = {0};\n    diameterHelper(root, diameter);\n    return diameter[0];\n}"
+    "code": "public int diameterOfBinaryTree(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    int[] diameter = {0};\n    diameterHelper(root, diameter);\n    return diameter[0];\n}\n\nprivate int diameterHelper(TreeNode node, int[] diameter) {\n    if (node == null) return 0;\n    \n    int leftHeight = diameterHelper(node.left, diameter);\n    int rightHeight = diameterHelper(node.right, diameter);\n    \n    diameter[0] = Math.max(diameter[0], leftHeight + rightHeight);\n    \n    return Math.max(leftHeight, rightHeight) + 1;\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Maximum Path Sum",
@@ -107,7 +107,7 @@
     "defaultInput": { "root": { "data": 1, "left": { "data": 2 }, "right": { "data": 3 } } },
     "description": "Find the maximum path sum in a binary tree.",
     "approach": "Recursively compute the maximum path sum for each node, updating the global maximum.",
-    "code": "public int findMaxPathSum(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    int[] maxSum = {Integer.MIN_VALUE};\n    maxPathSumHelper(root, maxSum);\n    return maxSum[0];\n}"
+    "code": "public int findMaxPathSum(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    int[] maxSum = {Integer.MIN_VALUE};\n    maxPathSumHelper(root, maxSum);\n    return maxSum[0];\n}\n\nprivate int maxPathSumHelper(TreeNode node, int[] maxSum) {\n    if (node == null) return 0;\n    \n    int leftSum = Math.max(0, maxPathSumHelper(node.left, maxSum));\n    int rightSum = Math.max(0, maxPathSumHelper(node.right, maxSum));\n    \n    maxSum[0] = Math.max(maxSum[0], node.data + leftSum + rightSum);\n    \n    return node.data + Math.max(leftSum, rightSum);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Right Side View",
@@ -127,7 +127,7 @@
     "defaultInput": { "root": { "data": 1, "left": { "data": 2, "left": { "data": 3 }, "right": { "data": 4 } }, "right": { "data": 5 } } },
     "description": "Return all root-to-leaf paths in a binary tree.",
     "approach": "Use DFS to build paths from root to each leaf.",
-    "code": "public List<String> allRootToLeafPaths(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<String> result = new ArrayList<>();\n    if (root == null) return result;\n    rootToLeafHelper(root, \"\", result);\n    return result;\n}"
+    "code": "public List<String> allRootToLeafPaths(BinaryTreeResponse.TreeNodeDTO rootDto) {\n    TreeNode root = fromDTO(rootDto);\n    List<String> result = new ArrayList<>();\n    if (root == null) return result;\n    rootToLeafHelper(root, \"\", result);\n    return result;\n}\n\nprivate void rootToLeafHelper(TreeNode node, String path, List<String> result) {\n    if (node == null) return;\n    \n    String currentPath = path.isEmpty() ? String.valueOf(node.data) : path + \"->\" + node.data;\n    \n    if (node.left == null && node.right == null) {\n        result.add(currentPath);\n        return;\n    }\n    \n    rootToLeafHelper(node.left, currentPath, result);\n    rootToLeafHelper(node.right, currentPath, result);\n}\n\nprivate TreeNode fromDTO(BinaryTreeResponse.TreeNodeDTO dto) {\n    if (dto == null) return null;\n    TreeNode node = new TreeNode(dto.getData());\n    node.left = fromDTO(dto.getLeft());\n    node.right = fromDTO(dto.getRight());\n    return node;\n}\n\nprivate static class TreeNode {\n    int data;\n    TreeNode left, right;\n    TreeNode(int val) { data = val; }\n}"
   },
   {
     "name": "Zigzag Level Order Traversal",

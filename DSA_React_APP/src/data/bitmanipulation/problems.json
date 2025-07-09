@@ -57,7 +57,7 @@
     "defaultInput": { "l": 2, "r": 5 },
     "description": "Find XOR of numbers from L to R.",
     "approach": "Use properties of XOR to compute the result efficiently.",
-    "code": "public int findRangeXOR(int l, int r) {\n    return XORtillN(l - 1) ^ XORtillN(r);\n}"
+    "code": "public int findRangeXOR(int l, int r) {\n    return XORtillN(l - 1) ^ XORtillN(r);\n}\n\nprivate int XORtillN(int n) {\n    if(n % 4 == 1) return 1;\n    if(n % 4 == 2) return n + 1;\n    if(n % 4 == 3) return 0;\n    return n;\n}"
   },
   {
     "name": "Minimum Bit Flips to Convert Start to Goal",

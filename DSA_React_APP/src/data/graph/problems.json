@@ -7,7 +7,7 @@
     "defaultInput": { "V": 5, "adj": [[1,2],[0,3,4],[0,4],[1],[1,2]] },
     "description": "Perform Depth First Search (DFS) traversal of a graph.",
     "approach": "Use a visited array and recursively visit all connected nodes.",
-    "code": "public List<Integer> dfsOfGraph(int V, List<Integer>[] adj) {\n    boolean[] vis = new boolean[V];\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            dfs(i, adj, vis, ans);\n        }\n    }\n    return ans;\n}"
+    "code": "public List<Integer> dfsOfGraph(int V, List<List<Integer>> adj) {\n    boolean[] vis = new boolean[V];\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            dfs(i, adj, vis, ans);\n        }\n    }\n    return ans;\n}\n\nprivate void dfs(int node, List<List<Integer>> adj, boolean[] vis, List<Integer> ans) {\n    vis[node] = true;\n    ans.add(node);\n    \n    for (int it : adj.get(node)) {\n        if (!vis[it]) {\n            dfs(it, adj, vis, ans);\n        }\n    }\n}"
   },
   {
     "name": "BFS of Graph",
@@ -17,7 +17,7 @@
     "defaultInput": { "V": 5, "adj": [[1,2],[0,3,4],[0,4],[1],[1,2]] },
     "description": "Perform Breadth First Search (BFS) traversal of a graph.",
     "approach": "Use a queue and visited array to traverse nodes level by level.",
-    "code": "public List<Integer> bfsOfGraph(int V, List<Integer>[] adj) {\n    boolean[] vis = new boolean[V];\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            vis[i] = true;\n            bfs(i, adj, vis, ans);\n        }\n    }\n    return ans;\n}"
+    "code": "public List<Integer> bfsOfGraph(int V, List<List<Integer>> adj) {\n    boolean[] vis = new boolean[V];\n    List<Integer> ans = new ArrayList<>();\n    for (int i = 0; i < V; i++) {\n        if (!vis[i]) {\n            vis[i] = true;\n            bfs(i, adj, vis, ans);\n        }\n    }\n    return ans;\n}\n\nprivate void bfs(int node, List<List<Integer>> adj, boolean[] vis, List<Integer> ans) {\n    Queue<Integer> q = new LinkedList<>();\n    q.add(node);\n    \n    while (!q.isEmpty()) {\n        int current = q.poll();\n        ans.add(current);\n        \n        for (int it : adj.get(current)) {\n            if (!vis[it]) {\n                vis[it] = true;\n                q.add(it);\n            }\n        }\n    }\n}"
   },
   {
     "name": "Detect Cycle in Directed Graph (DFS)",

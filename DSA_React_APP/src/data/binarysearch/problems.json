@@ -7,7 +7,7 @@
     "defaultInput": { "nums": [1, 2, 4, 8, 9], "k": 3 },
     "description": "Place k cows in stalls such that the minimum distance between any two cows is maximized.",
     "approach": "Use binary search on the answer (distance) and check feasibility with a greedy helper.",
-    "code": "public int aggressiveCows(int[] nums, int k) {\n    Arrays.sort(nums);\n    int low = 1, high = nums[nums.length - 1] - nums[0];\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (canWePlace(nums, mid, k)) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return high;\n}"
+    "code": "public int aggressiveCows(int[] nums, int k) {\n    Arrays.sort(nums);\n    int low = 1, high = nums[nums.length - 1] - nums[0];\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (canWePlace(nums, mid, k)) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return high;\n}\n\nprivate boolean canWePlace(int[] nums, int dist, int cows) {\n    int cntCows = 1, last = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        if (nums[i] - last >= dist) {\n            cntCows++;\n            last = nums[i];\n        }\n        if (cntCows >= cows) return true;\n    }\n    return false;\n}"
   },
   {
     "name": "Find Floor and Ceil",
@@ -57,7 +57,7 @@
     "defaultInput": { "nums": [12, 34, 67, 90], "students": 2 },
     "description": "Allocate books to students such that the maximum number of pages assigned is minimized.",
     "approach": "Use binary search on the answer and check allocation feasibility with a helper.",
-    "code": "public int findPages(int[] nums, int students) {\n    int n = nums.length;\n    if (students > n) return -1;\n    int low = Arrays.stream(nums).max().getAsInt();\n    int high = Arrays.stream(nums).sum();\n    int result = -1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (canAllocate(nums, students, mid)) {\n            result = mid;\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return result;\n}"
+    "code": "public int findPages(int[] nums, int students) {\n    int n = nums.length;\n    if (students > n) return -1;\n    int low = Arrays.stream(nums).max().getAsInt();\n    int high = Arrays.stream(nums).sum();\n    int result = -1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (canAllocate(nums, students, mid)) {\n            result = mid;\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return result;\n}\n\nprivate boolean canAllocate(int[] nums, int students, int maxPages) {\n    int count = 1, pages = 0;\n    for (int num : nums) {\n        if (pages + num > maxPages) {\n            count++;\n            pages = num;\n            if (count > students) return false;\n        } else {\n            pages += num;\n        }\n    }\n    return true;\n}"
   },
   {
     "name": "Find Peak Element",
@@ -77,7 +77,7 @@
     "defaultInput": { "arr": [[1, 4], [3, 2]] },
     "description": "Find a peak element in a 2D array.",
     "approach": "Use binary search on columns to find a peak in 2D.",
-    "code": "public int[] findPeakElement2D(int[][] arr) {\n    int n = arr.length;\n    int m = arr[0].length;\n    int low = 0, high = m - 1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int row = maxElement(arr, mid);\n        int left = mid - 1 >= 0 ? arr[row][mid - 1] : Integer.MIN_VALUE;\n        int right = mid + 1 < m ? arr[row][mid + 1] : Integer.MIN_VALUE;\n        if (arr[row][mid] > left && arr[row][mid] > right) {\n            return new int[]{row, mid};\n        } else if (left > arr[row][mid]) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return new int[]{-1, -1};\n}"
+    "code": "public int[] findPeakElement2D(int[][] arr) {\n    int n = arr.length;\n    int m = arr[0].length;\n    int low = 0, high = m - 1;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int row = maxElement(arr, mid);\n        int left = mid - 1 >= 0 ? arr[row][mid - 1] : Integer.MIN_VALUE;\n        int right = mid + 1 < m ? arr[row][mid + 1] : Integer.MIN_VALUE;\n        if (arr[row][mid] > left && arr[row][mid] > right) {\n            return new int[]{row, mid};\n        } else if (left > arr[row][mid]) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return new int[]{-1, -1};\n}\n\nprivate int maxElement(int[][] arr, int col) {\n    int n = arr.length;\n    int max = Integer.MIN_VALUE;\n    int index = -1;\n    for (int i = 0; i < n; i++) {\n        if (arr[i][col] > max) {\n            max = arr[i][col];\n            index = i;\n        }\n    }\n    return index;\n}"
   },
   {
     "name": "Binary Search",
@@ -157,7 +157,7 @@
     "defaultInput": { "nums": [1, 2, 5, 9], "limit": 6 },
     "description": "Find the smallest divisor such that the sum of division results is less than or equal to the limit.",
     "approach": "Use binary search on the divisor and check the sum with a helper.",
-    "code": "public int smallestDivisor(int[] nums, int limit) {\n    int n = nums.length;\n    if (n > limit) return -1;\n    int maxi = Integer.MIN_VALUE;\n    for (int i = 0; i < n; i++) {\n        maxi = Math.max(maxi, nums[i]);\n    }\n    int low = 1, high = maxi;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (sumByD(nums, mid) <= limit) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return low;\n}"
+    "code": "public int smallestDivisor(int[] nums, int limit) {\n    int n = nums.length;\n    if (n > limit) return -1;\n    int maxi = Integer.MIN_VALUE;\n    for (int i = 0; i < n; i++) {\n        maxi = Math.max(maxi, nums[i]);\n    }\n    int low = 1, high = maxi;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (sumByD(nums, mid) <= limit) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return low;\n}\n\nprivate int sumByD(int[] nums, int limit) {\n    int n = nums.length;\n    int sum = 0;\n    for (int i = 0; i < n; i++) {\n        sum += Math.ceil((double)nums[i] / (double)limit);\n    }\n    return sum;\n}"
   },
   {
     "name": "Floor Square Root",
@@ -177,7 +177,7 @@
     "defaultInput": { "n": 3, "m": 27 },
     "description": "Find the nth root of m using binary search.",
     "approach": "Use binary search to find the integer x such that x^n = m.",
-    "code": "public int nthRoot(int n, int m) {\n    int low = 1, high = m;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int midN = nthRootFunc(mid, n, m);\n        if (midN == 1) {\n            return mid;\n        } else if (midN == 0) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return -1;\n}"
+    "code": "public int nthRoot(int n, int m) {\n    int low = 1, high = m;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int midN = nthRootFunc(mid, n, m);\n        if (midN == 1) {\n            return mid;\n        } else if (midN == 0) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return -1;\n}\n\nprivate int nthRootFunc(int mid, int n, int m) {\n    long ans = 1;\n    for (int i = 1; i <= n; i++) {\n        ans *= mid;\n        if (ans > m) return 2;\n    }\n    if (ans == m) return 1;\n    return 0;\n}"
   },
   {
     "name": "Search in Rotated Sorted Array",
@@ -207,7 +207,7 @@
     "defaultInput": { "mat": [[0, 1, 1, 1], [0, 0, 1, 1], [1, 1, 1, 1], [0, 0, 0, 0]] },
     "description": "Find the row with the maximum number of 1s in a binary matrix.",
     "approach": "For each row, use lower bound to count 1s and track the row with the most.",
-    "code": "public int rowWithMax1s(int[][] mat) {\n    int n = mat.length;\n    int m = mat[0].length;\n    int cnt_max = 0;\n    int index = -1;\n    for (int i = 0; i < n; i++) {\n        int cnt_ones = m - lowerBound1(mat[i], m, 1);\n        if (cnt_ones > cnt_max) {\n            cnt_max = cnt_ones;\n            index = i;\n        }\n    }\n    return index;\n}"
+    "code": "public int rowWithMax1s(int[][] mat) {\n    int n = mat.length;\n    int m = mat[0].length;\n    int cnt_max = 0;\n    int index = -1;\n    for (int i = 0; i < n; i++) {\n        int cnt_ones = m - lowerBound1(mat[i], m, 1);\n        if (cnt_ones > cnt_max) {\n            cnt_max = cnt_ones;\n            index = i;\n        }\n    }\n    return index;\n}\n\nprivate int lowerBound1(int[] arr, int n, int x) {\n    int low = 0, high = n - 1;\n    int ans = n;\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        if (arr[mid] >= x) {\n            ans = mid;\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return ans;\n}"
   },
   {
     "name": "Rose Garden",
@@ -217,7 +217,7 @@
     "defaultInput": { "nums": [1, 10, 3, 10, 2], "k": 1, "m": 2 },
     "description": "Find the minimum day to make m bouquets of k adjacent flowers.",
     "approach": "Use binary search on days and check feasibility with a helper.",
-    "code": "public int roseGarden(int[] nums, int k, int m) {\n    int n = nums.length;\n    long val = (long) m * k;\n    if (val > n) return -1;\n    int mini = Integer.MAX_VALUE, maxi = Integer.MIN_VALUE;\n    for (int i = 0; i < n; i++) {\n        mini = Math.min(mini, nums[i]);\n        maxi = Math.max(maxi, nums[i]);\n    }\n    int left = mini, right = maxi, ans = -1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (possibleRoseGarden(nums, mid, m, k)) {\n            ans = mid;\n            right = mid - 1;\n        } else {\n            left = mid + 1;\n        }\n    }\n    return ans;\n}"
+    "code": "public int roseGarden(int[] nums, int k, int m) {\n    int n = nums.length;\n    long val = (long) m * k;\n    if (val > n) return -1;\n    int mini = Integer.MAX_VALUE, maxi = Integer.MIN_VALUE;\n    for (int i = 0; i < n; i++) {\n        mini = Math.min(mini, nums[i]);\n        maxi = Math.max(maxi, nums[i]);\n    }\n    int left = mini, right = maxi, ans = -1;\n    while (left <= right) {\n        int mid = left + (right - left) / 2;\n        if (possibleRoseGarden(nums, mid, m, k)) {\n            ans = mid;\n            right = mid - 1;\n        } else {\n            left = mid + 1;\n        }\n    }\n    return ans;\n}\n\nprivate boolean possibleRoseGarden(int[] nums, int day, int m, int k) {\n    int n = nums.length;\n    int cnt = 0;\n    int noOfB = 0;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] <= day) {\n            cnt++;\n        } else {\n            noOfB += (cnt / k);\n            cnt = 0;\n        }\n    }\n    noOfB += (cnt / k);\n    return noOfB >= m;\n}"
   },
   {
     "name": "Minimum Rate to Eat Bananas",
@@ -227,7 +227,7 @@
     "defaultInput": { "nums": [3, 6, 7, 11], "h": 8 },
     "description": "Find the minimum eating speed to finish all bananas in h hours.",
     "approach": "Use binary search on the rate and check total hours with a helper.",
-    "code": "public int minimumRateToEatBananas(int[] nums, int h) {\n    int low = 1, high = findMaxBananas(nums);\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int totalH = calculateTotalHours(nums, mid);\n        if (totalH <= h) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return low;\n}"
+    "code": "public int minimumRateToEatBananas(int[] nums, int h) {\n    int low = 1, high = findMaxBananas(nums);\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int totalH = calculateTotalHours(nums, mid);\n        if (totalH <= h) {\n            high = mid - 1;\n        } else {\n            low = mid + 1;\n        }\n    }\n    return low;\n}\n\nprivate int findMaxBananas(int[] nums) {\n    int maxi = Integer.MIN_VALUE;\n    int n = nums.length;\n    for (int i = 0; i < n; i++) {\n        maxi = Math.max(maxi, nums[i]);\n    }\n    return maxi;\n}\n\nprivate int calculateTotalHours(int[] nums, int hourly) {\n    int totalH = 0;\n    int n = nums.length;\n    for (int i = 0; i < n; i++) {\n        totalH += Math.ceil((double) nums[i] / (double) hourly);\n    }\n    return totalH;\n}"
   },
   {
     "name": "Minimize Maximum Distance to Gas Station",
@@ -237,7 +237,7 @@
     "defaultInput": { "arr": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "k": 9 },
     "description": "Minimize the maximum distance between gas stations after adding k more stations.",
     "approach": "Use binary search on the possible distance and check the number of stations needed.",
-    "code": "public double minimiseMaxDistance(int[] arr, int k) {\n    int n = arr.length;\n    double low = 0;\n    double high = 0;\n    for (int i = 0; i < n - 1; i++) {\n        high = Math.max(high, arr[i + 1] - arr[i]);\n    }\n    double diff = 1e-6;\n    while (high - low > diff) {\n        double mid = (low + high) / 2.0;\n        int cnt = numberOfGasStationsRequired(mid, arr);\n        if (cnt > k) {\n            low = mid;\n        } else {\n            high = mid;\n        }\n    }\n    return high;\n}"
+    "code": "public double minimiseMaxDistance(int[] arr, int k) {\n    int n = arr.length;\n    double low = 0;\n    double high = 0;\n    for (int i = 0; i < n - 1; i++) {\n        high = Math.max(high, arr[i + 1] - arr[i]);\n    }\n    double diff = 1e-6;\n    while (high - low > diff) {\n        double mid = (low + high) / 2.0;\n        int cnt = numberOfGasStationsRequired(mid, arr);\n        if (cnt > k) {\n            low = mid;\n        } else {\n            high = mid;\n        }\n    }\n    return high;\n}\n\nprivate int numberOfGasStationsRequired(double dist, int[] arr) {\n    int n = arr.length;\n    int cnt = 0;\n    for (int i = 1; i < n; i++) {\n        int numberInBetween = (int) ((arr[i] - arr[i - 1]) / dist);\n        if ((arr[i] - arr[i - 1]) == (dist * numberInBetween)) {\n            numberInBetween--;\n        }\n        cnt += numberInBetween;\n    }\n    return cnt;\n}"
   },
   {
     "name": "Largest Subarray Sum Minimized",
@@ -247,7 +247,7 @@
     "defaultInput": { "a": [7, 2, 5, 10, 8], "k": 2 },
     "description": "Split the array into k subarrays to minimize the largest subarray sum.",
     "approach": "Use binary search on the answer and count partitions with a helper.",
-    "code": "public int largestSubarraySumMinimized(int[] a, int k) {\n    int low = a[0];\n    int high = 0;\n    for (int i = 0; i < a.length; i++) {\n        low = Math.max(low, a[i]);\n        high += a[i];\n    }\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int partitions = countPartitions(a, mid);\n        if (partitions > k) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return low;\n}"
+    "code": "public int largestSubarraySumMinimized(int[] a, int k) {\n    int low = a[0];\n    int high = 0;\n    for (int i = 0; i < a.length; i++) {\n        low = Math.max(low, a[i]);\n        high += a[i];\n    }\n    while (low <= high) {\n        int mid = (low + high) / 2;\n        int partitions = countPartitions(a, mid);\n        if (partitions > k) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return low;\n}\n\nprivate int countPartitions(int[] a, int maxSum) {\n    int n = a.length;\n    int partitions = 1;\n    long subarraySum = 0;\n    for (int i = 0; i < n; i++) {\n        if (subarraySum + a[i] <= maxSum) {\n            subarraySum += a[i];\n        } else {\n            partitions++;\n            subarraySum = a[i];\n        }\n    }\n    return partitions;\n}"
   },
   {
     "name": "Kth Element of Two Sorted Arrays",
@@ -267,6 +267,6 @@
     "defaultInput": { "nums": [5, 7, 7, 8, 8, 10], "target": 8 },
     "description": "Find the starting and ending position of a given target value in a sorted array.",
     "approach": "Use binary search to find the first and last occurrence of the target.",
-    "code": "public int[] searchRange(int[] nums, int target) {\n    int first = firstOccurrence(nums, target);\n    if(first == -1) return new int[]{-1, -1};\n    int last = lastOccurrence(nums, target);\n    return new int[]{first, last};\n}"
+    "code": "public int[] searchRange(int[] nums, int target) {\n    int first = firstOccurrence(nums, target);\n    if(first == -1) return new int[]{-1, -1};\n    int last = lastOccurrence(nums, target);\n    return new int[]{first, last};\n}\n\nprivate int firstOccurrence(int[] nums, int target) {\n    int low = 0, high = nums.length - 1;\n    int first = -1;\n    while(low <= high) {\n        int mid = low + (high - low) / 2;\n        if(nums[mid] == target) {\n            first = mid;\n            high = mid - 1;\n        } else if(nums[mid] < target) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return first;\n}\n\nprivate int lastOccurrence(int[] nums, int target) {\n    int low = 0, high = nums.length - 1;\n    int last = -1;\n    while(low <= high) {\n        int mid = low + (high - low) / 2;\n        if(nums[mid] == target) {\n            last = mid;\n            low = mid + 1;\n        } else if(nums[mid] < target) {\n            low = mid + 1;\n        } else {\n            high = mid - 1;\n        }\n    }\n    return last;\n}"
   }
 ]

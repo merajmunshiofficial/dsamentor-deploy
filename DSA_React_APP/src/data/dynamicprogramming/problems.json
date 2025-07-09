@@ -17,7 +17,7 @@
     "defaultInput": { "wt": [1, 2, 4, 5], "val": [5, 4, 8, 6], "n": 4, "W": 5 },
     "description": "Solve 0/1 Knapsack problem.",
     "approach": "Use recursion and memoization to solve the knapsack problem.",
-    "code": "public int knapsack01(int[] wt, int[] val, int n, int W) {\n    int[][] dp = new int[n][W + 1];\n    for (int[] row : dp) {\n        Arrays.fill(row, -1);\n    }\n    return knapsack01Helper(wt, val, n - 1, W, dp);\n}"
+    "code": "public int knapsack01(int[] wt, int[] val, int n, int W) {\n    int[][] dp = new int[n][W + 1];\n    for (int[] row : dp) {\n        Arrays.fill(row, -1);\n    }\n    return knapsack01Helper(wt, val, n - 1, W, dp);\n}\n\nprivate int knapsack01Helper(int[] wt, int[] val, int ind, int W, int[][] dp) {\n    if (ind < 0 || W == 0) {\n        return 0;\n    }\n    if (dp[ind][W] != -1) {\n        return dp[ind][W];\n    }\n    int notTaken = knapsack01Helper(wt, val, ind - 1, W, dp);\n    int taken = 0;\n    if (wt[ind] <= W) {\n        taken = val[ind] + knapsack01Helper(wt, val, ind - 1, W - wt[ind], dp);\n    }\n    dp[ind][W] = Math.max(notTaken, taken);\n    return dp[ind][W];\n}"
   },
   {
     "name": "Frog Jump",
@@ -27,7 +27,7 @@
     "defaultInput": { "heights": [10, 20, 30, 10] },
     "description": "Find minimum energy for frog jump.",
     "approach": "Use DP to minimize energy spent jumping stairs.",
-    "code": "public int frogJump(int[] heights) {\n    int n = heights.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return frogJumpHelper(n - 1, heights, dp);\n}"
+    "code": "public int frogJump(int[] heights) {\n    int n = heights.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return frogJumpHelper(n - 1, heights, dp);\n}\n\nprivate int frogJumpHelper(int ind, int[] heights, int[] dp) {\n    if (ind == 0) return 0;\n    if (dp[ind] != -1) return dp[ind];\n    int jumpOne = frogJumpHelper(ind - 1, heights, dp) + Math.abs(heights[ind] - heights[ind - 1]);\n    int jumpTwo = Integer.MAX_VALUE;\n    if (ind > 1)\n        jumpTwo = frogJumpHelper(ind - 2, heights, dp) + Math.abs(heights[ind] - heights[ind - 2]);\n    return dp[ind] = Math.min(jumpOne, jumpTwo);\n}"
   },
   {
     "name": "Frog Jump K Steps",
@@ -37,7 +37,7 @@
     "defaultInput": { "heights": [10, 20, 30, 10], "k": 2 },
     "description": "Find minimum energy for frog jump with k steps.",
     "approach": "Use DP to minimize energy with up to k jumps.",
-    "code": "public int frogJumpK(int[] heights, int k) {\n    int n = heights.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return frogJumpKHelper(n - 1, heights, k, dp);\n}"
+    "code": "public int frogJumpK(int[] heights, int k) {\n    int n = heights.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return frogJumpKHelper(n - 1, heights, k, dp);\n}\n\nprivate int frogJumpKHelper(int ind, int[] heights, int k, int[] dp) {\n    if (ind == 0) return 0;\n    if (dp[ind] != -1) return dp[ind];\n    int minEnergy = Integer.MAX_VALUE;\n    for (int j = 1; j <= k; j++) {\n        if (ind - j >= 0) {\n            int energy = frogJumpKHelper(ind - j, heights, k, dp) + Math.abs(heights[ind] - heights[ind - j]);\n            minEnergy = Math.min(minEnergy, energy);\n        }\n    }\n    return dp[ind] = minEnergy;\n}"
   },
   {
     "name": "House Robber",
@@ -47,7 +47,7 @@
     "defaultInput": { "nums": [2, 7, 9, 3, 1] },
     "description": "House robber problem - maximum money without adjacent houses.",
     "approach": "Use DP to maximize sum without picking adjacent elements.",
-    "code": "public int houseRobber(int[] nums) {\n    int n = nums.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return houseRobberHelper(n - 1, nums, dp);\n}"
+    "code": "public int houseRobber(int[] nums) {\n    int n = nums.length;\n    int[] dp = new int[n];\n    Arrays.fill(dp, -1);\n    return houseRobberHelper(n - 1, nums, dp);\n}\n\nprivate int houseRobberHelper(int ind, int[] nums, int[] dp) {\n    if (ind < 0) return 0;\n    if (dp[ind] != -1) return dp[ind];\n    int pick = nums[ind] + houseRobberHelper(ind - 2, nums, dp);\n    int notPick = houseRobberHelper(ind - 1, nums, dp);\n    return dp[ind] = Math.max(pick, notPick);\n}"
   },
   {
     "name": "Unbounded Knapsack",
