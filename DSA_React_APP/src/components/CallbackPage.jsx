@@ -9,7 +9,8 @@ const CallbackPage = () => {
       try {
         await handleRedirectCallback();
         // Redirect to main app after successful authentication
-        window.location.href = '/';
+        const basePath = import.meta.env.PROD ? '/dsamentor-deploy' : '';
+        window.location.href = basePath + '/';
       } catch (err) {
         console.error('Auth0 callback error:', err);
       }
@@ -48,7 +49,10 @@ const CallbackPage = () => {
       }}>
         <h2>Authentication Error</h2>
         <p>{error.message}</p>
-        <button onClick={() => window.location.href = '/'}>
+        <button onClick={() => {
+          const basePath = import.meta.env.PROD ? '/dsamentor-deploy' : '';
+          window.location.href = basePath + '/';
+        }}>
           Return to Home
         </button>
       </div>

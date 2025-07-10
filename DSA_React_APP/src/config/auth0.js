@@ -24,12 +24,13 @@ console.log('🔧 Final Auth0 config values:', {
 
 // Get the correct redirect URI based on environment
 const getRedirectUri = () => {
+  const currentUrl = window.location.origin;
   if (import.meta.env.DEV) {
     // Development - use localhost with callback
-    return 'http://localhost:5173/callback';
+    return `${currentUrl}/callback`;
   } else {
     // Production - use the full GitHub Pages URL with callback path
-    return 'https://merajmunshiofficial.github.io/dsamentor-deploy/callback';
+    return `${currentUrl}/dsamentor-deploy/callback`;
   }
 };
 
