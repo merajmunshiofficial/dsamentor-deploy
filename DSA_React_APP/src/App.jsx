@@ -44,15 +44,17 @@ function MainApp() {
             // Use different paths for development vs production
             const dataPath = import.meta.env.DEV 
               ? `/src/data/${topic}/problems.json`
-              : `/dsamentor-deploy/data/${topic}/problems.json`;
+              : `./data/${topic}/problems.json`;
             
+            console.log(`Fetching data for ${topic} from:`, dataPath);
             const res = await fetch(dataPath);
             if (!res.ok) {
-              console.warn(`Failed to load ${topic}: ${res.status}`);
+              console.warn(`Failed to load ${topic}: ${res.status} from ${dataPath}`);
               continue;
             }
             const problems = await res.json();
             problemsByTopicTemp[topic] = problems;
+            console.log(`Successfully loaded ${topic}:`, problems.length, 'problems');
           } catch (err) {
             console.warn(`Error loading ${topic}:`, err);
             // skip topic if fetch fails
