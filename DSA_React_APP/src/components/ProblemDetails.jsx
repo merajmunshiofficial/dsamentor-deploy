@@ -8,7 +8,7 @@ export default function ProblemDetails({ problem }) {
   if (!problem) return <div className="p-4">Select a problem to view details.</div>;
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-shrink-0 p-4 border-b border-gray-200">
+      <div className="flex-shrink-0 p-4 border-b border-gray-200 bg-white">
         <h1 className="text-2xl font-bold mb-2">{problem.name}</h1>
         <div className="flex gap-2">
           {tabs.map((tab) => (

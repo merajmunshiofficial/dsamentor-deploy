@@ -21,17 +21,17 @@ export default function InputForm({ input, setInput, onRun, loading }) {
   };
 
   return (
-    <div className="flex flex-col gap-2 bg-white p-4 rounded shadow border flex-shrink-0">
+    <div className="bg-white p-4 rounded shadow border">
       <label className="font-semibold">Input (JSON):</label>
       <textarea
-        className="border rounded p-2 font-mono min-h-[120px] max-h-[200px] resize-y"
+        className="border rounded p-2 font-mono min-h-[120px] max-h-[200px] resize-y w-full mt-2"
         value={text}
         onChange={handleChange}
         disabled={loading}
       />
-      {error && <div className="text-red-500 text-sm">{error}</div>}
+      {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
       <button
-        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 hover:bg-blue-700 transition-colors"
+        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 hover:bg-blue-700 transition-colors w-full mt-2"
         onClick={onRun}
         disabled={!!error || loading}
       >

@@ -153,19 +153,21 @@ function MainApp() {
           selectedProblemIdx={selectedProblemIdx}
           onSelectProblem={setSelectedProblemIdx}
         />
-        <main className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex flex-row gap-6 p-6 h-full overflow-hidden">
-            <div className="flex-1 min-w-[350px] overflow-y-auto">
-              <ProblemDetails problem={selectedProblem} />
-            </div>
-            <div className="w-[350px] flex flex-col gap-4 overflow-y-auto">
-              <InputForm
-                input={input}
-                setInput={setInput}
-                onRun={handleRun}
-                loading={false}
-              />
-              <OutputPanel output={output} loading={false} error={error} />
+        <main className="flex-1 flex flex-row overflow-hidden">
+          <div className="flex-1 min-w-[350px] flex flex-col overflow-hidden border-r border-gray-300">
+            <ProblemDetails problem={selectedProblem} />
+          </div>
+          <div className="w-[350px] flex flex-col overflow-hidden">
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="space-y-4">
+                <InputForm
+                  input={input}
+                  setInput={setInput}
+                  onRun={handleRun}
+                  loading={false}
+                />
+                <OutputPanel output={output} loading={false} error={error} />
+              </div>
             </div>
           </div>
         </main>
