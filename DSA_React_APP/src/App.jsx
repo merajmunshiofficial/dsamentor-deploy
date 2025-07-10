@@ -142,7 +142,7 @@ function MainApp() {
   return (
     <div className="flex flex-col h-screen bg-gray-50">
       <Auth0Header />
-      <div className="flex flex-1">
+      <div className="flex flex-1 overflow-hidden">
         <TopicSelector
           topics={topics}
           selectedTopic={selectedTopic}
@@ -153,12 +153,12 @@ function MainApp() {
           selectedProblemIdx={selectedProblemIdx}
           onSelectProblem={setSelectedProblemIdx}
         />
-        <main className="flex-1 flex flex-col p-0 overflow-auto">
-          <div className="flex flex-row gap-6 p-6">
-            <div className="flex-1 min-w-[350px]">
+        <main className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex flex-row gap-6 p-6 h-full overflow-hidden">
+            <div className="flex-1 min-w-[350px] overflow-y-auto">
               <ProblemDetails problem={selectedProblem} />
             </div>
-            <div className="w-[350px] flex flex-col gap-4">
+            <div className="w-[350px] flex flex-col gap-4 overflow-y-auto">
               <InputForm
                 input={input}
                 setInput={setInput}

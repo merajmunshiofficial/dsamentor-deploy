@@ -10,18 +10,22 @@ export default function ProblemList({ problems, selectedProblemIdx, onSelectProb
   }, [selectedProblemIdx]);
 
   return (
-    <div className="flex flex-col gap-2 p-4 bg-gray-50 h-full min-w-[220px] border-l overflow-y-auto">
-      <h2 className="font-bold text-lg mb-2">Problems</h2>
-      {problems.map((problem, idx) => (
-        <button
-          key={problem.name}
-          ref={el => problemRefs.current[idx] = el}
-          className={`text-left px-3 py-2 rounded hover:bg-blue-100 transition-colors ${selectedProblemIdx === idx ? "bg-blue-400 text-white ring-2 ring-blue-700" : "bg-white"}`}
-          onClick={() => onSelectProblem(idx)}
-        >
-          {problem.name}
-        </button>
-      ))}
+    <div className="flex flex-col bg-gray-50 w-[280px] overflow-hidden border-r border-gray-300">
+      <div className="p-4 border-b border-gray-300 bg-gray-100">
+        <h2 className="font-bold text-lg">Problems</h2>
+      </div>
+      <div className="flex-1 overflow-y-auto p-2">
+        {problems.map((problem, idx) => (
+          <button
+            key={problem.name}
+            ref={el => problemRefs.current[idx] = el}
+            className={`w-full text-left px-3 py-2 mb-1 rounded hover:bg-blue-100 transition-colors text-sm ${selectedProblemIdx === idx ? "bg-blue-400 text-white ring-2 ring-blue-700" : "bg-white"}`}
+            onClick={() => onSelectProblem(idx)}
+          >
+            {problem.name}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
