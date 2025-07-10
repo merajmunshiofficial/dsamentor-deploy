@@ -5,7 +5,7 @@
     "methodName": "findMaxConsecutiveOnes",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [1, 1, 0, 1, 1, 1] },
-    "description": "Find the maximum number of consecutive 1s in a binary array.",
+    "description": "Given a binary array containing only 0s and 1s, find the maximum number of consecutive 1s in the array. Example: For array [1,1,0,1,1,1], the output should be 3 because there are three consecutive 1s at the end. The count of consecutive 1s is reset whenever a 0 is encountered.",
     "approach": "1. Use two variables: current count and maximum count to track consecutive 1s\n2. Initialize both counters to 0\n3. Iterate through array: if current element is 1, increment current count\n4. Update maximum count if current count exceeds it\n5. If current element is 0, reset current count to 0 (break the sequence)\n6. Return the maximum count found during iteration",
     "code": "public int findMaxConsecutiveOnes(int[] nums) {\n    int cnt = 0;\n    int maxi = 0;\n    for (int i = 0; i < nums.length; i++) {\n        if (nums[i] == 1) {\n            cnt++;\n            maxi = Math.max(maxi, cnt);\n        } else {\n            cnt = 0;\n        }\n    }\n    return maxi;\n}"
   },
@@ -15,7 +15,7 @@
     "methodName": "singleNumber",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [4, 1, 2, 1, 2] },
-    "description": "Find the element that appears only once in an array where every other element appears twice.",
+    "description": "Find the unique element in an array where all other elements appear exactly twice. Example: In array [4,1,2,1,2], 4 appears once while all other elements (1 and 2) appear twice. Given array must have exactly one element occurring once and all others occurring twice. The solution should have O(1) space complexity.",
     "approach": "1. Utilize XOR operation properties: a XOR a = 0, a XOR 0 = a\n2. Initialize result variable to 0\n3. XOR all elements in the array with the result\n4. All elements appearing twice will cancel out (become 0)\n5. Only the single element will remain since it has no pair to cancel with\n6. Return the final XOR result which is the unique element",
     "code": "public int singleNumber(int[] nums) {\n    int xorr = 0;\n    for (int num : nums) {\n        xorr ^= num;\n    }\n    return xorr;\n}"
   },
@@ -25,7 +25,7 @@
     "methodName": "largestElement",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [2, 3, 1, 4, 5] },
-    "description": "Find the largest element in the array.",
+    "description": "Find the largest element in an unsorted array. Example: In array [2,3,1,4,5], the output should be 5. Compare each element with the current maximum to find the largest value. For an empty array, the behavior should be defined (e.g., throw an exception or return Integer.MIN_VALUE).",
     "approach": "1. Initialize maximum value with first element of array\n2. Iterate through remaining elements starting from index 1\n3. For each element, compare it with current maximum\n4. If current element is greater than maximum, update maximum\n5. Continue until all elements are processed\n6. Return the maximum value found",
     "code": "public int largestElement(int[] nums) {\n    int max = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        if (nums[i] > max) {\n            max = nums[i];\n        }\n    }\n    return max;\n}"
   },
@@ -35,7 +35,7 @@
     "methodName": "secondLargestElement",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [2, 3, 1, 4, 5] },
-    "description": "Find the second largest element in the array.",
+    "description": "Find the second largest element in an unsorted array. Example: In array [2,3,1,4,5], the output should be 4 since 5 is the largest. Handle edge cases: if array has less than 2 elements, return -1. If all elements are equal, there is no second largest, return -1. If array has duplicates of the largest element, find the largest element that's different from the maximum.",
     "approach": "1. Handle edge case: return -1 if array has less than 2 elements\n2. Initialize largest and secondLargest to Integer.MIN_VALUE\n3. For each element: if it's greater than largest, update secondLargest to largest and largest to current\n4. Else if it's greater than secondLargest AND not equal to largest, update secondLargest\n5. This ensures we don't count duplicates of largest as second largest\n6. Return secondLargest if valid (not MIN_VALUE), else -1",
     "code": "public int secondLargestElement(int[] nums) {\n    if (nums.length < 2) {\n        return -1;\n    }\n    int largest = Integer.MIN_VALUE;\n    int secondLargest = Integer.MIN_VALUE;\n    for (int i = 0; i < nums.length; i++) {\n        if (nums[i] > largest) {\n            secondLargest = largest;\n            largest = nums[i];\n        } else if (nums[i] > secondLargest && nums[i] != largest) {\n            secondLargest = nums[i];\n        }\n    }\n    return secondLargest == Integer.MIN_VALUE ? -1 : secondLargest;\n}"
   },
@@ -45,7 +45,7 @@
     "methodName": "fourSum",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [1, 0, -1, 0, 2, -2], "target": 0 },
-    "description": "Find all unique quadruplets in the array that sum up to the target.",
+    "description": "Find all unique combinations of four elements in the array that sum up to the target value. Example: For array [1,0,-1,0,2,-2] and target=0, the output should be [[-2,-1,1,2], [-2,0,0,2], [-1,0,0,1]] where each quadruplet sums to 0. The solution should handle duplicates (each quadruplet should be unique) and can return the quadruplets in any order. Handle edge cases like empty array or array with less than 4 elements.",
     "approach": "1. Sort array first to enable systematic duplicate skipping and efficient search\n2. Use nested loops: fix first two elements (i, j), then use two pointers for remaining two\n3. Skip duplicates at each level to avoid repeated quadruplets\n4. For each (i,j) pair, use two pointers (k from j+1, l from end) to find pairs that complete target sum\n5. If sum equals target, add quadruplet and move both pointers while skipping duplicates\n6. If sum < target move left pointer right, if sum > target move right pointer left",
     "code": "public List<List<Integer>> fourSum(int[] nums, int target) {\n    List<List<Integer>> ans = new ArrayList<>();\n    int n = nums.length;\n    Arrays.sort(nums);\n    for (int i = 0; i < n; i++) {\n        if (i > 0 && nums[i] == nums[i - 1]) continue;\n        for (int j = i + 1; j < n; j++) {\n            if (j > i + 1 && nums[j] == nums[j - 1]) continue;\n            int k = j + 1, l = n - 1;\n            while (k < l) {\n                long sum = (long) nums[i] + nums[j] + nums[k] + nums[l];\n                if (sum == target) {\n                    ans.add(Arrays.asList(nums[i], nums[j], nums[k], nums[l]));\n                    k++; l--;\n                    while (k < l && nums[k] == nums[k - 1]) k++;\n                    while (k < l && nums[l] == nums[l + 1]) l--;\n                } else if (sum < target) {\n                    k++;\n                } else {\n                    l--;\n                }\n            }\n        }\n    }\n    return ans;\n}"
   },
@@ -55,7 +55,7 @@
     "methodName": "findMissingRepeatingNumbers",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [4, 3, 6, 2, 1, 1] },
-    "description": "Find the missing and repeating numbers in an array of size n containing numbers from 1 to n.",
+    "description": "In an array of size n containing numbers from 1 to n, find both the missing number and the repeating number. Example: For array [4,3,6,2,1,1], the output should be [5,1] where 5 is missing and 1 appears twice. The array contains all integers from 1 to n except one number is missing and one number appears twice. Solution should have O(1) extra space complexity. Numbers range from 1 to n (inclusive).",
     "approach": "1. Use XOR properties to separate the missing and repeating numbers\n2. XOR all array elements with numbers 1 to n to get XOR of missing and repeating numbers\n3. Find rightmost set bit in this XOR to differentiate the two numbers\n4. Separate all numbers into two groups based on this bit position\n5. XOR within each group to isolate the missing and repeating numbers\n6. Verify which is missing vs repeating by counting occurrences in original array",
     "code": "public int[] findMissingRepeatingNumbers(int[] nums) {\n    int n = nums.length;\n    int xr = 0;\n    for (int i = 0; i < n; i++) {\n        xr = xr ^ nums[i];\n        xr = xr ^ (i + 1);\n    }\n    int number = (xr & ~(xr - 1));\n    int zero = 0;\n    int one = 0;\n    for (int i = 0; i < n; i++) {\n        if ((nums[i] & number) != 0) {\n            one = one ^ nums[i];\n        } else {\n            zero = zero ^ nums[i];\n        }\n    }\n    for (int i = 1; i <= n; i++) {\n        if ((i & number) != 0) {\n            one = one ^ i;\n        } else {\n            zero = zero ^ i;\n        }\n    }\n    int cnt = 0;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] == zero) {\n            cnt++;\n        }\n    }\n    if (cnt == 2) {\n        return new int[] {zero, one};\n    }\n    return new int[] {one, zero};\n}"
   },
@@ -65,7 +65,7 @@
     "methodName": "moveZeroes",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [0, 1, 0, 3, 12] },
-    "description": "Move all zeroes in the array to the end while maintaining the order of non-zero elements.",
+    "description": "Move all zeros to the end of the array while maintaining the relative order of non-zero elements. Example: For array [0,1,0,3,12], after moving zeros the array should be [1,3,12,0,0]. The solution must operate in-place (modify the input array) with O(1) extra space. Non-zero elements must maintain their relative ordering. Handle edge cases like empty array or array with no zeros.",
     "approach": "1. Find the position of the first zero in the array and mark it with pointer j\n2. If no zeros are found, return the original array (nothing to move)\n3. For all elements after the first zero, check if current element is non-zero\n4. If a non-zero element is found, swap it with the element at pointer j\n5. Increment j to the next potential zero position after the swap\n6. This maintains relative order of non-zero elements while moving zeros to the end",
     "code": "public int[] moveZeroes(int[] nums) {\n    int j = -1;\n    int n = nums.length;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] == 0) {\n            j = i;\n            break;\n        }\n    }\n    if (j == -1) return nums;\n    for (int i = j + 1; i < n; i++) {\n        if (nums[i] != 0) {\n            int temp = nums[i];\n            nums[i] = nums[j];\n            nums[j] = temp;\n            j++;\n        }\n    }\n    return nums;\n}"
   },
@@ -75,7 +75,7 @@
     "methodName": "removeDuplicates",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [1, 1, 2, 2, 3, 4, 4] },
-    "description": "Remove duplicates from a sorted array and return the number of unique elements.",
+    "description": "Given a sorted array, remove duplicates in-place and return the number of unique elements. Example: For array [1,1,2,2,3,4,4], after removing duplicates it becomes [1,2,3,4,_,_,_] and returns 4. The first k elements should contain the unique elements in sorted order, where k is the return value. Elements beyond k can be any value. Must modify input array in-place with O(1) extra memory.",
     "approach": "1. Handle edge case: return 0 if array is empty\n2. Use two pointers: i (points to last unique element) and j (scans through array)\n3. Start i at 0 and j at 1 since first element is always unique\n4. Iterate j through array, comparing each element with current unique element at i\n5. If nums[j] is different from nums[i], increment i and set nums[i] to nums[j]\n6. This effectively overwrites duplicates with the next unique element\n7. Return i+1 as the count of unique elements (0-indexed)",
     "code": "public int removeDuplicates(int[] nums) {\n    if (nums.length == 0) {\n        return 0;\n    }\n    int i = 0;\n    for (int j = 1; j < nums.length; j++) {\n        if (nums[i] != nums[j]) {\n            i++;\n            nums[i] = nums[j];\n        }\n    }\n    return i + 1;\n}"
   },
@@ -85,7 +85,7 @@
     "methodName": "rotateArray",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [1, 2, 3, 4, 5, 6, 7], "k": 2 },
-    "description": "Rotate the array to the left by k positions.",
+    "description": "Rotate an array to the left by k positions in-place. Example: For array [1,2,3,4,5,6,7] and k=2, after rotation array becomes [3,4,5,6,7,1,2]. If k > array length, take k modulo array length. For k=8 on array length 6, rotate by k%6=2 positions. Must operate in-place with O(1) extra space. Handle edge cases: empty array, k=0, k=array length.",
     "approach": "1. Handle k larger than array length by taking k modulo n\n2. Use the reversal algorithm which rotates array in three steps:\n   a) Reverse the first k elements (0 to k-1)\n   b) Reverse the remaining elements (k to n-1)\n   c) Reverse the entire array (0 to n-1)\n3. This efficiently rotates the array with O(n) time and O(1) space complexity\n4. The algorithm can be visualized as: [1,2,3,4,5,6,7] → [2,1,7,6,5,4,3] → [3,4,5,6,7,1,2]",
     "code": "public int[] rotateArray(int[] nums, int k) {\n    int n = nums.length;\n    k = k % n;\n    reverseArray(nums, 0, k - 1);\n    reverseArray(nums, k, n - 1);\n    reverseArray(nums, 0, n - 1);\n    return nums;\n}"
   },
@@ -95,7 +95,7 @@
     "methodName": "linearSearch",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [2, 4, 6, 8, 10], "target": 6 },
-    "description": "Find the index of the target in the array using linear search.",
+    "description": "Implement linear search to find the index of a target element in an unsorted array. Example: For array [2,4,6,8,10] and target=6, return index 2 (0-based indexing). If target is not found, return -1. Linear search checks each element sequentially until target is found or end of array is reached. Time complexity is O(n) where n is array length. Handle edge cases: empty array, target not present.",
     "approach": "1. Use a simple sequential search through array elements\n2. For each element, compare it with the target value\n3. If a match is found, immediately return the index of that element\n4. If we reach the end of array without finding the target, return -1\n5. Time complexity is O(n) in worst case, where n is array length\n6. This approach works on any array regardless of sorting",
     "code": "public int linearSearch(int[] nums, int target) {\n    for (int i = 0; i < nums.length; i++) {\n        if (nums[i] == target) {\n            return i;\n        }\n    }\n    return -1;\n}"
   },
@@ -105,7 +105,7 @@
     "methodName": "majorityElement",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [3, 2, 3] },
-    "description": "Find the element that appears more than n/2 times in the array.",
+    "description": "Find the majority element that appears more than n/2 times in the array (where n is array length). Example: In array [3,2,3], 3 appears twice which is more than 3/2=1.5 times, so 3 is the majority element. By definition, if a majority element exists, it must be unique. If no majority element exists, return -1. Solution should have O(1) extra space complexity. Boyer-Moore Voting Algorithm can solve this optimally.",
     "approach": "1. Use Boyer-Moore Voting Algorithm to efficiently find potential majority element\n2. Maintain two variables: count and candidate element\n3. For each element: if count=0, set current element as candidate and count=1\n4. If current element matches candidate, increment count; otherwise decrement count\n5. After first pass, candidate is the potential majority element\n6. Verify with a second pass by counting candidate occurrences to ensure > n/2\n7. This algorithm works in O(n) time with O(1) space complexity",
     "code": "public int majorityElement(int[] nums) {\n    int n = nums.length;\n    int cnt = 0;\n    int el = 0;\n    for (int i = 0; i < n; i++) {\n        if (cnt == 0) {\n            cnt = 1;\n            el = nums[i];\n        } else if (el == nums[i]) {\n            cnt++;\n        } else {\n            cnt--;\n        }\n    }\n    int cnt1 = 0;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] == el) {\n            cnt1++;\n        }\n    }\n    if (cnt1 > (n / 2)) {\n        return el;\n    }\n    return -1;\n}"
   },
@@ -115,7 +115,7 @@
     "methodName": "majorityElementTwo",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [1, 1, 1, 3, 3, 2, 2, 2] },
-    "description": "Find all elements that appear more than n/3 times in the array.",
+    "description": "Find all elements that appear more than n/3 times in the array (where n is array length). Example: In array [1,1,1,3,3,2,2,2], both 1 and 2 appear 3 times which is more than 8/3≈2.67 times. Can have at most two such elements as each must occur more than n/3 times. Return elements in any order. Solution should have O(1) extra space complexity. Extended Boyer-Moore Voting Algorithm can solve this optimally.",
     "approach": "1. Use extended Boyer-Moore Voting Algorithm to find up to two potential majority elements\n2. Maintain two candidate elements and their respective counts\n3. For each number, increment count if it matches a candidate\n4. If a count reaches 0, replace that candidate with current number\n5. If number doesn't match either candidate and both counts are positive, decrement both counts\n6. After first pass, verify both candidates by counting their occurrences\n7. Only include candidates that appear more than n/3 times in result array",
     "code": "public int[] majorityElementTwo(int[] nums) {\n    int n = nums.length;\n    int count1 = 0, count2 = 0, candidate1 = 0, candidate2 = 1;\n    for (int num : nums) {\n        if (num == candidate1) {\n            count1++;\n        } else if (num == candidate2) {\n            count2++;\n        } else if (count1 == 0) {\n            candidate1 = num;\n            count1 = 1;\n        } else if (count2 == 0) {\n            candidate2 = num;\n            count2 = 1;\n        } else {\n            count1--;\n            count2--;\n        }\n    }\n    count1 = 0;\n    count2 = 0;\n    for (int num : nums) {\n        if (num == candidate1) count1++;\n        else if (num == candidate2) count2++;\n    }\n    List<Integer> result = new ArrayList<>();\n    if (count1 > n / 3) result.add(candidate1);\n    if (count2 > n / 3) result.add(candidate2);\n    return result.stream().mapToInt(i -> i).toArray();\n}"
   },
@@ -125,7 +125,7 @@
     "methodName": "rotateArrayByOne",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [1, 2, 3, 4, 5] },
-    "description": "Rotate the array to the left by one position.",
+    "description": "Rotate an array to the left by one position in-place. Example: For array [1,2,3,4,5], after one left rotation it becomes [2,3,4,5,1]. First element becomes last element, and all other elements move one position to the left. Must operate in-place with O(1) extra space. Handle edge cases: empty array, single element array. For array with n elements, element at index i moves to index (i-1), and element at index 0 moves to index n-1.",
     "approach": "1. First save the initial element (nums[0]) in a temporary variable\n2. Shift all remaining elements one position to the left\n3. This is done by assigning nums[i] to nums[i-1] for all i from 1 to n-1\n4. After shifting, place the stored first element at the end of the array\n5. This maintains the order of all elements except the first, which moves to the end\n6. Time complexity is O(n) and space complexity is O(1)",
     "code": "public int[] rotateArrayByOne(int[] nums) {\n    int temp = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        nums[i - 1] = nums[i];\n    }\n    nums[nums.length - 1] = temp;\n    return nums;\n}"
   },
@@ -135,7 +135,7 @@
     "methodName": "sortZeroOneTwo",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [2, 0, 2, 1, 1, 0] },
-    "description": "Sort an array containing only 0s, 1s, and 2s (Dutch National Flag problem).",
+    "description": "Sort an array containing only 0s, 1s, and 2s (Dutch National Flag problem) in-place. Example: For array [2,0,2,1,1,0], after sorting it becomes [0,0,1,1,2,2]. Must sort in one pass with O(1) extra space (no counting sort). Use three pointers: low (0s), mid (1s), and high (2s). Dutch National Flag algorithm guarantees one-pass sorting. Handle edge cases: empty array, array with only one or two distinct values.",
     "approach": "1. Use Dutch National Flag algorithm with three pointers: low, mid, and high\n2. Maintain three sections: 0s (0 to low-1), 1s (low to mid-1), and 2s (high+1 to end)\n3. The middle section (mid to high) contains elements still to be processed\n4. If current element (mid) is 0: swap with low, increment both low and mid\n5. If current element is 1: just increment mid (already in correct position)\n6. If current element is 2: swap with high, decrement high (don't move mid yet)\n7. Continue until mid crosses high, ensuring single-pass O(n) sorting",
     "code": "public int[] sortZeroOneTwo(int[] nums) {\n    int low = 0, mid = 0, high = nums.length - 1;\n    while (mid <= high) {\n        if (nums[mid] == 0) {\n            int temp = nums[low];\n            nums[low] = nums[mid];\n            nums[mid] = temp;\n            low++;\n            mid++;\n        } else if (nums[mid] == 1) {\n            mid++;\n        } else {\n            int temp = nums[mid];\n            nums[mid] = nums[high];\n            nums[high] = temp;\n            high--;\n        }\n    }\n    return nums;\n}"
   },
@@ -145,7 +145,7 @@
     "methodName": "maxSubArray",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [-2, 1, -3, 4, -1, 2, 1, -5, 4] },
-    "description": "Find the maximum sum of a contiguous subarray (Kadane's Algorithm).",
+    "description": "Find the maximum sum of any contiguous subarray within the array (Kadane's Algorithm). Example: For array [-2,1,-3,4,-1,2,1,-5,4], the maximum subarray sum is 6 from subarray [4,-1,2,1]. If all elements are negative, return the largest element. Kadane's algorithm maintains running sum, resets to 0 when sum becomes negative. Time complexity O(n), space O(1). Handle edge cases: empty array, all negative numbers, all positive numbers.",
     "approach": "1. Use Kadane's Algorithm to find maximum subarray sum in O(n) time\n2. Initialize two variables: maximum sum (maxi) to minimum value, current sum to 0\n3. Iterate through array, adding each element to current sum\n4. Update maximum sum if current sum exceeds it\n5. If current sum becomes negative, reset it to 0 (discard current subarray)\n6. This handles all cases: all positive, all negative, and mixed elements\n7. For all negative arrays, maximum will be the largest single element",
     "code": "public int maxSubArray(int[] nums) {\n    long maxi = Long.MIN_VALUE;\n    long sum = 0;\n    for (int i = 0; i < nums.length; i++) {\n        sum += nums[i];\n        if (sum > maxi) {\n            maxi = sum;\n        }\n        if (sum < 0) {\n            sum = 0;\n        }\n    }\n    return (int) maxi;\n}"
   },
@@ -155,7 +155,7 @@
     "methodName": "leaders",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [16, 17, 4, 3, 5, 2] },
-    "description": "Find all leaders in the array (elements greater than all elements to their right).",
+    "description": "Find all leaders in the array. A leader is an element greater than all elements to its right. Example: In array [16,17,4,3,5,2], leaders are [17,5,2] because: 17 > all elements to its right, 5 > [2], and 2 is last element (always a leader). The rightmost element is always a leader. Return leaders in right to left order of their occurrence. Time complexity O(n), space complexity O(1) excluding output array. Handle empty array and single element array.",
     "approach": "1. A leader is an element greater than all elements to its right\n2. Start from the rightmost element (always a leader) and add it to result\n3. Traverse array from right to left while tracking maximum element seen\n4. For each element, compare with current maximum\n5. If current element > maximum, it's a leader - add to result and update maximum\n6. Since we collected leaders right-to-left, reverse the result for correct order\n7. This ensures O(n) time complexity with a single pass (plus reversal)",
     "code": "public int[] leaders(int[] nums) {\n    ArrayList<Integer> ans = new ArrayList<>();\n    if (nums.length == 0) {\n        return nums;\n    }\n    int max = nums[nums.length - 1];\n    ans.add(nums[nums.length - 1]);\n    for (int i = nums.length - 2; i >= 0; i--) {\n        if (nums[i] > max) {\n            ans.add(nums[i]);\n            max = nums[i];\n        }\n    }\n    int[] result = new int[ans.size()];\n    for (int i = ans.size() - 1; i >= 0; i--) {\n        result[ans.size() - 1 - i] = ans.get(i);\n    }\n    return result;\n}"
   },
@@ -165,7 +165,7 @@
     "methodName": "intersectionArray",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums1": [1, 2, 2, 1], "nums2": [2, 2] },
-    "description": "Find the intersection of two arrays (unique elements present in both).",
+    "description": "Find the intersection of two arrays - elements that appear in both arrays. Example: For arrays [1,2,2,1] and [2,2], intersection is [2] as 2 is the only element present in both arrays. Return unique elements only (no duplicates in result). Order of elements in result can be arbitrary. Use HashSet for O(n+m) time complexity where n and m are array lengths. Handle edge cases: empty arrays, no common elements.",
     "approach": "1. Use HashSet to efficiently handle duplicates and lookups\n2. First pass: add all unique elements from nums1 to a HashSet (set1)\n3. Second pass: for each element in nums2, check if it exists in set1\n4. If found, add to resultSet (another HashSet for intersection results)\n5. This approach handles duplicates by only including each value once\n6. Convert final resultSet to array for return value\n7. Time complexity is O(n+m) where n and m are lengths of input arrays",
     "code": "public int[] intersectionArray(int[] nums1, int[] nums2) {\n    Set<Integer> set1 = new HashSet<>();\n    for (int num : nums1) set1.add(num);\n    Set<Integer> resultSet = new HashSet<>();\n    for (int num : nums2) {\n        if (set1.contains(num)) resultSet.add(num);\n    }\n    int[] result = new int[resultSet.size()];\n    int i = 0;\n    for (int num : resultSet) result[i++] = num;\n    return result;\n}"
   },
@@ -175,7 +175,7 @@
     "methodName": "unionArray",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums1": [1, 2, 2, 1], "nums2": [2, 2, 3] },
-    "description": "Find the union of two arrays (all unique elements from both arrays).",
+    "description": "Find the union of two arrays - all unique elements from both arrays. Example: For arrays [1,2,2,1] and [2,2,3], union is [1,2,3] containing all unique elements from both arrays. Use TreeSet for sorted output or HashSet for unsorted. Elements in result should be unique (no duplicates). Time complexity O((n+m)log(n+m)) with TreeSet, O(n+m) with HashSet. Handle edge cases: empty arrays, arrays with all same elements.",
     "approach": "1. Use TreeSet to collect unique elements from both arrays in sorted order\n2. Add all elements from first array to the set, duplicates automatically removed\n3. Add all elements from second array to the same set\n4. The set now contains all unique elements from both arrays (the union)\n5. Convert set to array for the result\n6. Using TreeSet gives us sorted output, but HashSet would be more efficient if order doesn't matter\n7. Time complexity is O((n+m)log(n+m)) due to TreeSet operations",
     "code": "public int[] unionArray(int[] nums1, int[] nums2) {\n    Set<Integer> set = new TreeSet<>();\n    for (int num : nums1) set.add(num);\n    for (int num : nums2) set.add(num);\n    int[] result = new int[set.size()];\n    int i = 0;\n    for (int num : set) result[i++] = num;\n    return result;\n}"
   },
@@ -185,7 +185,7 @@
     "methodName": "missingNumber",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [3, 0, 1] },
-    "description": "Find the missing number in an array containing numbers from 0 to n.",
+    "description": "Find the missing number in an array containing n distinct numbers from 0 to n. Example: For array [3,0,1], n=3 and missing number is 2. Array contains distinct numbers from 0 to n except one number. Solution should have O(1) extra space. XOR all numbers from 0 to n with array elements - missing number remains. Handle edge cases: missing first (0) or last (n) number.",
     "approach": "1. Use XOR properties to find the missing number in one pass\n2. XOR all numbers from 1 to n to get xor1\n3. XOR all elements in the array to get xor2\n4. The XOR of xor1 and xor2 gives the missing number\n5. This works because a⊕a=0 and a⊕0=a, so all numbers present in both cancel out\n6. Only the missing number remains after final XOR operation\n7. This solution has O(n) time complexity and O(1) space complexity",
     "code": "public int missingNumber(int[] nums) {\n    int xor1 = 0, xor2 = 0;\n    for (int i = 0; i < nums.length; i++) {\n        xor1 = xor1 ^ (i + 1);\n        xor2 = xor2 ^ nums[i];\n    }\n    return (xor1 ^ xor2);\n}"
   },
@@ -195,7 +195,7 @@
     "methodName": "generatePascalTriangle",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "n": 5 },
-    "description": "Generate Pascal's Triangle up to n rows.",
+    "description": "Generate first n rows of Pascal's Triangle where each number is sum of two numbers directly above it. Example: For n=5, output is:\n    1\n   1 1\n  1 2 1\n 1 3 3 1\n1 4 6 4 1\nEach value C(i,j) = C(i-1,j-1) + C(i-1,j) where i is row and j is position. First and last number in each row is 1. Handle edge cases: n=0, n=1. Time complexity O(n²), space complexity O(n²).",
     "approach": "1. Create a triangle of lists to store each row of Pascal's triangle\n2. For each row i from 0 to n-1, create a new list\n3. Each row starts with value 1, then compute remaining values using formula\n4. For each position j in row i, compute value using formula: val = val * (i-j) / (j+1)\n5. This formula is derived from combinatorial mathematics: C(n,k) = C(n,k-1) * (n-k+1)/k\n6. Add each computed value to current row\n7. Add completed row to triangle and continue to next row",
     "code": "public List<List<Integer>> generatePascalTriangle(int n) {\n    List<List<Integer>> triangle = new ArrayList<>();\n    for (int i = 0; i < n; i++) {\n        List<Integer> row = new ArrayList<>();\n        int val = 1;\n        for (int j = 0; j <= i; j++) {\n            row.add(val);\n            val = val * (i - j) / (j + 1);\n        }\n        triangle.add(row);\n    }\n    return triangle;\n}"
   },
@@ -205,7 +205,7 @@
     "methodName": "maxProduct",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [2, 3, -2, 4] },
-    "description": "Find the maximum product of a contiguous subarray.",
+    "description": "Find the maximum product of any contiguous subarray within the array. Example: For array [2,3,-2,4], maximum product is 6 from subarray [2,3]. Handle negative numbers by tracking both maximum and minimum products. A minimum product can become maximum when multiplied by negative number. For array [-2,0,-1], output is 0. Time complexity O(n), space complexity O(1). Handle edge cases: empty array, all zeros, all negative numbers.",
     "approach": "1. Unlike max sum, max product needs to track both maximum and minimum products\n2. This is because a negative number can make a minimum product become maximum when multiplied\n3. Initialize both prod1 (max) and prod2 (min) to the first array element\n4. For each element, calculate three possible products: element itself, max*element, min*element\n5. Update max as largest of the three and min as smallest of the three\n6. Keep track of overall maximum product seen so far\n7. This handles positive, negative, and zero values effectively in O(n) time",
     "code": "public int maxProduct(int[] nums) {\n    int prod1 = nums[0], prod2 = nums[0], result = nums[0];\n    for (int i = 1; i < nums.length; i++) {\n        int temp = Math.max(nums[i], Math.max(prod1 * nums[i], prod2 * nums[i]));\n        prod2 = Math.min(nums[i], Math.min(prod1 * nums[i], prod2 * nums[i]));\n        prod1 = temp;\n        result = Math.max(result, prod1);\n    }\n    return result;\n}"
   },
@@ -215,7 +215,7 @@
     "methodName": "spiralOrder",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "matrix": [[1,2,3],[4,5,6],[7,8,9]] },
-    "description": "Return all elements of a 2D matrix in spiral order.",
+    "description": "Print elements of a matrix in spiral order (clockwise). Example: For matrix:\n[[1,2,3],\n [4,5,6],\n [7,8,9]]\nOutput is [1,2,3,6,9,8,7,4,5]. Traverse boundaries: top row (left to right), right column (top to bottom), bottom row (right to left), left column (bottom to top). Repeat for inner layers. Time complexity O(m×n) where m and n are dimensions. Handle edge cases: empty matrix, 1×n matrix, m×1 matrix.",
     "approach": "1. Use four boundary pointers: top, right, bottom, left to define current layer\n2. Process matrix layer by layer in spiral order (outside to inside)\n3. For each layer, traverse four edges in order: top row, right column, bottom row, left column\n4. After processing each edge, adjust boundary pointer accordingly\n5. For top row: left to right, then increment top\n6. For right column: top to bottom, then decrement right\n7. For bottom row: right to left (if applicable), then decrement bottom\n8. For left column: bottom to top (if applicable), then increment left\n9. Continue until boundary pointers cross each other",
     "code": "public int[] spiralOrder(int[][] matrix) {\n    List<Integer> ans = new ArrayList<>();\n    int n = matrix.length;\n    int m = matrix[0].length;\n    int top = 0, left = 0, bottom = n - 1, right = m - 1;\n    while (top <= bottom && left <= right) {\n        for (int i = left; i <= right; ++i) ans.add(matrix[top][i]);\n        top++;\n        for (int i = top; i <= bottom; ++i) ans.add(matrix[i][right]);\n        right--;\n        if (top <= bottom) {\n            for (int i = right; i >= left; --i) ans.add(matrix[bottom][i]);\n            bottom--;\n        }\n        if (left <= right) {\n            for (int i = bottom; i >= top; --i) ans.add(matrix[i][left]);\n            left++;\n        }\n    }\n    return ans.stream().mapToInt(i -> i).toArray();\n}"
   },
@@ -225,7 +225,7 @@
     "methodName": "threeSum",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [-1, 0, 1, 2, -1, -4] },
-    "description": "Find all unique triplets in the array which gives the sum of zero.",
+    "description": "Find all unique triplets (a,b,c) in the array such that a+b+c=0. Example: For array [-1,0,1,2,-1,-4], output is [[-1,-1,2],[-1,0,1]] representing unique triplets summing to zero. Each triplet should be unique, order within triplet doesn't matter. Sort array first, then use two-pointer technique for each fixed element. Time complexity O(n²), space complexity O(1) excluding output. Handle duplicates and edge cases: empty array, less than 3 elements.",
     "approach": "1. Sort the array first to handle duplicates and enable two-pointer approach\n2. Iterate through array, fixing first element of potential triplet at each step\n3. Skip duplicate first elements to avoid duplicate triplets\n4. For each first element, use two pointers (j and k) for remaining elements\n5. If sum < 0, increment j to increase sum; if sum > 0, decrement k to decrease sum\n6. When sum = 0, add triplet to result and move both pointers\n7. Skip duplicate elements for j and k to avoid duplicate triplets\n8. This solution has O(n²) time complexity after sorting (O(n log n))",
     "code": "public List<List<Integer>> threeSum(int[] nums) {\n    List<List<Integer>> ans = new ArrayList<>();\n    int n = nums.length;\n    Arrays.sort(nums);\n    for (int i = 0; i < n; i++) {\n        if (i > 0 && nums[i] == nums[i - 1]) continue;\n        int j = i + 1, k = n - 1;\n        while (j < k) {\n            int sum = nums[i] + nums[j] + nums[k];\n            if (sum < 0) {\n                j++;\n            } else if (sum > 0) {\n                k--;\n            } else {\n                ans.add(Arrays.asList(nums[i], nums[j], nums[k]));\n                j++; k--;\n                while (j < k && nums[j] == nums[j - 1]) j++;\n                while (j < k && nums[k] == nums[k + 1]) k--;\n            }\n        }\n    }\n    return ans;\n}"
   },
@@ -235,7 +235,7 @@
     "methodName": "twoSum",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [2, 7, 11, 15], "target": 9 },
-    "description": "Find indices of the two numbers such that they add up to a specific target.",
+    "description": "Find indices of two numbers in array that add up to target. Example: For array [2,7,11,15] and target=9, return [0,1] because nums[0]+nums[1]=2+7=9. Exactly one valid solution guaranteed. Can't use same element twice. Use HashMap to store complement (target-current) for O(n) time complexity. Return indices in any order. Handle edge cases: no solution (return [-1,-1]), array with less than 2 elements.",
     "approach": "1. Use a HashMap to store element values and their indices\n2. For each element, calculate its complement (target - current element)\n3. Check if complement exists in HashMap (from previous elements)\n4. If found, return indices of current element and its complement\n5. If not found, add current element and its index to HashMap\n6. This one-pass approach finds the pair in O(n) time with O(n) space\n7. Unlike sorting + two pointers, this preserves original array indices",
     "code": "public int[] twoSum(int[] nums, int target) {\n    Map<Integer, Integer> map = new HashMap<>();\n    for (int i = 0; i < nums.length; i++) {\n        int complement = target - nums[i];\n        if (map.containsKey(complement)) {\n            return new int[] { map.get(complement), i };\n        }\n        map.put(nums[i], i);\n    }\n    return new int[] { -1, -1 };\n}"
   },
@@ -245,7 +245,7 @@
     "methodName": "rearrangeArray",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [3, 1, -2, -5, 2, -4] },
-    "description": "Rearrange the array so that positive and negative numbers alternate, maintaining their order.",
+    "description": "Rearrange array elements so positive and negative numbers alternate while maintaining relative order. Example: For array [3,1,-2,-5,2,-4], output is [3,-2,1,-5,2,-4]. Positive numbers at even indices (0,2,4..), negative at odd indices (1,3,5..). If counts unequal, extra numbers appear at end. Time complexity O(n), space complexity O(n). Handle edge cases: all positive/negative numbers, empty array, single element.",
     "approach": "1. Create a new array to store the rearranged elements\n2. Use two indices: posIndex starting at 0 for positive numbers, negIndex starting at 1 for negative\n3. Iterate through original array, placing each element in appropriate position\n4. If current element is negative, place at negIndex and increment by 2\n5. If current element is positive (or zero), place at posIndex and increment by 2\n6. This ensures positive and negative numbers alternate while maintaining relative order\n7. The approach has O(n) time complexity and O(n) space complexity",
     "code": "public int[] rearrangeArray(int[] nums) {\n    int n = nums.length;\n    int[] ans = new int[n];\n    int posIndex = 0, negIndex = 1;\n    for (int i = 0; i < n; i++) {\n        if (nums[i] < 0) {\n            ans[negIndex] = nums[i];\n            negIndex += 2;\n        } else {\n            ans[posIndex] = nums[i];\n            posIndex += 2;\n        }\n    }\n    return ans;\n}"
   },
@@ -255,7 +255,7 @@
     "methodName": "reversePairs",
     "serviceFile": "ArrayService.java",
     "defaultInput": { "nums": [1, 3, 2, 3, 1] },
-    "description": "Count the number of reverse pairs in the array (i < j and nums[i] > 2 * nums[j]).",
+    "description": "Count reverse pairs (i,j) where i < j and nums[i] > 2 * nums[j]. Example: For array [1,3,2,3,1], output is 2 because pairs are (3,1) and (3,1): nums[1]=3 > 2*nums[4]=2 and nums[3]=3 > 2*nums[4]=2. Use modified merge sort to count efficiently. Time complexity O(n log n), space complexity O(n). Handle overflow cases by using long. Edge cases: empty array, no reverse pairs exist, all elements same.",
     "approach": "1. Use a modified merge sort approach to efficiently count reverse pairs\n2. During merge sort, we divide array into halves until single elements\n3. While merging sorted halves, count reverse pairs before actual merging\n4. For each element in left half, find how many elements in right half satisfy condition\n5. Since both halves are sorted, we can do this efficiently\n6. Continue merge process as normal after counting pairs\n7. This approach has O(n log n) time complexity, same as merge sort",
     "code": "public int reversePairs(int[] nums) {\n    return reversePairsMergeSort(nums.clone(), 0, nums.length - 1);\n}\n\nprivate int reversePairsMergeSort(int[] arr, int low, int high) {\n    int cnt = 0;\n    if (low < high) {\n        int mid = low + (high - low) / 2;\n        cnt += reversePairsMergeSort(arr, low, mid);\n        cnt += reversePairsMergeSort(arr, mid + 1, high);\n        cnt += reversePairsCount(arr, low, mid, high);\n        reversePairsMerge(arr, low, mid, high);\n    }\n    return cnt;\n}\n\nprivate int reversePairsCount(int[] arr, int low, int mid, int high) {\n    int right = mid + 1, cnt = 0;\n    for (int i = low; i <= mid; i++) {\n        while (right <= high && arr[i] > 2L * arr[right]) right++;\n        cnt += (right - (mid + 1));\n    }\n    return cnt;\n}\n\nprivate void reversePairsMerge(int[] arr, int low, int mid, int high) {\n    List<Integer> temp = new ArrayList<>();\n    int left = low, right = mid + 1;\n    while (left <= mid && right <= high) {\n        if (arr[left] <= arr[right]) {\n            temp.add(arr[left++]);\n        } else {\n            temp.add(arr[right++]);\n        }\n    }\n    while (left <= mid) temp.add(arr[left++]);\n    while (right <= high) temp.add(arr[right++]);\n    for (int i = low; i <= high; i++) arr[i] = temp.get(i - low);\n}"
   }
