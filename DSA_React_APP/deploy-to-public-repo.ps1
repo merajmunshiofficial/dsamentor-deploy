@@ -54,4 +54,13 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "Build failed!" -ForegroundColor Red
 }
 
+# Ensure .env file exists with real credentials
+if (-not (Test-Path ".env")) {
+    Write-Host "Creating .env file with real credentials..." -ForegroundColor Yellow
+    Set-Content -Path ".env" -Value "VITE_AUTH0_DOMAIN=your-auth0-domain.us.auth0.com`nVITE_AUTH0_CLIENT_ID=your-auth0-client-id`nVITE_AUTH0_AUDIENCE=your-auth0-audience"
+}
+
+Write-Host "Using .env file for build:" -ForegroundColor Cyan
+Get-Content .env
+
 Write-Host "Done!" -ForegroundColor Green

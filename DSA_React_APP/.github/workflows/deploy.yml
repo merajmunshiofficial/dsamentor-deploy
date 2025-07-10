@@ -43,6 +43,13 @@ jobs:
         echo "Created .env.production file:"
         cat .env.production
       
+    - name: Debug .env file
+      run: |
+        echo "Debugging .env file contents:";
+        cat .env;
+        echo "Debugging .env.production file contents:";
+        cat .env.production;
+
     - name: Build
       run: |
         echo "Building with environment:"

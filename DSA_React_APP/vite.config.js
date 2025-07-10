@@ -7,7 +7,7 @@ export default defineConfig({
   // Only use base path in production for GitHub Pages
   base: process.env.NODE_ENV === 'production' ? '/dsamentor-deploy/' : '/',
   build: {
-    // Keep console logs for debugging
+    // Keep console logs for debugging but minify for production
     minify: 'terser',
     terserOptions: {
       compress: {

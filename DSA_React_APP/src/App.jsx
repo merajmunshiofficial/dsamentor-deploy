@@ -194,12 +194,7 @@ function AuthenticatedApp() {
 export default function App() {
   // Check if Auth0 is configured
   if (!isAuth0Configured()) {
-    return (
-      <div>
-        <EnvDebugger />
-        <Auth0Setup />
-      </div>
-    );
+    return <Auth0Setup />;
   }
 
   return (
