@@ -39,8 +39,8 @@ export const isAuth0Configured = () => {
 // 1. Go to https://auth0.com and create a free account
 // 2. Create a new application (Single Page Application)
 // 3. Configure the application settings:
-//    - Allowed Callback URLs: http://localhost:5173/, http://localhost:5174/, https://merajmunshiofficial.github.io/dsamentor/
-//    - Allowed Logout URLs: http://localhost:5173/, http://localhost:5174/, https://merajmunshiofficial.github.io/dsamentor/
-//    - Allowed Web Origins: http://localhost:5173, http://localhost:5174, https://merajmunshiofficial.github.io/dsamentor
+//    - Allowed Callback URLs: http://localhost:5173/, http://localhost:5174/, https://merajmunshiofficial.github.io/dsamentor-deploy/
+//    - Allowed Logout URLs: http://localhost:5173/, http://localhost:5174/, https://merajmunshiofficial.github.io/dsamentor-deploy/
+//    - Allowed Web Origins: http://localhost:5173, http://localhost:5174, https://merajmunshiofficial.github.io/dsamentor-deploy
 // 4. Copy your Domain and Client ID to the .env file
 // 5. Optionally create an API for additional security (recommended)

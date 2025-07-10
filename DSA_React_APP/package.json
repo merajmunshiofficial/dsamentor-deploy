@@ -3,14 +3,15 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://merajmunshiofficial.github.io/dsamentor",
+  "homepage": "https://merajmunshiofficial.github.io/dsamentor-deploy",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "deploy-public": "powershell -ExecutionPolicy Bypass -File deploy-to-public-repo.ps1"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",
