@@ -4,16 +4,16 @@
 This guide explains how to set up GitHub secrets for deploying your **private** DSA React App to a **public** repository for GitHub Pages hosting.
 
 ## Architecture
-- **Private Repository**: `DSA_React_APP` (your source code)
+- **Private Repository**: `dsamentor` (your source code)
 - **Public Repository**: `dsamentor-deploy` (only contains built files)
 - **GitHub Actions**: Automatically builds and deploys from private to public repo
 
 ## Required GitHub Secrets
 
 ### 1. Auth0 Credentials (Private Repository)
-Add these secrets to your **private repository** (`DSA_React_APP`):
+Add these secrets to your **private repository** (`dsamentor`):
 
-#### Go to: https://github.com/merajmunshiofficial/DSA_React_APP/settings/secrets/actions
+#### Go to: https://github.com/merajmunshiofficial/dsamentor/settings/secrets/actions
 
 **Required Secrets:**
 - `VITE_AUTH0_DOMAIN` = `merajmunshi.us.auth0.com`
@@ -38,7 +38,7 @@ You need a Personal Access Token to allow the private repo to push to the public
 7. **Copy the token** (you won't see it again!)
 
 #### Add the token as a secret:
-1. Go to: https://github.com/merajmunshiofficial/DSA_React_APP/settings/secrets/actions
+1. Go to: https://github.com/merajmunshiofficial/dsamentor/settings/secrets/actions
 2. Click "New repository secret"
 3. **Name**: `DEPLOY_TOKEN`
 4. **Value**: Paste your Personal Access Token
@@ -46,7 +46,7 @@ You need a Personal Access Token to allow the private repo to push to the public
 
 ## Summary of Secrets Needed
 
-In your **private repository** (`DSA_React_APP`), add these 3-4 secrets:
+In your **private repository** (`dsamentor`), add these 3-4 secrets:
 
 ```
 VITE_AUTH0_DOMAIN = merajmunshi.us.auth0.com
