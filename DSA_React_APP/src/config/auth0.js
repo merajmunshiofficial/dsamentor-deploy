@@ -24,13 +24,16 @@ console.log('🔧 Final Auth0 config values:', {
 
 // Get the correct redirect URI based on environment
 const getRedirectUri = () => {
-  const currentUrl = window.location.origin;
   if (import.meta.env.DEV) {
     // Development - use localhost with callback
-    return `${currentUrl}/callback`;
+    const redirectUri = window.location.origin + '/callback';
+    console.log('🔄 Dev redirect URI:', redirectUri);
+    return redirectUri;
   } else {
-    // Production - use the full GitHub Pages URL with callback path
-    return `${currentUrl}/dsamentor-deploy/callback`;
+    // Production - use the GitHub Pages URL with callback
+    const redirectUri = 'https://merajmunshiofficial.github.io/dsamentor-deploy/callback';
+    console.log('🔄 Prod redirect URI:', redirectUri);
+    return redirectUri;
   }
 };
 
