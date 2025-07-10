@@ -32,8 +32,8 @@ const getRedirectUri = () => {
     // Development - use current localhost without base path
     return window.location.origin + '/';
   } else {
-    // Production - use the full GitHub Pages URL
-    return window.location.origin + '/';
+    // Production - use the full GitHub Pages URL with callback path
+    return window.location.origin + '/callback';
   }
 };
 
