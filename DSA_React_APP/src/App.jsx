@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { isAuth0Configured } from "./config/auth0";
 import Auth0ProviderWithHistory from "./components/Auth0Provider";
@@ -6,6 +7,7 @@ import Auth0Login from "./components/Auth0Login";
 import Auth0Header from "./components/Auth0Header";
 import Auth0Setup from "./components/Auth0Setup";
 import LoadingSpinner from "./components/LoadingSpinner";
+import CallbackPage from "./components/CallbackPage";
 import TopicSelector from "./components/TopicSelector";
 import ProblemList from "./components/ProblemList";
 import ProblemDetails from "./components/ProblemDetails";
@@ -162,12 +164,18 @@ function MainApp() {
   );
 }
 
-// Authentication wrapper component
+// Authentication wrapper component with routing
 function AuthenticatedApp() {
   const { isAuthenticated, isLoading, error } = useAuth0();
+  const location = useLocation();
 
   if (isLoading) {
     return <LoadingSpinner />;
+  }
+
+  // Handle callback route
+  if (location.pathname === '/callback' || location.pathname === '/dsamentor-deploy/callback') {
+    return <CallbackPage />;
   }
 
   if (error) {
@@ -194,12 +202,19 @@ function AuthenticatedApp() {
 export default function App() {
   // Check if Auth0 is configured
   if (!isAuth0Configured()) {
-    return <Auth0Setup />;
+    return (
+      <div>
+        <EnvDebugger />
+        <Auth0Setup />
+      </div>
+    );
   }
 
   return (
-    <Auth0ProviderWithHistory>
-      <AuthenticatedApp />
-    </Auth0ProviderWithHistory>
+    <Router>
+      <Auth0ProviderWithHistory>
+        <AuthenticatedApp />
+      </Auth0ProviderWithHistory>
+    </Router>
   );
 }
