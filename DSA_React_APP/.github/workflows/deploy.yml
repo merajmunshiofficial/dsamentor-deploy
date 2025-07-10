@@ -29,9 +29,30 @@ jobs:
         if [ "${{ secrets.VITE_AUTH0_AUDIENCE }}" != "" ]; then
           echo "VITE_AUTH0_AUDIENCE=${{ secrets.VITE_AUTH0_AUDIENCE }}" >> .env
         fi
+        
+        # Also create .env.production for production builds
+        echo "VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}" > .env.production
+        echo "VITE_AUTH0_CLIENT_ID=${{ secrets.VITE_AUTH0_CLIENT_ID }}" >> .env.production
+        if [ "${{ secrets.VITE_AUTH0_AUDIENCE }}" != "" ]; then
+          echo "VITE_AUTH0_AUDIENCE=${{ secrets.VITE_AUTH0_AUDIENCE }}" >> .env.production
+        fi
+        
+        # Debug: show what we created
+        echo "Created .env file:"
+        cat .env
+        echo "Created .env.production file:"
+        cat .env.production
       
     - name: Build
-      run: npm run build
+      run: |
+        echo "Building with environment:"
+        echo "NODE_ENV=$NODE_ENV"
+        npm run build
+        
+        # Debug: check if environment variables made it into the build
+        echo "Checking for Auth0 config in built files:"
+        grep -r "merajmunshi" dist/ || echo "No Auth0 domain found in build"
+        grep -r "wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd" dist/ || echo "No Auth0 client ID found in build"
       
     - name: Deploy to Public Repository
       uses: peaceiris/actions-gh-pages@v3
