@@ -13,7 +13,6 @@ import ProblemList from "./components/ProblemList";
 import ProblemDetails from "./components/ProblemDetails";
 import InputForm from "./components/InputForm";
 import OutputPanel from "./components/OutputPanel";
-import EnvDebugger from "./components/EnvDebugger";
 
 // Main App Component (after authentication)
 function MainApp() {
@@ -204,7 +203,6 @@ export default function App() {
   if (!isAuth0Configured()) {
     return (
       <div>
-        <EnvDebugger />
         <Auth0Setup />
       </div>
     );
