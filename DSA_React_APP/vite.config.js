@@ -6,6 +6,16 @@ export default defineConfig({
   plugins: [react()],
   // Only use base path in production for GitHub Pages
   base: process.env.NODE_ENV === 'production' ? '/dsamentor-deploy/' : '/',
+  build: {
+    // Keep console logs for debugging
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: false,
+        drop_debugger: false,
+      },
+    },
+  },
   server: {
     proxy: {
       '/api': {

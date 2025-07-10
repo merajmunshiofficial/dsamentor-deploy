@@ -1,8 +1,25 @@
 // Auth0 Configuration
 // You'll need to create an Auth0 account and app to get these values
 
-const domain = import.meta.env.VITE_AUTH0_DOMAIN;
-const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
+// Debug environment variables
+console.log('🔍 Environment check:', {
+  isDev: import.meta.env.DEV,
+  mode: import.meta.env.MODE,
+  auth0Domain: import.meta.env.VITE_AUTH0_DOMAIN,
+  auth0ClientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
+  allEnv: import.meta.env
+});
+
+// Production values - these will be replaced by environment variables in production
+const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN || 'merajmunshi.us.auth0.com';
+const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID || 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd';
+const AUTH0_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE || '';
+
+console.log('🔧 Final Auth0 config values:', {
+  domain: AUTH0_DOMAIN,
+  clientId: AUTH0_CLIENT_ID,
+  audience: AUTH0_AUDIENCE
+});
 
 // Get the correct redirect URI based on environment
 const getRedirectUri = () => {
@@ -16,11 +33,11 @@ const getRedirectUri = () => {
 };
 
 export const auth0Config = {
-  domain: domain || 'your-auth0-domain.auth0.com',
-  clientId: clientId || 'your-auth0-client-id',
+  domain: AUTH0_DOMAIN,
+  clientId: AUTH0_CLIENT_ID,
   authorizationParams: {
     redirect_uri: getRedirectUri(),
-    audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+    audience: AUTH0_AUDIENCE,
   },
   cacheLocation: 'localstorage',
   useRefreshTokens: true,
@@ -28,11 +45,28 @@ export const auth0Config = {
 
 // Check if Auth0 is properly configured
 export const isAuth0Configured = () => {
-  return domain && clientId && 
-         domain !== 'your-auth0-domain.auth0.com' && 
-         clientId !== 'your-auth0-client-id' &&
-         domain !== 'dev-example.auth0.com' &&
-         clientId !== 'test-client-id';
+  // Debug information
+  console.log('Auth0 Debug Info:', {
+    domain: AUTH0_DOMAIN,
+    clientId: AUTH0_CLIENT_ID,
+    env: import.meta.env.MODE,
+    isDev: import.meta.env.DEV
+  });
+  
+  const hasValidDomain = AUTH0_DOMAIN && 
+                         AUTH0_DOMAIN !== 'undefined' &&
+                         AUTH0_DOMAIN !== 'your-auth0-domain.auth0.com' && 
+                         AUTH0_DOMAIN !== 'dev-example.auth0.com';
+  
+  const hasValidClientId = AUTH0_CLIENT_ID && 
+                          AUTH0_CLIENT_ID !== 'undefined' &&
+                          AUTH0_CLIENT_ID !== 'your-auth0-client-id' &&
+                          AUTH0_CLIENT_ID !== 'test-client-id';
+  
+  const isConfigured = hasValidDomain && hasValidClientId;
+  console.log('Auth0 Configuration Check:', { hasValidDomain, hasValidClientId, isConfigured });
+  
+  return isConfigured;
 };
 
 // Auth0 setup instructions:
