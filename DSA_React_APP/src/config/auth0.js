@@ -33,7 +33,7 @@ const getRedirectUri = () => {
     return window.location.origin + '/';
   } else {
     // Production - use the full GitHub Pages URL with callback path
-    return window.location.origin + '/callback';
+    return window.location.origin + '/dsamentor-deploy/callback';
   }
 };
 
