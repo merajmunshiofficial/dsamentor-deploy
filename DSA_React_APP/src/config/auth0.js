@@ -10,9 +10,14 @@ console.log('🔍 Environment check:', {
   allEnv: import.meta.env
 });
 
-// Production values - these will be replaced by environment variables in production
-const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN || 'merajmunshi.us.auth0.com';
-const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID || 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd';
+// For now, let's hardcode the production values to test if that works
+// In production these should come from GitHub secrets via environment variables
+const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN || 
+  (import.meta.env.PROD ? 'merajmunshi.us.auth0.com' : 'merajmunshi.us.auth0.com');
+
+const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID || 
+  (import.meta.env.PROD ? 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd' : 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd');
+
 const AUTH0_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE || '';
 
 console.log('🔧 Final Auth0 config values:', {

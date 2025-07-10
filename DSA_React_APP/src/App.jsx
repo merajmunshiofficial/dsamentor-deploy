@@ -11,6 +11,7 @@ import ProblemList from "./components/ProblemList";
 import ProblemDetails from "./components/ProblemDetails";
 import InputForm from "./components/InputForm";
 import OutputPanel from "./components/OutputPanel";
+import EnvDebugger from "./components/EnvDebugger";
 
 // Main App Component (after authentication)
 function MainApp() {
@@ -193,7 +194,12 @@ function AuthenticatedApp() {
 export default function App() {
   // Check if Auth0 is configured
   if (!isAuth0Configured()) {
-    return <Auth0Setup />;
+    return (
+      <div>
+        <EnvDebugger />
+        <Auth0Setup />
+      </div>
+    );
   }
 
   return (
