@@ -41,11 +41,20 @@ function MainApp() {
         const problemsByTopicTemp = {};
         for (const topic of topicList) {
           try {
-            const res = await fetch(`/src/data/${topic}/problems.json`);
-            if (!res.ok) continue;
+            // Use different paths for development vs production
+            const dataPath = import.meta.env.DEV 
+              ? `/src/data/${topic}/problems.json`
+              : `/dsamentor-deploy/data/${topic}/problems.json`;
+            
+            const res = await fetch(dataPath);
+            if (!res.ok) {
+              console.warn(`Failed to load ${topic}: ${res.status}`);
+              continue;
+            }
             const problems = await res.json();
             problemsByTopicTemp[topic] = problems;
-          } catch {
+          } catch (err) {
+            console.warn(`Error loading ${topic}:`, err);
             // skip topic if fetch fails
           }
         }
