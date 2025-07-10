@@ -1,53 +1,110 @@
-# GitHub Repository Secrets Setup Guide
+# GitHub Secrets Setup Guide for Two-Repository Deployment
 
-## 🔐 Setting Up Repository Secrets for Auth0
+## Overview
+This guide explains how to set up GitHub secrets for deploying your **private** DSA React App to a **public** repository for GitHub Pages hosting.
 
-This guide will help you set up GitHub repository secrets to securely store your Auth0 credentials for automatic deployment.
+## Architecture
+- **Private Repository**: `DSA_React_APP` (your source code)
+- **Public Repository**: `dsamentor-deploy` (only contains built files)
+- **GitHub Actions**: Automatically builds and deploys from private to public repo
 
-## 📝 Step-by-Step Instructions
+## Required GitHub Secrets
 
-### 1. Access Repository Settings
-1. Go to your private repository: https://github.com/merajmunshiofficial/DSA_React_APP
-2. Click on **Settings** tab
-3. In the left sidebar, click on **Secrets and variables**
-4. Click on **Actions**
+### 1. Auth0 Credentials (Private Repository)
+Add these secrets to your **private repository** (`DSA_React_APP`):
 
-### 2. Add Repository Secrets
-Click **New repository secret** for each of the following:
+#### Go to: https://github.com/merajmunshiofficial/DSA_React_APP/settings/secrets/actions
 
-#### Secret 1: VITE_AUTH0_DOMAIN
-- **Name**: `VITE_AUTH0_DOMAIN`
-- **Value**: `merajmunshi.us.auth0.com`
+**Required Secrets:**
+- `VITE_AUTH0_DOMAIN` = `merajmunshi.us.auth0.com`
+- `VITE_AUTH0_CLIENT_ID` = `wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd`
 
-#### Secret 2: VITE_AUTH0_CLIENT_ID
-- **Name**: `VITE_AUTH0_CLIENT_ID`
-- **Value**: `wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd`
+**Optional Secret:**
+- `VITE_AUTH0_AUDIENCE` = (your Auth0 API audience, if you have one)
 
-#### Secret 3: VITE_AUTH0_AUDIENCE (Optional)
-- **Name**: `VITE_AUTH0_AUDIENCE`
-- **Value**: Leave empty or add your Auth0 API audience if you have one
+### 2. GitHub Personal Access Token (Private Repository)
+You need a Personal Access Token to allow the private repo to push to the public repo.
 
-### 3. Repository Access Token (Already Set)
-The `GITHUB_TOKEN` is automatically provided by GitHub Actions and has the necessary permissions.
+#### Create a Personal Access Token:
+1. Go to: https://github.com/settings/tokens
+2. Click "Generate new token" > "Generate new token (classic)"
+3. **Name**: `Deploy to dsamentor-deploy`
+4. **Expiration**: Choose your preferred expiration
+5. **Scopes**: Check the following:
+   - `repo` (Full control of private repositories)
+   - `workflow` (Update GitHub Action workflows)
 
-## 🚀 How It Works
+6. Click "Generate token"
+7. **Copy the token** (you won't see it again!)
 
-1. **When you push code** to the main branch of your private repository
-2. **GitHub Actions** automatically runs the workflow
-3. **Creates .env file** using the repository secrets
-4. **Builds the app** with your Auth0 credentials
-5. **Deploys to public repository** (dsamentor-deploy)
+#### Add the token as a secret:
+1. Go to: https://github.com/merajmunshiofficial/DSA_React_APP/settings/secrets/actions
+2. Click "New repository secret"
+3. **Name**: `DEPLOY_TOKEN`
+4. **Value**: Paste your Personal Access Token
+5. Click "Add secret"
 
-## ✅ Benefits of Using Repository Secrets
+## Summary of Secrets Needed
 
-- 🔒 **Security**: Credentials are encrypted and not visible in code
-- 🔄 **Automatic**: Deploys happen automatically on push
-- 🚀 **Convenience**: No manual deployment needed
-- 🎯 **Production-ready**: Proper CI/CD pipeline
+In your **private repository** (`DSA_React_APP`), add these 3-4 secrets:
 
-## 📋 Current Workflow
+```
+VITE_AUTH0_DOMAIN = merajmunshi.us.auth0.com
+VITE_AUTH0_CLIENT_ID = wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd
+VITE_AUTH0_AUDIENCE = (optional)
+DEPLOY_TOKEN = (your GitHub Personal Access Token)
+```
 
-```yaml
+## How It Works
+
+1. **When you push to main branch** in your private repo
+2. **GitHub Actions triggers** the deployment workflow
+3. **Secrets are injected** into environment variables during build
+4. **App is built** with your real Auth0 credentials
+5. **Built files are pushed** to the public repository
+6. **GitHub Pages serves** the app from the public repo
+
+## Auth0 Configuration
+
+Make sure your Auth0 application has these URLs configured:
+
+**Callback URLs:**
+```
+http://localhost:5173/, https://merajmunshiofficial.github.io/dsamentor-deploy/
+```
+
+**Logout URLs:**
+```
+http://localhost:5173/, https://merajmunshiofficial.github.io/dsamentor-deploy/
+```
+
+**Web Origins:**
+```
+http://localhost:5173, https://merajmunshiofficial.github.io/dsamentor-deploy
+```
+
+## Testing
+
+After setting up the secrets:
+1. Make a small change to your code
+2. Push to the main branch
+3. Check the Actions tab to see the deployment
+4. Your app should be live at: https://merajmunshiofficial.github.io/dsamentor-deploy/
+
+## Security Notes
+
+- ✅ **Auth0 credentials are secure** - stored as GitHub secrets
+- ✅ **Source code remains private** - only built files are public
+- ✅ **Automatic deployment** - no manual steps needed
+- ✅ **No credentials in public repo** - everything is handled securely
+
+## Troubleshooting
+
+If deployment fails:
+1. Check that all secrets are set correctly
+2. Verify the Personal Access Token has the right permissions
+3. Check the Actions tab for error messages
+4. Ensure Auth0 URLs are configured properly
 name: Deploy to GitHub Pages
 
 on:

@@ -1,10 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy to Public Repository
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -27,17 +26,19 @@ jobs:
       run: |
         echo "VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}" > .env
         echo "VITE_AUTH0_CLIENT_ID=${{ secrets.VITE_AUTH0_CLIENT_ID }}" >> .env
-        echo "VITE_AUTH0_AUDIENCE=${{ secrets.VITE_AUTH0_AUDIENCE }}" >> .env
+        if [ "${{ secrets.VITE_AUTH0_AUDIENCE }}" != "" ]; then
+          echo "VITE_AUTH0_AUDIENCE=${{ secrets.VITE_AUTH0_AUDIENCE }}" >> .env
+        fi
       
     - name: Build
       run: npm run build
       
-    - name: Deploy to GitHub Pages
+    - name: Deploy to Public Repository
       uses: peaceiris/actions-gh-pages@v3
       if: github.ref == 'refs/heads/main'
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
+        personal_token: ${{ secrets.DEPLOY_TOKEN }}
         external_repository: merajmunshiofficial/dsamentor-deploy
+        publish_dir: ./dist
         publish_branch: main
         force_orphan: true
