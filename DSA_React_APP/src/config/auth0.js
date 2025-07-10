@@ -10,13 +10,9 @@ console.log('🔍 Environment check:', {
   allEnv: import.meta.env
 });
 
-// For now, let's hardcode the production values to test if that works
-// In production these should come from GitHub secrets via environment variables
-const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN || 
-  (import.meta.env.PROD ? 'merajmunshi.us.auth0.com' : 'merajmunshi.us.auth0.com');
-
-const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID || 
-  (import.meta.env.PROD ? 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd' : 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd');
+// Get Auth0 credentials from environment variables with fallbacks
+const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN || 'merajmunshi.us.auth0.com';
+const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID || 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd';
 
 const AUTH0_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE || '';
 
@@ -55,21 +51,22 @@ export const isAuth0Configured = () => {
     domain: AUTH0_DOMAIN,
     clientId: AUTH0_CLIENT_ID,
     env: import.meta.env.MODE,
-    isDev: import.meta.env.DEV
+    isDev: import.meta.env.DEV,
+    importMetaEnv: import.meta.env
   });
   
-  const hasValidDomain = AUTH0_DOMAIN && 
-                         AUTH0_DOMAIN !== 'undefined' &&
-                         AUTH0_DOMAIN !== 'your-auth0-domain.auth0.com' && 
-                         AUTH0_DOMAIN !== 'dev-example.auth0.com';
-  
-  const hasValidClientId = AUTH0_CLIENT_ID && 
-                          AUTH0_CLIENT_ID !== 'undefined' &&
-                          AUTH0_CLIENT_ID !== 'your-auth0-client-id' &&
-                          AUTH0_CLIENT_ID !== 'test-client-id';
+  // For our specific credentials, just check if they exist
+  const hasValidDomain = AUTH0_DOMAIN && AUTH0_DOMAIN.includes('auth0.com');
+  const hasValidClientId = AUTH0_CLIENT_ID && AUTH0_CLIENT_ID.length > 10;
   
   const isConfigured = hasValidDomain && hasValidClientId;
-  console.log('Auth0 Configuration Check:', { hasValidDomain, hasValidClientId, isConfigured });
+  console.log('Auth0 Configuration Check:', { 
+    domain: AUTH0_DOMAIN,
+    clientId: AUTH0_CLIENT_ID,
+    hasValidDomain, 
+    hasValidClientId, 
+    isConfigured 
+  });
   
   return isConfigured;
 };
