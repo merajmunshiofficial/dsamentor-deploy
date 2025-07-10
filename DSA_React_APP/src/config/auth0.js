@@ -83,3 +83,5 @@ export const isAuth0Configured = () => {
 //    - Allowed Web Origins: http://localhost:5173, http://localhost:5174, https://merajmunshiofficial.github.io/dsamentor-deploy
 // 4. Copy your Domain and Client ID to the .env file
 // 5. Optionally create an API for additional security (recommended)
+
+console.log('🔍 Full import.meta.env:', import.meta.env);
