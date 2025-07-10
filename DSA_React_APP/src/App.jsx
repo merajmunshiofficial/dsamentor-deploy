@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { isAuth0Configured } from "./config/auth0";
+import Auth0ProviderWithHistory from "./components/Auth0Provider";
+import Auth0Login from "./components/Auth0Login";
+import Auth0Header from "./components/Auth0Header";
+import Auth0Setup from "./components/Auth0Setup";
+import LoadingSpinner from "./components/LoadingSpinner";
 import TopicSelector from "./components/TopicSelector";
 import ProblemList from "./components/ProblemList";
 import ProblemDetails from "./components/ProblemDetails";
 import InputForm from "./components/InputForm";
 import OutputPanel from "./components/OutputPanel";
 
-export default function App() {
+// Main App Component (after authentication)
+function MainApp() {
   const [topics, setTopics] = useState([]);
   const [problemsByTopic, setProblemsByTopic] = useState({});
   const [selectedTopic, setSelectedTopic] = useState(() => localStorage.getItem("lastSelectedTopic") || "");
@@ -119,33 +127,78 @@ export default function App() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50">
-      <TopicSelector
-        topics={topics}
-        selectedTopic={selectedTopic}
-        onSelectTopic={setSelectedTopic}
-      />
-      <ProblemList
-        problems={problems}
-        selectedProblemIdx={selectedProblemIdx}
-        onSelectProblem={setSelectedProblemIdx}
-      />
-      <main className="flex-1 flex flex-col p-0 overflow-auto">
-        <div className="flex flex-row gap-6 p-6">
-          <div className="flex-1 min-w-[350px]">
-            <ProblemDetails problem={selectedProblem} />
+    <div className="flex flex-col h-screen bg-gray-50">
+      <Auth0Header />
+      <div className="flex flex-1">
+        <TopicSelector
+          topics={topics}
+          selectedTopic={selectedTopic}
+          onSelectTopic={setSelectedTopic}
+        />
+        <ProblemList
+          problems={problems}
+          selectedProblemIdx={selectedProblemIdx}
+          onSelectProblem={setSelectedProblemIdx}
+        />
+        <main className="flex-1 flex flex-col p-0 overflow-auto">
+          <div className="flex flex-row gap-6 p-6">
+            <div className="flex-1 min-w-[350px]">
+              <ProblemDetails problem={selectedProblem} />
+            </div>
+            <div className="w-[350px] flex flex-col gap-4">
+              <InputForm
+                input={input}
+                setInput={setInput}
+                onRun={handleRun}
+                loading={false}
+              />
+              <OutputPanel output={output} loading={false} error={error} />
+            </div>
           </div>
-          <div className="w-[350px] flex flex-col gap-4">
-            <InputForm
-              input={input}
-              setInput={setInput}
-              onRun={handleRun}
-              loading={false}
-            />
-            <OutputPanel output={output} loading={false} error={error} />
-          </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
+  );
+}
+
+// Authentication wrapper component
+function AuthenticatedApp() {
+  const { isAuthenticated, isLoading, error } = useAuth0();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-red-900 via-red-800 to-red-900 flex items-center justify-center p-4">
+        <div className="text-white text-center">
+          <h2 className="text-2xl font-bold mb-4">Authentication Error</h2>
+          <p className="text-red-200 mb-4">{error.message}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return isAuthenticated ? <MainApp /> : <Auth0Login />;
+}
+
+// Root App Component
+export default function App() {
+  // Check if Auth0 is configured
+  if (!isAuth0Configured()) {
+    return <Auth0Setup />;
+  }
+
+  return (
+    <Auth0ProviderWithHistory>
+      <AuthenticatedApp />
+    </Auth0ProviderWithHistory>
   );
 }
