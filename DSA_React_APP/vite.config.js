@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig(({ mode }) => ({
   plugins: [react()],
   // Only use base path in production for GitHub Pages
-  base: mode === 'production' ? '/dsamentor-deploy/' : '/',
+  base: mode === 'production' ? '/dsamentorai/' : '/',
   build: {
     // Disable minification temporarily for debugging
     minify: false,

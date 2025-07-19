@@ -3,38 +3,57 @@
 
 Write-Host "Building and deploying DSA Mentor..." -ForegroundColor Green
 
-# Step 1: Build the application
+# Step 1: Check for environment variables
+Write-Host "Checking environment variables..." -ForegroundColor Yellow
+if (-not (Test-Path ".env")) {
+    Write-Host "Error: .env file not found! Please create one from .env.example" -ForegroundColor Red
+    Write-Host "Refer to AUTH0_SETUP_GUIDE.md for configuration instructions" -ForegroundColor Yellow
+    exit 1
+}
+
+# Step 2: Build the application
 Write-Host "Building application..." -ForegroundColor Yellow
 npm run build
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Build successful!" -ForegroundColor Green
     
-    # Step 2: Navigate to dist folder
+    # Step 3: Navigate to dist folder
     Push-Location dist
     
-    # Step 3: Initialize git in dist folder (if not already)
+    # Step 4: Initialize git in dist folder (if not already)
     if (-not (Test-Path ".git")) {
         Write-Host "Initializing git in dist folder..." -ForegroundColor Yellow
         git init
         git branch -M main
     }
     
-    # Step 4: Add all files
+    # Step 5: Clean sensitive data from build files
+    Write-Host "Cleaning sensitive data from build files..." -ForegroundColor Yellow
+    Get-ChildItem -Recurse -File -Filter "*.js" | ForEach-Object {
+        (Get-Content $_.FullName) | ForEach-Object {
+            $_ -replace 'sk-[a-zA-Z0-9]{32,}', 'sk-REMOVED' `
+               -replace 'sk-proj-[a-zA-Z0-9-]{32,}', 'sk-proj-REMOVED' `
+               -replace 'auth0\.com', 'auth0.com' `
+               -replace '[a-zA-Z0-9]{32,}', 'CLIENT-ID-REMOVED'
+        } | Set-Content $_.FullName
+    }
+    
+    # Step 6: Add all files
     Write-Host "Adding files..." -ForegroundColor Yellow
     git add .
     
-    # Step 5: Commit changes
+    # Step 7: Commit changes
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     git commit -m "Deploy DSA Mentor - $timestamp"
     
-    # Step 6: Push to public deployment repository
+    # Step 8: Push to public deployment repository
     Write-Host "Deploying to public repository..." -ForegroundColor Yellow
     
     # Add remote if not exists
     $remoteExists = git remote get-url origin 2>$null
     if (-not $remoteExists) {
-        git remote add origin https://github.com/merajmunshiofficial/dsamentor-deploy.git
+        git remote add origin https://github.com/merajmunshiofficial/dsamentorai.git
     }
     
     # Push to main branch
@@ -43,7 +62,7 @@ if ($LASTEXITCODE -eq 0) {
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Deployment successful!" -ForegroundColor Green
         Write-Host "Your app will be available at:" -ForegroundColor Cyan
-        Write-Host "https://merajmunshiofficial.github.io/dsamentor-deploy/" -ForegroundColor Cyan
+        Write-Host "https://merajmunshiofficial.github.io/dsamentorai/" -ForegroundColor Cyan
     } else {
         Write-Host "Deployment failed!" -ForegroundColor Red
     }
@@ -54,6 +73,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "Build failed!" -ForegroundColor Red
 }
 
+Write-Host "Done!" -ForegroundColor Green
 # Ensure .env file exists with real credentials
 if (-not (Test-Path ".env")) {
     Write-Host "Creating .env file with real credentials..." -ForegroundColor Yellow
@@ -62,5 +82,3 @@ if (-not (Test-Path ".env")) {
 
 Write-Host "Using .env file for build:" -ForegroundColor Cyan
 Get-Content .env
-
-Write-Host "Done!" -ForegroundColor Green

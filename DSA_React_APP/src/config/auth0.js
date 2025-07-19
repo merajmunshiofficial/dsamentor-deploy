@@ -1,41 +1,21 @@
+console.log('VITE ENV:', import.meta.env);
 // Auth0 Configuration
-// You'll need to create an Auth0 account and app to get these values
-
-// Debug environment variables
-console.log('🔍 Environment check:', {
-  isDev: import.meta.env.DEV,
-  mode: import.meta.env.MODE,
-  auth0Domain: import.meta.env.VITE_AUTH0_DOMAIN,
-  auth0ClientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
-  allEnv: import.meta.env
-});
-
-// Get Auth0 credentials from environment variables with fallbacks
-const AUTH0_DOMAIN = import.meta.env.VITE_AUTH0_DOMAIN || 'merajmunshi.us.auth0.com';
-const AUTH0_CLIENT_ID = import.meta.env.VITE_AUTH0_CLIENT_ID || 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd';
-
-const AUTH0_AUDIENCE = import.meta.env.VITE_AUTH0_AUDIENCE || '';
-
-console.log('🔧 Final Auth0 config values:', {
-  domain: AUTH0_DOMAIN,
-  clientId: AUTH0_CLIENT_ID,
-  audience: AUTH0_AUDIENCE
-});
+// Hardcoded credentials for debugging
+const AUTH0_DOMAIN = 'merajmunshi.us.auth0.com'; // <-- Replace with your real Auth0 domain
+const AUTH0_CLIENT_ID = 'wetVbccRWFxGMtiWEfAI9XGFZnWRj4Gd';     // <-- Replace with your real Auth0 client ID
+const AUTH0_AUDIENCE = '';
 
 // Get the correct redirect URI based on environment
 const getRedirectUri = () => {
   if (import.meta.env.DEV) {
-    // Development - use localhost with callback
-    const redirectUri = window.location.origin + '/callback';
-    console.log('🔄 Dev redirect URI:', redirectUri);
-    return redirectUri;
+    return window.location.origin + '/callback';
   } else {
-    // Production - use the GitHub Pages URL with callback
-    const redirectUri = 'https://merajmunshiofficial.github.io/dsamentor-deploy/callback';
-    console.log('🔄 Prod redirect URI:', redirectUri);
-    return redirectUri;
+    return 'https://merajmunshiofficial.github.io/dsamentorai/callback';
   }
 };
+
+console.log('AUTH0_DOMAIN (hardcoded):', AUTH0_DOMAIN);
+console.log('AUTH0_CLIENT_ID (hardcoded):', AUTH0_CLIENT_ID);
 
 export const auth0Config = {
   domain: AUTH0_DOMAIN,
@@ -48,41 +28,22 @@ export const auth0Config = {
   useRefreshTokens: true,
 };
 
-// Check if Auth0 is properly configured
 export const isAuth0Configured = () => {
-  // Debug information
-  console.log('Auth0 Debug Info:', {
-    domain: AUTH0_DOMAIN,
-    clientId: AUTH0_CLIENT_ID,
-    env: import.meta.env.MODE,
-    isDev: import.meta.env.DEV,
-    importMetaEnv: import.meta.env
-  });
-  
-  // For our specific credentials, just check if they exist
   const hasValidDomain = AUTH0_DOMAIN && AUTH0_DOMAIN.includes('auth0.com');
   const hasValidClientId = AUTH0_CLIENT_ID && AUTH0_CLIENT_ID.length > 10;
-  
   const isConfigured = hasValidDomain && hasValidClientId;
-  console.log('Auth0 Configuration Check:', { 
-    domain: AUTH0_DOMAIN,
-    clientId: AUTH0_CLIENT_ID,
-    hasValidDomain, 
-    hasValidClientId, 
-    isConfigured 
-  });
-  
   return isConfigured;
 };
 
 // Auth0 setup instructions:
 // 1. Go to https://auth0.com and create a free account
 // 2. Create a new application (Single Page Application)
-// 3. Configure the application settings:
-//    - Allowed Callback URLs: http://localhost:5173/, http://localhost:5174/, https://merajmunshiofficial.github.io/dsamentor-deploy/
-//    - Allowed Logout URLs: http://localhost:5173/, http://localhost:5174/, https://merajmunshiofficial.github.io/dsamentor-deploy/
-//    - Allowed Web Origins: http://localhost:5173, http://localhost:5174, https://merajmunshiofficial.github.io/dsamentor-deploy
+// 3. Configure the application settings in your Auth0 dashboard:
+//    - Set Allowed Callback URLs for your development and production environments
+//    - Set Allowed Logout URLs for your development and production environments
+//    - Set Allowed Web Origins for your development and production environments
 // 4. Copy your Domain and Client ID to the .env file
-// 5. Optionally create an API for additional security (recommended)
+// 5. Set VITE_PROD_CALLBACK_URL in your production environment
+// 6. Create an API and set the audience for additional security (recommended)
 
-console.log('🔍 Full import.meta.env:', import.meta.env);
+// End of Auth0 configuration

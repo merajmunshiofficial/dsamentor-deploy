@@ -1,15 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Auth0Header = () => {
   const { logout, user } = useAuth0();
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const [apiKeyInput, setApiKeyInput] = useState(localStorage.getItem('openai_api_key') || '');
+  const [apiKeyError, setApiKeyError] = useState('');
 
   const handleLogout = () => {
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin
-      }
-    });
+    localStorage.removeItem('openai_api_key');
+    logout({ logoutParams: { returnTo: window.location.origin } });
+  };
+
+  const handleApiKeySave = (e) => {
+    e.preventDefault();
+    if (!apiKeyInput.trim().startsWith('sk-') && !apiKeyInput.trim().startsWith('sk-proj-')) {
+      setApiKeyError('Please enter a valid OpenAI API key.');
+      return;
+    }
+    localStorage.setItem('openai_api_key', apiKeyInput.trim());
+    setShowApiKeyModal(false);
+    setApiKeyError('');
+  };
+
+  const handleApiKeyChange = (e) => {
+    setApiKeyInput(e.target.value);
+    setApiKeyError('');
+  };
+
+  const handleApiKeyClear = () => {
+    localStorage.removeItem('openai_api_key');
+    setApiKeyInput('');
+    setShowApiKeyModal(false);
+    setApiKeyError('');
   };
 
   return (
@@ -30,8 +53,13 @@ const Auth0Header = () => {
               </div>
             </div>
           </div>
-          
           <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setShowApiKeyModal(true)}
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white px-4 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm font-medium"
+            >
+              API Key
+            </button>
             <div className="flex items-center space-x-3 bg-white/10 rounded-2xl px-4 py-2 backdrop-blur-xl border border-white/20">
               {user?.picture && (
                 <img 
@@ -49,7 +77,6 @@ const Auth0Header = () => {
                 </div>
               </div>
             </div>
-            
             <button
               onClick={handleLogout}
               className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-4 py-2 rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-lg text-sm font-medium"
@@ -59,6 +86,49 @@ const Auth0Header = () => {
           </div>
         </div>
       </div>
+      {/* API Key Modal */}
+      {showApiKeyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{background: 'rgba(0,0,0,0.7)'}}>
+          <div className="bg-white rounded-xl p-8 shadow-xl w-full max-w-sm relative">
+            <h3 className="text-lg font-semibold mb-4">OpenAI API Key</h3>
+            <form onSubmit={handleApiKeySave}>
+              <input
+                type="password"
+                className="w-full border border-gray-300 rounded px-3 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="sk-... or sk-proj-..."
+                value={apiKeyInput}
+                onChange={handleApiKeyChange}
+                autoFocus
+              />
+              {apiKeyError && <div className="text-red-600 text-sm mb-2">{apiKeyError}</div>}
+              <div className="flex space-x-2 mt-2">
+                <button
+                  type="submit"
+                  className="flex-1 bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="flex-1 bg-gray-300 text-gray-800 py-2 rounded hover:bg-gray-400"
+                  onClick={() => setShowApiKeyModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600"
+                  onClick={handleApiKeyClear}
+                  disabled={!localStorage.getItem('openai_api_key')}
+                >
+                  Clear
+                </button>
+              </div>
+            </form>
+            <p className="text-xs text-gray-500 mt-2">Your API key is stored only in your browser for this session.</p>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

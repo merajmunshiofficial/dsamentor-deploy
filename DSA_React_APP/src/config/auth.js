@@ -2,10 +2,10 @@
 // Password is stored as a hash for basic security
 
 export const AUTH_CONFIG = {
-  // Your personal login credentials
-  USERNAME: 'admin',
-  // This is a hash of your password - change this using the generateHash function
-  PASSWORD_HASH: '0c5c1b02c57ad72ce7823558181e7fa431b3727d2607bb4ad86ff96966db016e',
+  // Credentials should be set via environment variables
+  USERNAME: import.meta.env.VITE_APP_USERNAME || '',
+  // Password hash should be set via environment variables
+  PASSWORD_HASH: import.meta.env.VITE_APP_PASSWORD_HASH || '',
   
   // Session duration (in hours)
   SESSION_DURATION: 24,
@@ -32,7 +32,7 @@ const simpleHash = (str) => {
 // Advanced hash function (better security)
 const advancedHash = async (password) => {
   const encoder = new TextEncoder();
-  const data = encoder.encode(password + 'DSA_SALT_2025'); // Add salt
+  const data = encoder.encode(password + import.meta.env.VITE_APP_SALT || 'CHANGE_THIS_SALT'); // Add salt
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
@@ -40,9 +40,7 @@ const advancedHash = async (password) => {
 
 // Function to generate hash for your password (use this in console to get hash)
 export const generateHash = async (password) => {
-  const hash = await advancedHash(password);
-  console.log('Your password hash:', hash);
-  return hash;
+  return await advancedHash(password);
 };
 
 // Function to verify password

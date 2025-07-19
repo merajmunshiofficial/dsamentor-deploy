@@ -1,3 +1,5 @@
+import typography from '@tailwindcss/typography';
+
 export default {
   content: [
     "./index.html",
@@ -6,5 +8,8 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
-}; 
+  plugins: [require("daisyui"), typography],
+  daisyui: {
+    themes: ["light", "dark"],
+  },
+};

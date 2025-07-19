@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 
-export default function InputForm({ input, setInput, onRun, loading }) {
+export default function InputForm({ input, onInputChange, problem, onRun, loading }) {
   const [error, setError] = useState("");
   const [text, setText] = useState(JSON.stringify(input, null, 2));
 
-  // Sync text area with input prop when problem changes
   useEffect(() => {
     setText(JSON.stringify(input, null, 2));
   }, [input]);
@@ -14,28 +13,41 @@ export default function InputForm({ input, setInput, onRun, loading }) {
     try {
       const parsed = JSON.parse(e.target.value);
       setError("");
-      setInput(parsed);
+      onInputChange(parsed);
     } catch {
       setError("Invalid JSON");
     }
   };
 
   return (
-    <div className="bg-white p-4 rounded shadow border">
-      <label className="font-semibold">Input (JSON):</label>
-      <textarea
-        className="border rounded p-2 font-mono min-h-[120px] max-h-[200px] resize-y w-full mt-2"
-        value={text}
-        onChange={handleChange}
-        disabled={loading}
-      />
-      {error && <div className="text-red-500 text-sm mt-1">{error}</div>}
+    <div className="space-y-4">
+      <div className="form-control">
+        <label className="label">
+          <span className="label-text font-semibold">Input (JSON)</span>
+        </label>
+        <textarea
+          className="textarea textarea-bordered font-mono h-32"
+          value={text}
+          onChange={handleChange}
+          disabled={loading}
+          placeholder="Enter JSON input..."
+        />
+        {error && <label className="label"><span className="label-text-alt text-error">{error}</span></label>}
+      </div>
+      
       <button
-        className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50 hover:bg-blue-700 transition-colors w-full mt-2"
+        className="btn btn-primary w-full"
         onClick={onRun}
         disabled={!!error || loading}
       >
-        {loading ? "Running..." : "Run Solution"}
+        {loading ? (
+          <>
+            <span className="loading loading-spinner loading-sm"></span>
+            Running...
+          </>
+        ) : (
+          "Run Solution"
+        )}
       </button>
     </div>
   );
