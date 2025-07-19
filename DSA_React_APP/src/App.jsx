@@ -14,10 +14,10 @@ import InputForm from "./components/InputForm";
 import OutputPanel from "./components/OutputPanel";
 import CodeEditor from "./components/CodeEditor";
 import ModernDaisyNavbar from "./components/ModernDaisyNavbar";
-
 import DaisyApiKeyModal from "./components/DaisyApiKeyModal";
 
-// Main App Component (after authentication)
+
+  // Main App Component (after authentication)
 function MainApp() {
   const [topics, setTopics] = useState([]);
   const [problemsByTopic, setProblemsByTopic] = useState({});
@@ -120,119 +120,71 @@ function MainApp() {
 
   return (
     <div className="flex flex-col min-h-screen bg-base-100">
-      <ModernDaisyNavbar />
-
+      <ModernDaisyNavbar onApiKeyClick={() => setShowApiKeyModal(true)} />
       
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar with Topic Selector */}
-        <div className="w-64 bg-base-200 border-r border-base-300">
-          <div className="p-4">
-            <h2 className="text-lg font-bold mb-4">Topics</h2>
-            <TopicSelector
-              topics={topics}
-              selectedTopic={selectedTopic}
-              onSelectTopic={setSelectedTopic}
-            />
-          </div>
-        </div>
-        
-        {/* Problem List */}
-        <div className="w-80 bg-base-100 border-r border-base-300">
-          <div className="p-4 border-b border-base-300">
-            <h2 className="text-lg font-bold">Problems</h2>
-            <p className="text-sm text-base-content/70">
-              {problems.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase())).length} problems
-            </p>
-          </div>
-          <div className="overflow-y-auto h-[calc(100vh-8rem)]">
-            <ProblemList
-              problems={problems.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))}
-              selectedProblemIdx={selectedProblemIdx}
-              onSelectProblem={setSelectedProblemIdx}
-            />
-          </div>
-        </div>
-        
-        {/* Main Content Area */}
+        <TopicSelector
+          topics={topics}
+          selectedTopic={selectedTopic}
+          onSelectTopic={setSelectedTopic}
+        />
+        <ProblemList
+          problems={problems.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))}
+          selectedProblemIdx={selectedProblemIdx}
+          onSelectProblem={setSelectedProblemIdx}
+        />
         <main className="flex-1 flex flex-col overflow-hidden">
-          {/* Problem Details Card */}
-          <div className="bg-base-100 border-b border-base-300">
-            <ProblemDetails problem={selectedProblem} />
-          </div>
-          
-          {/* Code Editor Section */}
-          <div className="flex-1 flex flex-col bg-base-100">
-            <div className="navbar bg-base-200 border-b border-base-300 px-4 py-2">
-              <div className="flex-1">
+          <ProblemDetails problem={selectedProblem} />
+          {/* Code Editor */}
+          <div className="flex-1 overflow-hidden">
+            <div className="h-full flex flex-col">
+              <div className="bg-base-200 px-4 py-2 border-b border-base-300">
                 <h3 className="text-lg font-semibold">Code Editor</h3>
               </div>
-              <div className="flex-none">
-                <button 
-                  className="btn btn-primary btn-sm"
-                  onClick={handleRun}
-                  disabled={!selectedProblem}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  Run Code
-                </button>
-              </div>
-            </div>
-            <div className="flex-1 overflow-hidden">
-              {selectedProblem ? (
-                <CodeEditor
-                  value={userCode}
-                  onChange={setUserCode}
-                  language={selectedProblem.language === 'java' ? 'java' : 'javascript'}
-                  height="100%"
-                  width="100%"
-                  options={{
-                    fontSize: 14,
-                    minimap: { enabled: false },
-                    scrollBeyondLastLine: false,
-                    automaticLayout: true,
-                    theme: "vs-dark",
-                  }}
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto mb-4 text-base-content/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                    </svg>
-                    <p className="text-base-content/50">Select a problem to start coding</p>
+              <div className="flex-1 overflow-hidden">
+                {selectedProblem && (
+                  <div className="h-full">
+                    <CodeEditor
+                      value={userCode}
+                      onChange={setUserCode}
+                      language={selectedProblem.language === 'java' ? 'java' : 'javascript'}
+                      height="100%"
+                      width="100%"
+                      options={{
+                        fontSize: 14,
+                        minimap: { enabled: false },
+                        scrollBeyondLastLine: false,
+                        automaticLayout: true,
+                        theme: "vs-dark",
+                      }}
+                    />
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
           
           {/* Input/Output Panel */}
-          <div className="h-80 bg-base-100 border-t border-base-300">
-            <div className="tabs tabs-boxed bg-base-200">
+          <div className="h-80 border-t border-base-300 flex flex-col">
+            <div className="tabs tabs-bordered bg-base-200">
               <a className="tab tab-active">Input</a>
               <a className="tab">Output</a>
             </div>
-            <div className="flex h-[calc(100%-3rem)]">
+            
+            <div className="flex-1 flex overflow-hidden">
               {/* Input Section */}
-              <div className="w-1/2 border-r border-base-300">
-                <div className="p-4 h-full overflow-y-auto">
-                  <InputForm 
-                    input={input} 
-                    onInputChange={setInput} 
-                    problem={selectedProblem}
-                    onRun={handleRun}
-                  />
-                </div>
+              <div className="w-1/2 border-r border-base-300 p-4">
+                <InputForm 
+                  input={input} 
+                  onInputChange={setInput} 
+                  problem={selectedProblem}
+                  onRun={handleRun}
+                />
               </div>
               
               {/* Output Section */}
-              <div className="w-1/2">
-                <div className="p-4 h-full overflow-y-auto">
-                  <OutputPanel output={output} error={error} />
-                </div>
+              <div className="w-1/2 p-4">
+                <OutputPanel output={output} error={error} />
               </div>
             </div>
           </div>
@@ -246,6 +198,7 @@ function MainApp() {
       />
     </div>
   );
+
 
 
 
