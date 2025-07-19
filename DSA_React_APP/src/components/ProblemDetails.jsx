@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import CodeBlock from "./CodeBlock";
 import CodeEditor from "./CodeEditor";
+import ReactMarkdown from "react-markdown";
 
 const tabs = ["Description", "Approach", "Code", "Code Editor"];
 
@@ -269,15 +270,18 @@ export default function ProblemDetails({ problem }) {
               </div>
             )}
             {feedback && (
-              <div className="mt-2 card bg-base-100 border border-base-300 p-4 whitespace-pre-wrap">
+              <div className="mt-2 card bg-base-100 border border-base-300 p-4 prose max-w-none">
                 <h4 className="font-semibold mb-2">Feedback:</h4>
-                <pre className="whitespace-pre-wrap">{feedback}</pre>
+                <ReactMarkdown className="prose max-w-none">
+                  {feedback}
+                </ReactMarkdown>
               </div>
             )}
+
+
+
           </div>
         )}
-
-
       </div>
     </div>
   );
