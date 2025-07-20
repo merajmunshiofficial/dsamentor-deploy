@@ -74,10 +74,10 @@ export default function ProblemDetails({ problem }) {
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
           messages: [
-            { role: "system", content: "You are a helpful DSA coding mentor." },
+            { role: "system", content: "You are a helpful DSA coding mentor. Provide detailed and in-depth explanations." },
             { role: "user", content: prompt },
           ],
-          max_tokens: 512,
+          max_tokens: 1024,
         }),
       });
       if (!response.ok) {
@@ -270,7 +270,7 @@ export default function ProblemDetails({ problem }) {
               </div>
             )}
             {feedback && (
-              <div className="flex-grow overflow-auto card bg-base-100 border border-base-300 p-4 prose max-w-none">
+              <div className="flex-grow overflow-auto card bg-base-100 border border-base-300 p-4 prose max-w-none" style={{ minHeight: '400px' }}>
                 <h4 className="font-semibold mb-2">Feedback:</h4>
                 <ReactMarkdown className="prose max-w-none">
                   {feedback}
