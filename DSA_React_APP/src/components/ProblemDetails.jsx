@@ -235,7 +235,7 @@ export default function ProblemDetails({ problem }) {
         
         {activeTab === "Code Editor" && (
           <div className="flex flex-col flex-1 h-[80vh]">
-            <div className="flex-grow border border-base-300 rounded-lg mb-2" style={{ minHeight: '400px' }}>
+            <div className="flex-grow border border-base-300 rounded-lg mb-2" style={{ minHeight: '600px' }}>
               <CodeEditor
                 value={userCode}
                 onChange={setUserCode}
@@ -272,7 +272,19 @@ export default function ProblemDetails({ problem }) {
             {feedback && (
               <div className="flex-grow overflow-auto card bg-base-100 border border-base-300 p-4 prose max-w-none" style={{ minHeight: '400px' }}>
                 <h4 className="font-semibold mb-2">Feedback:</h4>
-                <ReactMarkdown className="prose max-w-none">
+                <ReactMarkdown className="prose max-w-none" components={{
+                  code({node, inline, className, children, ...props}) {
+                    return !inline ? (
+                      <pre className="overflow-x-auto p-4 bg-gray-900 rounded-lg text-white text-sm" style={{ maxHeight: '8rem' }} {...props}>
+                        <code style={{ fontSize: '1.25rem', lineHeight: '1.5rem' }}>{children}</code>
+                      </pre>
+                    ) : (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    )
+                  }
+                }}>
                   {feedback}
                 </ReactMarkdown>
               </div>
