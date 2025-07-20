@@ -275,8 +275,8 @@ export default function ProblemDetails({ problem }) {
                 <ReactMarkdown className="prose max-w-none" components={{
                   code({node, inline, className, children, ...props}) {
                     return !inline ? (
-                      <pre className="overflow-x-auto p-4 bg-gray-900 rounded-lg text-white text-sm" style={{ maxHeight: '8rem' }} {...props}>
-                        <code style={{ fontSize: '1.25rem', lineHeight: '1.5rem' }}>{children}</code>
+                      <pre className="overflow-x-auto p-4 bg-gray-900 rounded-lg text-white text-sm" style={{ maxHeight: 'none' }} {...props}>
+                        <code style={{ fontSize: '0.875rem', lineHeight: '1.25rem' }}>{children}</code>
                       </pre>
                     ) : (
                       <code className={className} {...props}>
