@@ -234,8 +234,8 @@ export default function ProblemDetails({ problem }) {
         )}
         
         {activeTab === "Code Editor" && (
-          <div className="flex flex-col flex-1 h-[600px] max-h-[80vh]">
-            <div className="flex-grow overflow-auto border border-base-300 rounded-lg">
+          <div className="flex flex-col flex-1 h-[80vh]">
+            <div className="flex-grow border border-base-300 rounded-lg mb-2" style={{ minHeight: '400px' }}>
               <CodeEditor
                 value={userCode}
                 onChange={setUserCode}
@@ -251,7 +251,7 @@ export default function ProblemDetails({ problem }) {
                 }}
               />
             </div>
-            <div className="mt-2 flex justify-end">
+            <div className="flex justify-end mb-2">
               <button
                 className="btn btn-primary"
                 onClick={handleCheck}
@@ -265,21 +265,18 @@ export default function ProblemDetails({ problem }) {
               </button>
             </div>
             {error && (
-              <div className="mt-2 alert alert-error">
+              <div className="mb-2 alert alert-error">
                 <span>{error}</span>
               </div>
             )}
             {feedback && (
-              <div className="mt-2 card bg-base-100 border border-base-300 p-4 prose max-w-none">
+              <div className="flex-grow overflow-auto card bg-base-100 border border-base-300 p-4 prose max-w-none">
                 <h4 className="font-semibold mb-2">Feedback:</h4>
                 <ReactMarkdown className="prose max-w-none">
                   {feedback}
                 </ReactMarkdown>
               </div>
             )}
-
-
-
           </div>
         )}
       </div>
