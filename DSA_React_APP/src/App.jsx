@@ -120,7 +120,7 @@ function MainApp() {
 
   return (
     <div className="flex flex-col min-h-screen bg-base-100">
-      <ModernDaisyNavbar onApiKeyClick={() => setShowApiKeyModal(true)} />
+      <ModernDaisyNavbar onApiKeyClick={() => setShowApiKeyModal(true)} onSearch={setSearchQuery} />
       
       <div className="flex flex-1 overflow-hidden">
         <TopicSelector
