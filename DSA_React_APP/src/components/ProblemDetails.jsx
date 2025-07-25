@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import CodeBlock from "./CodeBlock";
 import CodeEditor from "./CodeEditor";
 import ReactMarkdown from "react-markdown";
+import aiService from "../services/aiService";
 
 const tabs = ["Description", "Approach", "Code", "Code Editor"];
 
@@ -17,6 +18,7 @@ export default function ProblemDetails({ problem }) {
   const [output, setOutput] = useState(null);
   const [runLoading, setRunLoading] = useState(false);
   const [runError, setRunError] = useState("");
+  const [aiProvider, setAiProvider] = useState(null);
 
   const getProblemKey = () => {
     if (!problem) return "";
@@ -31,6 +33,10 @@ export default function ProblemDetails({ problem }) {
     setInput(problem?.defaultInput || {});
     setOutput(null);
     setRunError("");
+    setAiProvider(null);
+    
+    // Migrate existing keys on component mount
+    aiService.migrateExistingKeys();
   }, [problem]);
 
   useEffect(() => {
@@ -57,37 +63,17 @@ export default function ProblemDetails({ problem }) {
     setLoading(true);
     setError(null);
     setFeedback(null);
-    const apiKey = localStorage.getItem("openai_api_key");
-    if (!apiKey) {
-      setError("No OpenAI API key found. Please log in and provide your API key.");
-      setLoading(false);
-      return;
-    }
+    setAiProvider(null);
+    
     try {
-      const prompt = `You are a DSA coding mentor. Compare the user's code to the reference solution.\n\nReference Solution:\n${problem.code}\n\nUser's Code:\n${userCode}\n\nIf the user's code is correct, reply with 'Correct' and a brief explanation. If incorrect, explain what is wrong, how to fix it, and actionable guidance.`;
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-3.5-turbo",
-          messages: [
-            { role: "system", content: "You are a helpful DSA coding mentor. Provide detailed and in-depth explanations." },
-            { role: "user", content: prompt },
-          ],
-          max_tokens: 1024,
-        }),
+      const result = await aiService.getCodeFeedback(userCode, problem.code);
+      setFeedback(result.feedback);
+      setAiProvider({
+        name: result.provider,
+        model: result.model
       });
-      if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
-      }
-      const data = await response.json();
-      const aiMessage = data.choices?.[0]?.message?.content || "No feedback received.";
-      setFeedback(aiMessage);
     } catch (err) {
-      setError(err.message || "Unknown error");
+      setError(err.message || "Unknown error occurred");
     } finally {
       setLoading(false);
     }
@@ -271,7 +257,14 @@ export default function ProblemDetails({ problem }) {
             )}
             {feedback && (
               <div className="flex-grow overflow-auto card bg-base-100 border border-base-300 p-4 prose max-w-none" style={{ minHeight: '400px' }}>
-                <h4 className="font-semibold mb-2">Feedback:</h4>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-semibold">Feedback:</h4>
+                  {aiProvider && (
+                    <div className="badge badge-outline badge-sm">
+                      {aiProvider.name} ({aiProvider.model})
+                    </div>
+                  )}
+                </div>
                 <ReactMarkdown className="prose max-w-none" components={{
                   code({node, inline, className, children, ...props}) {
                     return !inline ? (
