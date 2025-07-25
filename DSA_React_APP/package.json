@@ -9,7 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
+    "sync-data": "node sync-data.cjs",
+    "predeploy": "npm run build && npm run sync-data",
     "deploy": "gh-pages -d dist -b gh-pages -r https://github.com/merajmunshiofficial/dsamentorai.git",
     "deploy-public": "powershell -ExecutionPolicy Bypass -File deploy-to-public-repo.ps1"
   },
